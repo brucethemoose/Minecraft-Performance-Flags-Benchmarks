@@ -1,9 +1,9 @@
 GraalVM
 ------
 
-GraalVM is a new high performance Java VM from Oracle that can improve the performance of Minecraft.
+GraalVM is a new high performance Java VM from Oracle that can improve the performance of (modded) Minecraft.
 
-Unfortunately, only GraalVM Enterprise Edition comes with the full set of optimizations, and downloading it requires making a (free) Oracle account.
+Unfortunately, only GraalVM Enterprise Edition comes with the full set of optimizations, and downloading it requires making a free Oracle account.
 
 Register and download it here: https://www.oracle.com/downloads/graalvm-downloads.html
 
@@ -36,6 +36,8 @@ Arguments for GraalVM EE 21 for Java 8 (only recommended for packs that absolute
 
 Notes
 ------
+- No GraalVM incompatibilities with any mods/modpacks that I know of, it should be a drop-in replacment for OpenJDK.
+
 - Oracle does not build GraalVM EE for OSX on ARM yet. If you are on a newer, M1-based Mac, you can try the ARM/OSX build of GraalVM CE: https://github.com/graalvm/graalvm-ce-builds/releases
 
 - Windows/Linux users who want a "free" GraalVM can also grab it from the above link, and remove flags until it launches. If anyone is interested, I can add a section with the EE-specific flags removed.
