@@ -2,7 +2,7 @@
 
 Download GraalVM: https://www.oracle.com/downloads/graalvm-downloads.html
 
-Be sure to enable Large Pages in Windows, or otherwise remove the large pages flag at the end:
+Be sure to enable Large Pages in Windows, or otherwise remove the 2 large pages flags at the end:
 https://www.chaoticafractals.com/manual/getting-started/enabling-large-page-support-windows
 
 Arguments for GraalVM EE Java 17:
