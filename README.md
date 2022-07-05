@@ -1,6 +1,6 @@
 # WIP
 
-Download GraalVM: https://www.oracle.com/downloads/graalvm-downloads.html
+Download GraalVM EE: https://www.oracle.com/downloads/graalvm-downloads.html
 
 Be sure to enable Large Pages in Windows, or otherwise remove the 2 large pages flags at the end:
 https://www.chaoticafractals.com/manual/getting-started/enabling-large-page-support-windows
