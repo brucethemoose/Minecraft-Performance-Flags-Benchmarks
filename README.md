@@ -38,6 +38,8 @@ Notes
 ------
 - Oracle does not build GraalVM EE for OSX on ARM yet. If you are on a newer, M1-based Mac, you can try the ARM/OSX build of GraalVM CE: https://github.com/graalvm/graalvm-ce-builds/releases
 
+- Windows/Linux users who want a "free" GraalVM can also grab it from the above link, and remove flags until it launches. If anyone is interested, I can add a section with the EE-specific flags removed.
+
 - Java 17+ users can try replacing `-XX:+UseG1GC` with `XX:+UseZGC`, in GraalVM or any other OpenJDK build. This can hit FPS/TPS (especially in GraalVM, where zgc isn't fully supported and disables many of the optimizations) and increase memory usage, but can reduces pauses/stutters from GC even more.
 
 - For Java 8 users: Red Hat builds OpenJDK with the Shenandoah GC. If GraalVM 21 is still stuttering, it may be worth a try with `-XX:+UseShenandoahGC`: https://access.redhat.com/products/openjdk
