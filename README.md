@@ -3,11 +3,11 @@ GraalVM
 
 GraalVM is a new high performance Java VM from Oracle that can improve the performance of Minecraft.
 
-Unfortunately, only GraalVM Enterprise Edition comes with the full set of optimizations, and downloading requires making a (free) Oracle account.
+Unfortunately, only GraalVM Enterprise Edition comes with the full set of optimizations, and downloading it requires making a (free) Oracle account.
 
 Register and download it here: https://www.oracle.com/downloads/graalvm-downloads.html
 
-Grab the newest "Oracle GraalVM Enterprise Edition Core" release available for Java 17+, or grab GraalVM 21 Java 8 for running old versions of Minecraft that explicitly require Java 8. Unzip them, and put the unzipped folder somewhere safe.
+Grab the newest "Oracle GraalVM Enterprise Edition Core" release available for Java 17+, or grab the latest GraalVM 21.X Java 8 for running old versions of Minecraft that explicitly require Java 8. Unzip them, and put the unzipped folder somewhere safe.
 
 These releases are *not* Java installers. You need to manually replace your launcher's version of Java, or use a Minecraft launcher that supports specifying your Java path. I recommend ATlauncher, PolyMC, or GDLauncher. When specifying a java path, navigate to the "bin" folder in the GraalVM download and use "javaw.exe" or "java.exe"
 
@@ -21,7 +21,7 @@ Enabling large pages can further improve the performance of Minecraft servers an
 
 Red Hat has a good tutorial for RHEL-like linux distros, like Fedora, CentOS, or Oracle Linux. Note that some linux users may have to change the value of`LargePageSizeInBytes`: https://www.redhat.com/en/blog/optimizing-rhel-8-run-java-implementation-minecraft-server
 
-To skip this, remove `-XX:+UseLargePages -XX:LargePageSizeInBytes=2m` from the end of the arguments below. Otherwise Minecraft will crash.
+To skip this tweak, remove `-XX:+UseLargePages -XX:LargePageSizeInBytes=2m` from the end of the arguments below. Otherwise Minecraft will not launch.
 
 Java Arguments
 ------
@@ -46,7 +46,7 @@ Notes
 
 Benchmarks
 ------
-15%+ improvements in chunk generation and server startup time. Actual data coming Soon(TM).
+15%+ improvement in chunk generation and server startup time. Actual data coming Soon(TM).
 
 Sources
 ------
