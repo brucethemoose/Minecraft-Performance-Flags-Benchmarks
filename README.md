@@ -1,22 +1,49 @@
-# WIP
+GraalVM
+------
 
-Download GraalVM EE: https://www.oracle.com/downloads/graalvm-downloads.html
+GraalVM is a new high performance Java VM from Oracle that can improve the performance of Minecraft.
 
-Be sure to enable Large Pages in Windows, or otherwise remove the 2 large pages flags at the end:
-https://www.chaoticafractals.com/manual/getting-started/enabling-large-page-support-windows
+Unfortunately, only GraalVM Enterprise Edition comes with the full set of optimizations, and downloading requires making a (free) Oracle account.
 
-These work for servers and clients, on any operating system and hardware.
+Register and download it here: https://www.oracle.com/downloads/graalvm-downloads.html
 
-Arguments for GraalVM EE 22 for Java 17+:
+Grab the newest "Oracle GraalVM Enterprise Edition Core" release available for Java 17+, or grab GraalVM 21 Java 8 for running old versions of Minecraft that explicitly require Java 8. Unzip them, and put the unzipped folder somewhere safe.
+
+These releases are *not* Java installers. You need to manually replace your launcher's version of Java, or use a Minecraft launcher that supports specifying your Java path. I recommend ATlauncher, PolyMC, or GDLauncher. When specifying a java path, navigate to the "bin" folder in the GraalVM download and use "javaw.exe" or "java.exe"
+
+For servers, you need to replace the "java" command in your server start sh/bat file with the full path to graalvm java, in quotes.
+
+
+Large Pages
+------
+
+Enabling large pages can further improve the performance of Minecraft servers and clients, but requires launching Minecraft as an administrator. Chaotica Fractals has a great explanation, and a tutorial for enabling it in Windows: https://www.chaoticafractals.com/manual/getting-started/enabling-large-page-support-windows
+
+Red Hat has a good tutorial for RHEL-like linux distros, like Fedora, CentOS, or Oracle Linux. Note that some linux users may have to change the value of`LargePageSizeInBytes`: https://www.redhat.com/en/blog/optimizing-rhel-8-run-java-implementation-minecraft-server
+
+To skip this, remove `-XX:+UseLargePages -XX:LargePageSizeInBytes=2m` from the end of the arguments below. Otherwise Minecraft will crash.
+
+Java Arguments
+------
+
+These work for servers and clients, on any operating system and ARM/x86 hardware. They do not include the `xms` or `xmx` memory flags.
+
+Arguments for GraalVM EE 22+ for Java 17+:
 ```-server -XX:+UseG1GC -XX:+ParallelRefProcEnabled -XX:MaxGCPauseMillis=100 -XX:+UnlockExperimentalVMOptions -XX:+UnlockDiagnosticVMOptions -XX:+DisableExplicitGC -XX:+AlwaysPreTouch -XX:G1NewSizePercent=30 -XX:G1MaxNewSizePercent=40 -XX:G1HeapRegionSize=32M -XX:G1ReservePercent=20 -XX:G1HeapWastePercent=5 -XX:G1MixedGCCountTarget=4 -XX:InitiatingHeapOccupancyPercent=15 -XX:G1MixedGCLiveThresholdPercent=90 -XX:G1RSetUpdatingPauseTimePercent=5 -XX:SurvivorRatio=32 -Dsun.rmi.dgc.server.gcInterval=2147483646 -XX:+PerfDisableSharedMem -XX:MaxTenuringThreshold=1 -XX:+EnableJVMCIProduct -XX:+EnableJVMCI -XX:+UseJVMCICompiler -XX:+EagerJVMCI -XX:+UseStringDeduplication -XX:+UseFastUnorderedTimeStamps -XX:+UseAES -XX:+UseAESIntrinsics -XX:AllocatePrefetchStyle=1 -XX:+UseLoopPredicate -XX:+RangeCheckElimination -XX:+EliminateLocks -XX:+DoEscapeAnalysis -XX:+UseCodeCacheFlushing -XX:+UseFastJNIAccessors -XX:+OptimizeStringConcat -XX:+UseCompressedOops -XX:+UseThreadPriorities -XX:+OmitStackTraceInFastThrow -XX:+TrustFinalNonStaticFields -XX:ThreadPriorityPolicy=1 -XX:+UseInlineCaches -XX:+RewriteBytecodes -XX:+RewriteFrequentPairs -XX:+UseNUMA -XX:-DontCompileHugeMethods -XX:+UseCMoveUnconditionally -XX:+UseFPUForSpilling -XX:+UseNewLongLShift -XX:+UseVectorCmov -XX:+UseXMMForArrayCopy -XX:+UseXmmI2D -XX:+UseXmmI2F -XX:+UseXmmLoadAndClearUpper -XX:+UseXmmRegToRegMoveAll -Dfile.encoding=UTF-8 -Djdk.nio.maxCachedBufferSize=262144 -Dgraal.TuneInlinerExploration=1 -Dgraal.CompilerConfiguration=enterprise -Dgraal.UsePriorityInlining=true -Dgraal.Vectorization=true -Dgraal.OptDuplication=true -Dgraal.DetectInvertedLoopsAsCounted=true -Dgraal.LoopInversion=true -Dgraal.VectorizeHashes=true -Dgraal.EnterprisePartialUnroll=true -Dgraal.VectorizeSIMD=true -Dgraal.StripMineNonCountedLoops=true -Dgraal.SpeculativeGuardMovement=true -Dgraal.InfeasiblePathCorrelation=true -Dgraal.LoopRotation=true --add-modules jdk.incubator.vector -XX:+UseFMA -XX:+UseLargePages -XX:LargePageSizeInBytes=2m```
 
 Arguments for GraalVM EE 21 for Java 8 (only recommended for packs that absolutely require Java 8):
 ```-server -XX:+UseG1GC -XX:+ParallelRefProcEnabled -XX:MaxGCPauseMillis=100 -XX:+UnlockExperimentalVMOptions -XX:+UnlockDiagnosticVMOptions -XX:+DisableExplicitGC -XX:+AlwaysPreTouch -XX:G1NewSizePercent=30 -XX:G1MaxNewSizePercent=40 -XX:G1HeapRegionSize=32M -XX:G1ReservePercent=20 -XX:G1HeapWastePercent=5 -XX:G1MixedGCCountTarget=4 -XX:InitiatingHeapOccupancyPercent=15 -XX:G1MixedGCLiveThresholdPercent=90 -XX:G1RSetUpdatingPauseTimePercent=5 -XX:SurvivorRatio=32 -Dsun.rmi.dgc.server.gcInterval=2147483646 -XX:+PerfDisableSharedMem -XX:MaxTenuringThreshold=1  -XX:+EnableJVMCI -XX:+UseJVMCICompiler -XX:+EagerJVMCI -XX:+UseStringDeduplication -XX:+UseFastUnorderedTimeStamps -XX:+UseAES -XX:+UseAESIntrinsics -XX:AllocatePrefetchStyle=1 -XX:+UseLoopPredicate -XX:+RangeCheckElimination -XX:+EliminateLocks -XX:+DoEscapeAnalysis -XX:+UseCodeCacheFlushing -XX:+UseFastJNIAccessors -XX:+OptimizeStringConcat -XX:+UseCompressedOops -XX:+UseThreadPriorities -XX:+OmitStackTraceInFastThrow -XX:+TrustFinalNonStaticFields -XX:ThreadPriorityPolicy=1 -XX:+UseInlineCaches -XX:+RewriteBytecodes -XX:+RewriteFrequentPairs -XX:+UseNUMA -XX:-DontCompileHugeMethods -XX:+UseFPUForSpilling -XX:+UseNewLongLShift -XX:+UseXMMForArrayCopy -XX:+UseXmmI2D -XX:+UseXmmI2F -XX:+UseXmmLoadAndClearUpper -XX:+UseXmmRegToRegMoveAll -Dfile.encoding=UTF-8 -Djdk.nio.maxCachedBufferSize=262144 -Dgraal.TuneInlinerExploration=1 -Dgraal.CompilerConfiguration=enterprise -Dgraal.UsePriorityInlining=true -Dgraal.Vectorization=true -Dgraal.OptDuplication=true -Dgraal.DetectInvertedLoopsAsCounted=true -Dgraal.LoopInversion=true -Dgraal.VectorizeHashes=true -Dgraal.EnterprisePartialUnroll=true -Dgraal.VectorizeSIMD=true -Dgraal.StripMineNonCountedLoops=true -Dgraal.SpeculativeGuardMovement=true -Dgraal.InfeasiblePathCorrelation=true -XX:+UseLargePages -XX:LargePageSizeInBytes=2m```
 
+Notes
+------
+- Oracle does not build GraalVM EE for OSX on ARM yet. If you are on a newer, M1-based Mac, you can try the ARM/OSX build of GraalVM CE: https://github.com/graalvm/graalvm-ce-builds/releases
 
-"LargePageSizeInBytes" may need to be changed on non-Windows, non x86 hardware (like an M1 Mac or an ARM Ampere server)
+- Java 17+ users can try replacing `-XX:+UseG1GC` with `XX:+UseZGC`, in GraalVM or any other OpenJDK build. This can hit FPS/TPS (especially in GraalVM, where zgc isn't fully supported and disables many of the optimizations) and increase memory usage, but can reduces pauses/stutters from GC even more.
 
-Based on:
+- For Java 8 users: Red Hat builds OpenJDK with the Shenandoah GC. If GraalVM 21 is still stuttering, it may be worth a try with `-XX:+UseShenandoahGC`: https://access.redhat.com/products/openjdk
+
+Sources
+------
 - Updated Aikar flags from this repo: https://github.com/etil2jz/etil-minecraft-flags
 - This post from a Forge dev: https://www.reddit.com/r/feedthebeast/comments/5jhuk9/modded_mc_and_memory_usage_a_history_with_a/
 - Red Hat's optimization guide: https://www.redhat.com/en/blog/optimizing-rhel-8-run-java-implementation-minecraft-server
