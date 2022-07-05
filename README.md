@@ -42,10 +42,14 @@ Notes
 
 - For Java 8 users: Red Hat builds OpenJDK with the Shenandoah GC. If GraalVM 21 is still stuttering, it may be worth a try with `-XX:+UseShenandoahGC`: https://access.redhat.com/products/openjdk
 
+Benchmarks
+------
+15%+ improvements in chunk generation and server startup time. Actual data coming Soon(TM).
+
 Sources
 ------
 - Updated Aikar flags from this repo: https://github.com/etil2jz/etil-minecraft-flags
-- This post from a Forge dev: https://www.reddit.com/r/feedthebeast/comments/5jhuk9/modded_mc_and_memory_usage_a_history_with_a/
+- Reddit post from a Forge dev: https://www.reddit.com/r/feedthebeast/comments/5jhuk9/modded_mc_and_memory_usage_a_history_with_a/
 - Red Hat's optimization guide: https://www.redhat.com/en/blog/optimizing-rhel-8-run-java-implementation-minecraft-server
 - GraalVM release notes: https://www.graalvm.org/release-notes/
 - Oracle's Java 17 Documentation: https://docs.oracle.com/en/java/javase/17/docs/specs/man/java.html
