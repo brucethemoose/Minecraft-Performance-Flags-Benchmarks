@@ -56,6 +56,8 @@ Notes
 
 - For Java 8 users: Red Hat builds OpenJDK with the Shenandoah GC. If GraalVM 21 is still stuttering, it may be worth a try with `-XX:+UseShenandoahGC`: https://access.redhat.com/products/openjdk
 
+- Recommended values for `MaxGCPauseMillis` range from 50 (one Minecraft tick) to 200 (Aikar's chosen value), and may have a significant effect on client smoothness in particular. 
+
 Benchmarks
 ------
 15%+ improvement in chunk generation and server startup time. Actual data coming Soon(TM).
