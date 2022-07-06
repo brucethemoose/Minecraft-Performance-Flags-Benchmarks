@@ -10,7 +10,7 @@ These flags are applicable to both servers and clients.
 
 But even more performance can be gained with the tweaks below:
 
-GraalVM
+GraalVM Enterprise Edition
 ------
 
 GraalVM is a new high performance Java VM from Oracle that can improve the performance of (modded) Minecraft.
@@ -35,7 +35,7 @@ Red Hat has a good tutorial for RHEL-like linux distros, like Fedora, CentOS, or
 
 To skip this tweak, remove `-XX:+UseLargePages -XX:LargePageSizeInBytes=2m` from the end of the arguments below. Otherwise Minecraft will not launch.
 
-Java Arguments
+GraalVM Java Arguments
 ------
 
 These work for servers and clients, on any operating system and ARM/x86 hardware. They do not include the `xms` or `xmx` memory flags.
@@ -56,7 +56,7 @@ Notes
 
 - Java 17+ users can try replacing `-XX:+UseG1GC` with `XX:+UseZGC`, in GraalVM or any other OpenJDK build. In my testing, ZGC reduces FPS/TPS (especially in GraalVM, where zgc isn't fully supported and disables some of the optimizations) and increase memory usage, but can reduce pauses/stutters from GC even more. See this Github page for more optimal ZGC flags: https://github.com/FroggeMC/MC-Java-Flags
 
-- For Java 8 users: Red Hat builds OpenJDK with the Shenandoah GC. If GraalVM 21 is still stuttering, it may be worth a try with `-XX:+UseShenandoahGC`: https://access.redhat.com/products/openjdk
+- For Java 8 users: Red Hat builds OpenJDK with the Shenandoah GC. If GraalVM 21 is still stuttering, you can try `-XX:+UseShenandoahGC`: https://access.redhat.com/products/openjdk
 
 - Recommended values for `MaxGCPauseMillis` range from 50 (one Minecraft tick) to 200 (Aikar's chosen value), and may have a significant effect on client smoothness in particular. 
 
