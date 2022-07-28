@@ -1,4 +1,4 @@
-These flags are enabled by default on Adoptium and Oracle Java 17, and should probably be removed:
+These flags are enabled by default on Adoptium and Oracle Java 17. If they are enabled in most JDKs, they should probably be removed:
 
 ```-XX:+UseStringDeduplication -XX:+UseAES -XX:+UseAESIntrinsics -XX:AllocatePrefetchStyle=1 -XX:+UseLoopPredicate -XX:+RangeCheckElimination -XX:+EliminateLocks -XX:+DoEscapeAnalysis -XX:+UseCodeCacheFlushing -XX:+UseFastJNIAccessors -XX:+OptimizeStringConcat -XX:+UseCompressedOops -XX:+UseThreadPriorities -XX:+OmitStackTraceInFastThrow -XX:+UseInlineCaches  -XX:+RewriteBytecodes -XX:+RewriteFrequentPairs -XX:+UseFPUForSpilling```
 
