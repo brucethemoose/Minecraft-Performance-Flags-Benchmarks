@@ -28,7 +28,7 @@ These releases are *not* Java installers. You need to manually replace your laun
 
 For servers, you need to replace the "java" command in your server start sh/bat file with the full path to graalvm java, in quotes.
 
-If you don't feel comfortable making an Oracle account, grab the latest GraalVM CE release and use the flags from above ^. But Oracle does not check the information you put into the registration page, and GraalVM CE lacks most of the EE optimizations.
+If you don't feel comfortable making an Oracle account, grab the latest [GraalVM CE release](https://github.com/graalvm/graalvm-ce-builds/releases) and use the flags from above ^. But Oracle does not check the information you put into the registration page, and GraalVM CE lacks most of the EE optimizations.
 
 Large Pages
 ------
