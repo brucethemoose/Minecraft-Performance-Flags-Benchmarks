@@ -55,12 +55,20 @@ Arguments for GraalVM EE 21 for Java 8 (only recommended for packs that absolute
 x86 users can add these additional arguments: 
 ```-XX:+UseNewLongLShift -XX:+UseXMMForArrayCopy -XX:+UseXmmI2D -XX:+UseXmmI2F -XX:+UseXmmLoadAndClearUpper -XX:+UseXmmRegToRegMoveAll -XX:+UseNewLongLShift```
 
+Memory Allocation
+------
+The minimum and maxmum (`-xms` and `-xmx`) values should be set to the same value, as explained here: https://dzone.com/articles/benefits-of-setting-initial-and-maximum-memory-siz
+
+Among other things, allocating too much memory can make GC pauses much more severe, while allocating too little can slow the game down. Give Minecraft only as much memory as your setup needs.   
+
 Notes
 ------
 
 - GraalVM should be compatible with any mod, as far as I know. I am removing incompatible flags as I come across them, but I tend to run these with large Forge/Fabric packs. 
 
-- Java 17+ users can try replacing `-XX:+UseG1GC` with `XX:+UseZGC`, in GraalVM or any other OpenJDK build. In my testing, ZGC reduces FPS/TPS (especially in GraalVM, where zgc isn't fully supported and disables some of the optimizations) and increase memory usage, but can reduce pauses/stutters from GC even more. See this Github page for more optimal ZGC flags: https://github.com/FroggeMC/MC-Java-Flags
+- Some users report improved performance from launching java at a high priority, via `start /high java...` on Windows or `nice -n -20 java...` on linux. This can be done through launchers like PolyMC and ATlauncher. 
+
+- Java 17+ users can try replacing `-XX:+UseG1GC` with `XX:+UseZGC`, in GraalVM or any other new OpenJDK build. In my testing, ZGC reduces FPS/TPS (especially in GraalVM, where zgc isn't fully supported and disables some of the optimizations) and increase memory usage, but can reduce pauses/stutters from GC even more. See this Github page for more optimal ZGC flags: https://github.com/FroggeMC/MC-Java-Flags
 
 - For Java 8 users: Red Hat builds OpenJDK with the Shenandoah GC. If GraalVM 21 is still stuttering, you can try `-XX:+UseShenandoahGC`: https://access.redhat.com/products/openjdk
 
