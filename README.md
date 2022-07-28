@@ -66,7 +66,7 @@ Notes
 
 - GraalVM should be compatible with any mod, as far as I know. I am removing incompatible flags as I come across them, but I tend to run these with large Forge/Fabric packs. 
 
-- Some users report improved performance from launching java at a high priority, via `start /high java...` on Windows or `nice -n -20 java...` on linux. This can be done through launchers like PolyMC and ATlauncher. 
+- Some users report improved performance from running Minecraft at a high priority, via the task manager on Windows or `nice -n -20 java...` on linux.
 
 - Java 17+ users can try replacing `-XX:+UseG1GC` with `XX:+UseZGC`, in GraalVM or any other new OpenJDK build. In my testing, ZGC reduces FPS/TPS (especially in GraalVM, where zgc isn't fully supported and disables some of the optimizations) and increase memory usage, but can reduce pauses/stutters from GC even more. See this Github page for more optimal ZGC flags: https://github.com/FroggeMC/MC-Java-Flags
 
