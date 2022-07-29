@@ -71,6 +71,8 @@ Notes
 
 - `MaxGCPauseMillis` and `G1HeapRegionSize` need more testing, given how divergent recommendations are.
 
+- Many flags are reduntant/enabled by default. But some Java releases disable some of these flags, so they are left in by default. See reduntant-flags.md if you need to remove flags for some reason.
+
 Benchmarks
 ------
 15%+ improvement in chunk generation and server startup time. Actual data coming Soon(TM).
