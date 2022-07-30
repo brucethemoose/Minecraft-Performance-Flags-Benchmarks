@@ -78,7 +78,7 @@ Notes
 
 - `MaxGCPauseMillis` and `G1HeapRegionSize` need more testing, given how divergent recommendations are.
 
-- Many flags are reduntant/enabled by default. But some Java releases disable some of these flags, so they are left in by default. See reduntant-flags.md if you need to remove flags for some reason.
+- Many flags are reduntant/enabled by default. Some will be culled from the GraalVM args, see reduntant-flags.md
 
 Benchmarks
 ------
