@@ -74,7 +74,7 @@ Notes
 
 - Some users report improved performance from running Minecraft at a high priority, via the task manager on Windows or `nice -n -20 java...` on linux.
 
-- On windows, a tool called SpecialK can make clients in windowed mode run more efficiently, especially with a high performance frame cap as an alternative to vsync. See: https://wiki.special-k.info/en/SwapChain
+- On Windows, a tool called SpecialK can make clients in windowed mode run more efficiently, especially with a high performance frame cap as an alternative to vsync. See: https://wiki.special-k.info/en/SwapChain
 
 - Minecraft linux users should check out https://github.com/Admicos/minecraft-wayland
 
