@@ -12,7 +12,7 @@ x86 users (aka most users) can add these additional arguments:
 
 ```-XX:+UseNewLongLShift -XX:+UseXMMForArrayCopy -XX:+UseXmmI2D -XX:+UseXmmI2F -XX:+UseXmmLoadAndClearUpper -XX:+UseXmmRegToRegMoveAll -XX:+UseNewLongLShift```
 
-These flags are applicable to both servers and clients.
+These flags are applicable to both servers and clients. While they will work with anything, I recommend running them with GraalVM CE instead of other OpenJDK builds, which you can [download here](https://github.com/graalvm/graalvm-ce-builds/releases).
 
 But even more performance can be gained with the tweaks below:
 
