@@ -65,7 +65,7 @@ Among other things, allocating too much memory can make GC pauses much more seve
 
 Mod Compatibility
 ------
-- GraalVM 22.2.0 is currently incompatible with Immersive Portals. If you use it, roll back to 22.1.0 and remove these flags: `-Dgraal.EarlyGVN=true -Dgraal.StripMineCountedLoops=true`. See: https://github.com/oracle/graal/issues/4772
+- If you run the Immersive Portals mod, change `-Dgraal.UsePriorityInlining=true` to `-Dgraal.UsePriorityInlining=false`
 
 I know of no other mod incompatibilities, and I run these flags in Forge/Fabric modpacks. If you run into any issues, please create a Github issue!
 
