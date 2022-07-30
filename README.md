@@ -33,8 +33,6 @@ For servers, you need to replace the "java" command in your server start sh/bat 
 
 If you don't feel comfortable making an Oracle account, grab the latest [GraalVM CE release](https://github.com/graalvm/graalvm-ce-builds/releases) and use the flags from above ^. But Oracle does not check the information you put into the registration page, and GraalVM CE lacks most of the EE optimizations.
 
-Note that GraalVM EE is currently incompatible with Immerisve Portals 1.19. I haven't run into any other Forge/Fabic compatibilities in modpacks, but if y'all find any, please create an issue.  
-
 Large Pages
 ------
 
@@ -65,20 +63,28 @@ The minimum and maxmum (`-xms` and `-xmx`) values should be set to the same valu
 
 Among other things, allocating too much memory can make GC pauses much more severe, while allocating too little can slow the game down. Give Minecraft only as much memory as your setup needs.   
 
+Mod Compatibility
+------
+- GraalVM 22.2.0 is currently incompatible with Immersive Portals. If you use it, roll back to 22.1.0 and remove these flags: `-Dgraal.EarlyGVN=true -Dgraal.StripMineCountedLoops=true`. See: https://github.com/oracle/graal/issues/4772
+
+I know of no other mod incompatibilities, and I run these flags in Forge/Fabric modpacks. If you run into any issues, please create a Github issue!
+
 Notes
 ------
 
-- GraalVM should be compatible most mods, as far as I know. I am removing incompatible flags as I come across them, but I tend to run these with large Forge/Fabric packs. 
-
 - Some users report improved performance from running Minecraft at a high priority, via the task manager on Windows or `nice -n -20 java...` on linux.
 
-- Java 17+ users can try replacing `-XX:+UseG1GC` with `XX:+UseZGC`, in GraalVM or any other new OpenJDK build. In my testing, ZGC reduces FPS/TPS (especially in GraalVM, where zgc isn't fully supported and disables some of the optimizations) and increase memory usage, but can reduce pauses/stutters from GC even more. See this Github page for more optimal ZGC flags: https://github.com/FroggeMC/MC-Java-Flags
+- On windows, a tool called SpecialK can make clients in windowed mode run more efficiently, especially with a high performance frame cap as an alternative to vsync. See: https://wiki.special-k.info/en/SwapChain
+
+- Minecraft linux users should check out https://github.com/Admicos/minecraft-wayland
+
+- Java 17+ users can try replacing `-XX:+UseG1GC` with `XX:+UseZGC`, in GraalVM or any other new OpenJDK build. In my testing, ZGC reduces FPS/TPS (especially in GraalVM, where zgc isn't fully supported and disablest the enterprise compiler entirely) and increase memory usage, but can reduce pauses/stutters from GC even more. See this Github page for more optimal ZGC flags: https://github.com/FroggeMC/MC-Java-Flags
 
 - For Java 8 users: Red Hat builds OpenJDK with the Shenandoah GC. If GraalVM 21 is still stuttering, you can try `-XX:+UseShenandoahGC`: https://access.redhat.com/products/openjdk
 
 - `MaxGCPauseMillis` and `G1HeapRegionSize` need more testing, given how divergent recommendations are.
 
-- Many flags are reduntant/enabled by default. Some will be culled from the GraalVM args, see reduntant-flags.md
+- Many flags are reduntant/enabled by default. Some will be culled from the GraalVM args, but others will be left in, see reduntant-flags.md
 
 Benchmarks
 ------
