@@ -59,7 +59,7 @@ Arguments for GraalVM EE 21 for Java 8 (only recommended for packs that absolute
 
 Memory Allocation
 ------
-The minimum and maxmum (`-xms` and `-xmx`) values should be set to the same value, as explained here: https://dzone.com/articles/benefits-of-setting-initial-and-maximum-memory-siz
+The minimum and maximum (`-xms` and `-xmx`) values should be set to the same value, as explained here: https://dzone.com/articles/benefits-of-setting-initial-and-maximum-memory-siz
 
 Among other things, allocating too much memory can make GC pauses much more severe, while allocating too little can slow the game down. Give Minecraft only as much memory as your setup needs.   
 
@@ -97,3 +97,5 @@ Sources
 - Red Hat's optimization guide: https://www.redhat.com/en/blog/optimizing-rhel-8-run-java-implementation-minecraft-server
 - GraalVM release notes: https://www.graalvm.org/release-notes/
 - Oracle's Java 17 Documentation: https://docs.oracle.com/en/java/javase/17/docs/specs/man/java.html
+- VM Options explorer: https://chriswhocodes.com/
+- Java itself, via the `-XX:+PrintFlagsFinal` and the `-XX:+JVMCIPrintProperties` flags to dump flag descriptions/defaults. 
