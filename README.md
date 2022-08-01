@@ -65,7 +65,7 @@ Among other things, allocating too much memory can make GC pauses much more seve
 
 Mod Compatibility
 ------
-- `UsePriorityInlining` is seems to break mods that touch rendering (like Iris and Immerisive Portals) in particular. You can try re enabling it if you don't run similar mods.
+- `UsePriorityInlining` breaks vanilla Minecraft in the current release. You can roll back to 22.1.0, or wait until Oracle (or Mojang?) fix the issue. 
 
 - Similarly, `VectorizeSIMD` turns villagers and some passive mobs invisible when running Iris. You can try re-enabling it if you don't run Iris. 
 
