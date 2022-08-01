@@ -65,9 +65,9 @@ Among other things, allocating too much memory can make GC pauses much more seve
 
 Mod Compatibility
 ------
-- `UsePriorityInlining` breaks vanilla Minecraft in the current release. You can roll back to 22.1.0, or wait until Oracle (or Mojang?) fix the issue. 
+- `UsePriorityInlining` breaks vanilla Minecraft in the current release. You can roll back to 22.1.0, or wait until Oracle (or Mojang?) fixes the issue. 
 
-- Similarly, `VectorizeSIMD` turns villagers and some passive mobs invisible when running Iris. You can try re-enabling it if you don't run Iris. 
+- `VectorizeSIMD` turns villagers and some passive mobs invisible when running shaders through Iris or Occulus. You can try re-enabling it if you don't run Iris. 
 
 I know of no other mod incompatibilities, and I run these flags in Forge/Fabric modpacks. If you run into any issues, please create a Github issue!
 
