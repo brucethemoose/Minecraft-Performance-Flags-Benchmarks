@@ -86,7 +86,7 @@ Notes
 
 - `MaxGCPauseMillis` and `G1HeapRegionSize` need more testing, given how divergent recommendations are.
 
-- Many flags are reduntant/enabled by default. Some will be culled from the GraalVM args, but others will be left in, see reduntant-flags.md
+- Many flags are reduntant/enabled by default. Some will be culled from the GraalVM args, but others will be left in, see redundant-flags.md
 
 Benchmarks
 ------
