@@ -84,7 +84,7 @@ Notes
 
 - For Java 8 users: Red Hat builds OpenJDK with the Shenandoah GC. If GraalVM 21 is still stuttering, you can try `-XX:+UseShenandoahGC`: https://access.redhat.com/products/openjdk
 
-- `MaxGCPauseMillis` and `G1HeapRegionSize` need more testing, given how divergent recommendations are.
+- `MaxGCPauseMillis` and `G1HeapRegionSize` need more testing, given how divergent recommendations are. You can try decreasing `MaxGCPauseMillis` on the client, but this doesn't seem to have the desired effect.
 
 - Many flags are reduntant/enabled by default. Some will be culled from the GraalVM args, but others will be left in, see redundant-flags.md
 
