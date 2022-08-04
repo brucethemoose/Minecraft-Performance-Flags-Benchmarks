@@ -76,17 +76,15 @@ Notes
 
 - Some users report improved performance from running Minecraft at a high priority, via the task manager on Windows or `nice -n -20 java...` on linux.
 
-- On Windows, a tool called SpecialK can make clients in windowed mode run more efficiently, especially with a high performance frame cap as an alternative to vsync. See: https://wiki.special-k.info/en/SwapChain
-
 - Minecraft linux users should check out https://github.com/Admicos/minecraft-wayland
 
 - Java 17+ users can try replacing `-XX:+UseG1GC` with `XX:+UseZGC`, in GraalVM or any other new OpenJDK build. In my testing, ZGC reduces FPS/TPS (especially in GraalVM, where zgc isn't fully supported and disables the enterprise compiler entirely) and increase memory usage, but can reduce pauses/stutters from GC even more. See this Github page for more optimal ZGC flags: https://github.com/FroggeMC/MC-Java-Flags
 
 - For Java 8 users: Red Hat builds OpenJDK with the Shenandoah GC. If GraalVM 21 is still stuttering, you can try `-XX:+UseShenandoahGC`: https://access.redhat.com/products/openjdk
 
-- `MaxGCPauseMillis` and `G1HeapRegionSize` need more testing, given how divergent recommendations are. You can try decreasing `MaxGCPauseMillis` and increasing `XX:G1ReservePercent` on the client, but this doesn't seem to have the desired effect.
+- `MaxGCPauseMillis` and `G1HeapRegionSize` need more testing, given how divergent recommendations are. You can try decreasing `MaxGCPauseMillis` and increasing `XX:G1ReservePercent` (which allocates more memory to GC) on the client, but your mileage may vary.
 
-- Many flags are reduntant/enabled by default. Some will be culled from the GraalVM args, but others will be left in, see redundant-flags.md
+- Many flags are redundant/enabled by default. Some will be culled from the GraalVM args, but most are left in the OpemJDK args due to variations between distribitions, See redundant-flags.md
 
 Benchmarks
 ------
