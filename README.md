@@ -93,7 +93,15 @@ Notes
 
 Benchmarks
 ------
-15%+ improvement in chunk generation and server startup time. Actual data coming Soon(TM).
+
+| All The Mods 7 (8/5/2022)          | Server Startup | Generate 9000 Chunks |
+|------------------------------------|----------------|----------------------|
+| Adoptium 17 (Optimized Arguments)  | 167.2s         | 746.5s               |
+| GraalVM 22.1.0 17 (Optimized Args) | 148.8s         | 611.7s               |
+
+Made with https://github.com/brucethemoose/Minecraft-Benchmark
+
+More to come soon(tm)
 
 Sources
 ------
