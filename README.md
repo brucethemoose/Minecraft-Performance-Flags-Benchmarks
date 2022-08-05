@@ -51,9 +51,9 @@ Arguments for GraalVM EE 22+ for Java 17+:
 
 ```-server -XX:+UseG1GC -XX:+ParallelRefProcEnabled -XX:MaxGCPauseMillis=200 -XX:+UnlockExperimentalVMOptions -XX:+UnlockDiagnosticVMOptions -XX:+DisableExplicitGC -XX:+AlwaysPreTouch -XX:G1NewSizePercent=30 -XX:G1MaxNewSizePercent=40 -XX:G1HeapRegionSize=8M -XX:G1ReservePercent=20 -XX:G1HeapWastePercent=5 -XX:G1MixedGCCountTarget=4 -XX:InitiatingHeapOccupancyPercent=15 -XX:G1MixedGCLiveThresholdPercent=90 -XX:G1RSetUpdatingPauseTimePercent=5 -XX:SurvivorRatio=32 -Dsun.rmi.dgc.server.gcInterval=2147483646 -XX:+PerfDisableSharedMem -XX:MaxTenuringThreshold=1 -XX:+EnableJVMCIProduct -XX:+EnableJVMCI -XX:+UseJVMCICompiler -XX:+EagerJVMCI -XX:+UseFastUnorderedTimeStamps -XX:AllocatePrefetchStyle=1 -XX:+TrustFinalNonStaticFields -XX:ThreadPriorityPolicy=1 -XX:+UseNUMA -XX:-DontCompileHugeMethods -XX:+UseVectorCmov -Djdk.nio.maxCachedBufferSize=262144 -Dgraal.TuneInlinerExploration=1 -Dgraal.CompilerConfiguration=enterprise -Dgraal.UsePriorityInlining=false -Dgraal.Vectorization=true -Dgraal.OptDuplication=true -Dgraal.DetectInvertedLoopsAsCounted=true -Dgraal.LoopInversion=true -Dgraal.VectorizeHashes=true -Dgraal.EnterprisePartialUnroll=true -Dgraal.VectorizeSIMD=false -Dgraal.StripMineNonCountedLoops=true -Dgraal.SpeculativeGuardMovement=true -Dgraal.InfeasiblePathCorrelation=true -Dgraal.LoopRotation=true -Dgraal.EarlyGVN=true -Dgraal.StripMineCountedLoops=true -Dlibgraal.ExplicitGCInvokesConcurrent=true -Dlibgraal.AlwaysPreTouch=true -Dlibgraal.ParallelRefProcEnabled=true --add-modules jdk.incubator.vector -XX:+UseFMA -XX:+UseLargePages -XX:LargePageSizeInBytes=2m```
 
-You can also add these experimental flags, which I am still testing: 
+Some experimental flags, but at least one of these is unstable:
 
-```-XX:JVMCIThreads=8 -XX:+AlignVector -XX:+RelaxAccessControlCheck -XX:+OptoScheduling -XX:+OptoBundling -XX:+OptimizeFill -XX:+AlwaysCompileLoopMethods -XX:+AlwaysActAsServerClassMachine -XX:+AllowParallelDefineClass -Dlibgraal.WriteableCodeCache=true```
+```-XX:+RelaxAccessControlCheck -XX:+OptoScheduling -XX:+OptoBundling -XX:+OptimizeFill -XX:+AlwaysCompileLoopMethods -XX:+AlwaysActAsServerClassMachine -XX:+AllowParallelDefineClass -Dlibgraal.WriteableCodeCache=true -Dgraal.VectorPolynomialIntrinsics=true -Dgraal.SIMDVectorizationSingletons=true -Dgraal.SIMDVectorizationDirectLoadStore=true -Dgraal.OptWriteMotion=true -Dgraal.LSRAOptimization=true -XX:JVMCIThreads=8 -XX:+AlignVector```
 
 Java 11 users: remove this line from the above arguments: `--add-modules jdk.incubator.vector`
 
@@ -70,7 +70,7 @@ Among other things, allocating too much memory can make GC pauses much more seve
 
 Mod Compatibility
 ------
-- `UsePriorityInlining` breaks vanilla Minecraft in the current release. You can roll back to 22.1.0, or wait until Oracle (or Mojang?) fixes the issue. 
+- `UsePriorityInlining` breaks vanilla Minecraft in the current release. You can roll back to GraalVM 22.1.0 (which I recommend), or wait until Oracle (or Mojang?) fixes the issue. 
 
 - `VectorizeSIMD` turns villagers and some passive mobs invisible when running shaders through Iris or Occulus. You can try re-enabling it if you don't run Iris. 
 
