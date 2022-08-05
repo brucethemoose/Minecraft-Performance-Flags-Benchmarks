@@ -79,6 +79,8 @@ I know of no other mod incompatibilities, and I run these flags in Forge/Fabric 
 Notes
 ------
 
+- A Windows program called SpecialK can mitigate the impact of Minecraft's windowed mode and janky frame limiter. After installing it, create an empty `SpecialK.OpenGL32` file in you Java bin directory.
+
 - Some users report improved performance from running Minecraft at a high priority, via the task manager on Windows or `nice -n -20 java...` on linux.
 
 - Minecraft linux users should check out https://github.com/Admicos/minecraft-wayland
@@ -89,7 +91,7 @@ Notes
 
 - `MaxGCPauseMillis` and `G1HeapRegionSize` need more testing, given how divergent recommendations are. You can try decreasing `MaxGCPauseMillis` and increasing `XX:G1ReservePercent` (which allocates more memory to GC) on the client, but your mileage may vary.
 
-- Many flags are redundant/enabled by default. Some will be culled from the GraalVM args, but most are left in the OpemJDK args due to variations between distribitions, See redundant-flags.md
+- Many flags Herr are redundant/enabled by default. Some will be culled from the GraalVM args, but most are left in the OpemJDK args due to variations between distribitions, See redundant-flags.md
 
 Benchmarks
 ------
