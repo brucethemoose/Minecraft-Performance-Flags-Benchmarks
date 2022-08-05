@@ -99,9 +99,10 @@ Benchmarks
 | Adoptium 17 (Optimized Arguments)  | 167.2s         | 746.5s               |
 | GraalVM 22.1.0 17 (Optimized Args) | 148.8s         | 611.7s               |
 
-Made with https://github.com/brucethemoose/Minecraft-Benchmark
 
-More to come soon(tm)
+More coming Soon(TM)
+
+Made with https://github.com/brucethemoose/Minecraft-Benchmark
 
 Sources
 ------
