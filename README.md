@@ -53,7 +53,7 @@ Arguments for GraalVM EE 22+ for Java 17+:
 
 Some experimental flags, but at least one of these is unstable:
 
-```-XX:+RelaxAccessControlCheck -XX:+OptoScheduling -XX:+OptoBundling -XX:+OptimizeFill -XX:+AlwaysCompileLoopMethods -XX:+AlwaysActAsServerClassMachine -XX:+AllowParallelDefineClass -Dlibgraal.WriteableCodeCache=true -Dgraal.VectorPolynomialIntrinsics=true -Dgraal.SIMDVectorizationSingletons=true -Dgraal.SIMDVectorizationDirectLoadStore=true -Dgraal.OptWriteMotion=true -Dgraal.LSRAOptimization=true -XX:JVMCIThreads=8 -XX:+AlignVector```
+```-XX:+AlwaysActAsServerClassMachine -XX:+AllowParallelDefineClass -Dlibgraal.WriteableCodeCache=true -Dgraal.VectorPolynomialIntrinsics=true -Dgraal.SIMDVectorizationSingletons=true -Dgraal.SIMDVectorizationDirectLoadStore=true -Dgraal.OptWriteMotion=true -Dgraal.LSRAOptimization=true -XX:JVMCIThreads=8 -XX:+AlignVector```
 
 Java 11 users: remove this line from the above arguments: `--add-modules jdk.incubator.vector`
 
