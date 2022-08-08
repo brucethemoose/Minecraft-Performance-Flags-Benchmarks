@@ -70,9 +70,9 @@ Among other things, allocating too much memory can make GC pauses much more seve
 
 Mod Compatibility
 ------
-- `UsePriorityInlining` breaks vanilla Minecraft in GraalVM 22.2.0, which is why you *must* use 22.1.0, as disabling it has a significant performance impact.
+- `UsePriorityInlining` breaks vanilla Minecraft in GraalVM 22.2.0, which is why you *must* use 22.1.0, as disabling it has a significant performance impact. See: https://github.com/oracle/graal/issues/4776
 
-- `VectorizeSIMD` *sometimes* turns villagers and some passive mobs invisible when running shaders through Iris or Occulus. This doesn't happen for me on 22.1.0, but set it to `false` if it does.
+- `VectorizeSIMD` *sometimes* turns villagers and some passive mobs invisible when running shaders through Iris or Occulus. This doesn't happen for me on 22.1.0, but set it to `false` if it does. See: https://github.com/oracle/graal/issues/4775
 
 - Java JVMCI (which is available in *all* java distributions but enabled by default in GraalVM) breaks constellation rendering in Astral Sorcery. See: https://github.com/HellFirePvP/AstralSorcery/issues/1963
 
