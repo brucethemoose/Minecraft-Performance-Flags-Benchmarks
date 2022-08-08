@@ -74,7 +74,7 @@ Mod Compatibility
 
 - `VectorizeSIMD` *sometimes* turns villagers and some passive mobs invisible when running shaders through Iris or Occulus. This doesn't happen for me on 22.1.0, but set it to `false` if it does. See: https://github.com/oracle/graal/issues/4775
 
-- Java JVMCI (which is available in *all* java distributions but enabled by default in GraalVM) breaks constellation rendering in Astral Sorcery. See: https://github.com/HellFirePvP/AstralSorcery/issues/1963
+- Java JVMCI (which is enabled by default in GraalVM CE and EE) breaks constellation rendering in Astral Sorcery. See: https://github.com/HellFirePvP/AstralSorcery/issues/1963
 
 I know of no other mod incompatibilities, and I run these flags in Forge/Fabric modpacks. If you run into any issues, please create a Github issue!
 
