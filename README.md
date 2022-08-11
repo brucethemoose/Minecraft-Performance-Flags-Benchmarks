@@ -81,7 +81,7 @@ Among other things, allocating too much memory can make GC pauses much more seve
 
 Alternative Garbage Collection
 ------
-- In OpenJDK, replacing the G1GC flags with `-XX:+UseZGC -XX:+AlwaysPreTouch -XX:+ParallelRefProcEnabled -XX:+ExplicitGCInvokesConcurrent -XX:ZAllocationSpikeTolerance=7` has almost no performance hit compared to g1gc, at the cost of higher memory usage. More specific zgc flags are still being tested.
+- In OpenJDK, replacing the G1GC flags with `-XX:+UseZGC -XX:+AlwaysPreTouch -XX:+ParallelRefProcEnabled -XX:+ExplicitGCInvokesConcurrent -XX:ZAllocationSpikeTolerance=5` has almost no performance hit compared to g1gc, at the cost of higher memory usage. More specific zgc flags are still being tested.
 
 - All combinations of Shenandoh tested so far have a significant performance penalty. However, if you are a Java 8 user who can't run Graal EE 21 for some reason, Red Hat builds Java 8 with Shenandoah https://access.redhat.com/products/openjdk
 
