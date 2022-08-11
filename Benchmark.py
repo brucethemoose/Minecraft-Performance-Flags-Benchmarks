@@ -1,4 +1,4 @@
-import os,time,shutil,glob,datetime,json,platform,signal,statistics
+import os,time,shutil,glob,datetime,json,platform,signal,statistics,pprint
 import pexpect #Please install pexpect with pip
 import psutil  #Please install psutil with pip
 from pexpect import popen_spawn
