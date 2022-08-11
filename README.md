@@ -1,3 +1,9 @@
+Benchmarks
+------
+
+These flags are being tested/refined by the Benchmark.py script. See benchmark.md.
+
+
 Java Minecraft Flags
 ------
 These optimized flags will work with any Java 17+ build: 
@@ -12,7 +18,7 @@ x86 Java 8 users (aka most Java 8 users) can add these additional arguments:
 
 ```-XX:+UseNewLongLShift -XX:+UseXMMForArrayCopy -XX:+UseXmmI2D -XX:+UseXmmI2F -XX:+UseXmmLoadAndClearUpper -XX:+UseXmmRegToRegMoveAll -XX:+UseNewLongLShift```
 
-These flags are applicable to both servers and clients. Most Java distributions are (about) the same, except for a few extra optimizations in GraalVM CE, which you can [download here](https://github.com/graalvm/graalvm-ce-builds/releases).
+These flags are applicable to both servers and clients. Most Java distributions are similar, except for a few extra optimizations in GraalVM CE, which you can [download here](https://github.com/graalvm/graalvm-ce-builds/releases).
 
 But even more performance can be gained with the tweaks below:
 
@@ -25,7 +31,7 @@ Unfortunately, only GraalVM Enterprise Edition comes with the full set of optimi
 
 Register and download it here: https://www.oracle.com/downloads/graalvm-downloads.html
 
-Grab the newest "Oracle GraalVM Enterprise Edition Core" release available for Java 17+, or grab the latest GraalVM 21.X Java 8 for running old versions of Minecraft that explicitly require Java 8. Unzip them, and put the unzipped folder somewhere safe.
+Grab the newest "Oracle GraalVM Enterprise Edition Core" release available for Java 17+ from the "Archives" section, or grab the latest GraalVM 21.X Java 8 for running old versions of Minecraft that explicitly require Java 8. Unzip it, and put the unzipped folder somewhere safe.
 
 These releases are *not* Java installers. You need to manually replace your launcher's version of Java, or use a Minecraft launcher that supports specifying your Java path. I recommend ATlauncher, PolyMC, or GDLauncher. When specifying a java path, navigate to the "bin" folder in the GraalVM download and use "javaw.exe" or "java.exe"
 
@@ -38,9 +44,11 @@ Large Pages
 
 Enabling large pages can further improve the performance of Minecraft servers and clients, but requires launching Minecraft as an administrator. Chaotica Fractals has a great explanation, and a tutorial for enabling it in Windows: https://www.chaoticafractals.com/manual/getting-started/enabling-large-page-support-windows
 
+You **must** run java [as an administrator](https://support.sega.com/hc/en-us/articles/201556551-Compatibility-Mode-and-Running-as-Administrator-for-PC-Games) on Windows, otherwise Large Pages will silently not work. 
+
 Red Hat has a good tutorial for RHEL-like linux distros, like Fedora, CentOS, or Oracle Linux. Note that some linux users may have to change the value of`LargePageSizeInBytes`: https://www.redhat.com/en/blog/optimizing-rhel-8-run-java-implementation-minecraft-server
 
-To skip this tweak, remove `-XX:+UseLargePages -XX:LargePageSizeInBytes=2m` from the end of the arguments below. Otherwise Minecraft will not launch.
+To skip this tweak, remove `-XX:+UseLargePages -XX:LargePageSizeInBytes=2m` from the end of the arguments below. 
 
 GraalVM Java Arguments
 ------
@@ -66,43 +74,46 @@ The minimum and maximum (`-xms` and `-xmx`) values should be set to the same val
 
 Among other things, allocating too much memory can make GC pauses much more severe, while allocating too little can slow the game down. Give Minecraft only as much memory as your setup needs.   
 
+Alternative Garbage Collection
+------
+- In OpenJDK, replacing the G1GC flags with `-XX:+UseZGC -XX:+AlwaysPreTouch -XX:+ParallelRefProcEnabled -XX:+ExplicitGCInvokesConcurrent -XX:ZAllocationSpikeTolerance=7` has almost no performance hit compared to g1gc, at the cost of higher memory usage. More specific zgc flags are still being tested.
+
+- All combinations of Shenandoh tested so far have a significant performance penalty. However, if you are a Java 8 user who can't run Graal EE 21 for some reason, Red Hat builds Java 8 with Shenandoah https://access.redhat.com/products/openjdk
+
+- Ony G1GC works well with GraalVM. ZGC will disable JVMCI and most of Graal EE's performance optimizations. 
+
 Mod Compatibility
 ------
-- `UsePriorityInlining` breaks vanilla Minecraft in the current release. You can roll back to GraalVM 22.1.0 (which I recommend), or wait until Oracle (or Mojang?) fixes the issue. 
+- GraalVM 22.2.0 has issues with Minecraft, particularly with the `UsePriorityInlining` flag enabled. Please use 22.1.0 for now, see: https://github.com/oracle/graal/issues/4776
 
-- `VectorizeSIMD` turns villagers and some passive mobs invisible when running shaders through Iris or Occulus. You can try re-enabling it if you don't run Iris. 
+- `VectorizeSIMD` turns villagers and some passive mobs invisible when running shaders through Iris or Occulus... but only under certain unknown conditions. Disable this flag if you experience this, see https://github.com/oracle/graal/issues/4775
 
-I know of no other mod incompatibilities, and I run these flags in Forge/Fabric modpacks. If you run into any issues, please create a Github issue!
+- GraalVM CE and EE both break constellation rendering in Astral Sorcery, unless JVCMI is disabled. See: https://github.com/HellFirePvP/AstralSorcery/issues/1963
 
-Notes
+I know of no other Graal mod incompatibilities, and I run 1.18.2 Forge/Fabric modpacks. If you run into any issues, please create a Github issue!
+
+Benchmarks
+------
+
+These flags are being tested/refined by the Benchmark.py script. See benchmark.md.
+
+More data will be posted in the "Benchmarks" folder Soon(tm)
+
+Performance Notes
 ------
 
 - A Windows program called SpecialK can mitigate the impact of Minecraft's windowed mode and janky frame limiter. After installing it, create an empty `SpecialK.OpenGL32` file in you Java bin directory.
 
-- Some users report improved performance from running Minecraft at a high priority, via the task manager on Windows or `nice -n -20 java...` on linux.
+- Some users report improved performance from running Minecraft at a high priority, via the task manager on Windows or `nice -n -19 java...` on linux. The `Benchmark.py` script does this automatically.
 
 - Minecraft linux users should check out https://github.com/Admicos/minecraft-wayland
-
-- Java 17+ users can try replacing `-XX:+UseG1GC` with `XX:+UseZGC`, in GraalVM or any other new OpenJDK build. In my testing, ZGC reduces FPS/TPS (especially in GraalVM, where zgc isn't fully supported and disables the enterprise compiler entirely) and increase memory usage, but can reduce pauses/stutters from GC even more. See this Github page for more optimal ZGC flags: https://github.com/FroggeMC/MC-Java-Flags
-
-- For Java 8 users: Red Hat builds OpenJDK with the Shenandoah GC. If GraalVM 21 is still stuttering, you can try `-XX:+UseShenandoahGC`: https://access.redhat.com/products/openjdk
 
 - G1GC parameters like `MaxGCPauseMillis` and `G1HeapRegionSize` need more testing, given how divergent recommendations are. On clients, you can try decreasing `MaxGCPauseMillis` and increasing `XX:G1ReservePercent` (which allocates more memory to GC), but your mileage may vary.
 
 - Many OpenJDK8 Flags are redundant/default in some distributions/versions. In addition, many of the `dgraal` flags are reduntant for testing ease of access.
 
-Benchmarks
-------
-
-| All The Mods 7 (8/5/2022)          | Server Startup | Generate 9000 Chunks |
-|------------------------------------|----------------|----------------------|
-| Adoptium 17 (Optimized Arguments)  | 167.2s         | 746.5s               |
-| GraalVM 22.1.0 17 (Optimized Args) | 148.8s         | 611.7s               |
 
 
-More coming Soon(TM)
-
-Made with https://github.com/brucethemoose/Minecraft-Benchmark
 
 Sources
 ------
