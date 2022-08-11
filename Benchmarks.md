@@ -10,6 +10,8 @@
 
 - Forceload chunks on the server.
 
+- Dump all the data as a json.
+
 Benchmarks are configured at the top of the `Benchmarks.py` file, and requires some very basic knowledge about Python formatting and strings. 
 
 Some features that are a work-in-progress:
