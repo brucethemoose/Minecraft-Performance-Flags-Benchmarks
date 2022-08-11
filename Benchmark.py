@@ -32,7 +32,11 @@ gbackpath = r"C:/Users/Alpha/Downloads/graalvm-ee-java17-windows-amd64-22.1.0/gr
 #GC
 aikar = r''' -XX:+UseG1GC -XX:+ParallelRefProcEnabled -XX:MaxGCPauseMillis=200 -XX:+UnlockExperimentalVMOptions -XX:+DisableExplicitGC -XX:+AlwaysPreTouch -XX:G1NewSizePercent=30 -XX:G1MaxNewSizePercent=40 -XX:G1HeapRegionSize=8M -XX:G1ReservePercent=20 -XX:G1HeapWastePercent=5 -XX:G1MixedGCCountTarget=4 -XX:InitiatingHeapOccupancyPercent=15 -XX:G1MixedGCLiveThresholdPercent=90 -XX:G1RSetUpdatingPauseTimePercent=5 -XX:SurvivorRatio=32 -XX:MaxTenuringThreshold=1'''
 
-aikartweaks = r''' -XX:+UseG1GC -XX:+ParallelRefProcEnabled -XX:MaxGCPauseMillis=20 -XX:+UnlockExperimentalVMOptions -XX:+DisableExplicitGC -XX:+AlwaysPreTouch -XX:G1NewSizePercent=30 -XX:G1MaxNewSizePercent=40 -XX:G1HeapRegionSize=32M -XX:G1ReservePercent=45 -XX:G1HeapWastePercent=5 -XX:G1MixedGCCountTarget=4 -XX:InitiatingHeapOccupancyPercent=15 -XX:G1MixedGCLiveThresholdPercent=90 -XX:G1RSetUpdatingPauseTimePercent=5 -XX:SurvivorRatio=32 -XX:MaxTenuringThreshold=1 -XX:+ExplicitGCInvokesConcurrent'''
+#aikartweaks = r''' -XX:+UseG1GC -XX:+ParallelRefProcEnabled -XX:MaxGCPauseMillis=20 -XX:+UnlockExperimentalVMOptions -XX:+DisableExplicitGC -XX:+AlwaysPreTouch -XX:G1NewSizePercent=30 -XX:G1MaxNewSizePercent=40 -XX:G1HeapRegionSize=32M -XX:G1ReservePercent=45 -XX:G1HeapWastePercent=5 -XX:G1MixedGCCountTarget=4 -XX:InitiatingHeapOccupancyPercent=15 -XX:G1MixedGCLiveThresholdPercent=90 -XX:G1RSetUpdatingPauseTimePercent=5 -XX:SurvivorRatio=32 -XX:MaxTenuringThreshold=1 -XX:+ExplicitGCInvokesConcurrent'''
+
+aikarmegatweak = r''' -XX:+UseG1GC -XX:+ParallelRefProcEnabled -XX:MaxGCPauseMillis=8 -XX:+UnlockExperimentalVMOptions -XX:+DisableExplicitGC -XX:+AlwaysPreTouch -XX:G1NewSizePercent=35 -XX:G1MaxNewSizePercent=45 -XX:G1HeapRegionSize=32M -XX:G1ReservePercent=38 -XX:G1HeapWastePercent=4 -XX:G1MixedGCCountTarget=1 -XX:InitiatingHeapOccupancyPercent=1 -XX:G1MixedGCLiveThresholdPercent=45 -XX:G1RSetUpdatingPauseTimePercent=4 -XX:SurvivorRatio=32 -XX:MaxTenuringThreshold=1 -XX:+ExplicitGCInvokesConcurrent -XX:GCPauseIntervalMillis=9 -XX:G1RSetUpdatingPauseTimePercent=10 -XX:G1ConcRSHotCardLimit=8 -XX:G1ConcRefinementServiceIntervalMillis=75'''
+
+aikarlesstweak = r''' -XX:+UseG1GC -XX:+ParallelRefProcEnabled -XX:MaxGCPauseMillis=16 -XX:+UnlockExperimentalVMOptions -XX:+DisableExplicitGC -XX:+AlwaysPreTouch -XX:G1NewSizePercent=30 -XX:G1MaxNewSizePercent=40 -XX:G1HeapRegionSize=16M -XX:G1ReservePercent=38 -XX:G1HeapWastePercent=5 -XX:G1MixedGCCountTarget=2 -XX:InitiatingHeapOccupancyPercent=1 -XX:G1MixedGCLiveThresholdPercent=70 -XX:G1RSetUpdatingPauseTimePercent=5 -XX:SurvivorRatio=32 -XX:MaxTenuringThreshold=1 -XX:+ExplicitGCInvokesConcurrent -XX:GCPauseIntervalMillis=17 -XX:G1RSetUpdatingPauseTimePercent=12 -XX:G1ConcRSHotCardLimit=8 -XX:G1ConcRefinementServiceIntervalMillis=150'''
 
 shen1 = r''' -XX:+UseShenandoahGC -XX:+AlwaysPreTouch -XX:+ParallelRefProcEnabled -XX:+ExplicitGCInvokesConcurrent -XX:ShenandoahGCMode=satb -XX:ShenandoahGCHeuristics=adaptive'''
 
@@ -77,53 +81,25 @@ blist = [
 #Benchmark name, Bechmark command (java + flags),server root directory, polymc instance name (only needed for client benchmarking), # of iterations to run this benchmark
 
   {
-    "Name": "OpenJDK Zgc", 
-    "Command": jdkpath + ojdk + zmemory + z2,
+    "Name": "Graal Extreme Tweaked Aikar", 
+    "Command": jdkpath + ojdk + memory + aikarmegatweak,
     "Path": vev, 
     "PolyInstance": "",
     "Iterations":  3
   },
   {
-    "Name": "More Graal",
-    "Command": gbackpath + memory + moregraal + aikar,
-    "Path": vev, 
-    "PolyInstance": "",
-    "Iterations": 3
-  },
-  {
-    "Name": "More Graal + Tweaked Aikar",
-    "Command": gbackpath + memory + moregraal + aikartweaks,
-    "Path": vev, 
-    "PolyInstance": "",
-    "Iterations": 3
-  },
-  {
-    "Name": "OpenJDK g1gc",
-    "Command": jdkpath + memory + ojdk + aikar,
+    "Name": "Graal Moderately Tweaked Aikar", 
+    "Command": jdkpath + ojdk + memory + aikarlesstweak,
     "Path": vev, 
     "PolyInstance": "",
     "Iterations":  3
   },
-  {
-    "Name": "OpenJDK vanilla + aikar",
-    "Command": jdkpath + memory + minimalgraal + aikar,
-    "Path": vev, 
-    "PolyInstance": "",
-    "Iterations":  3
-  },
-  {
-    "Name": "OpenJDK vanilla",
-    "Command": jdkpath + memory,
-    "Path": vev, 
-    "PolyInstance": "",
-    "Iterations":  3
-  }
 ]
 
 #----------------------Other Options--------------------------
 
 nogui = False     #Whether to run the dedicated server GUI or not
-carpet = 20 #number of simulated players if the "Carpet" fabric mod is present
+carpet = 50 #number of simulated players if the "Carpet" fabric mod is present
 fabric_chunkgen_command = r"chunky start"                 #Chunk generation command to use in fabric packs
 fabric_chunkgen_expect =  r"[Chunky] Task finished for"   #String to look for when chunk generation is finished
 forge_chunkgen_command = r"forge generate 0 0 0 3000"     #Chunk generation command to use in forge packs
@@ -131,7 +107,7 @@ forge_chunkgen_expect =  r"Finished generating"           ##String to look for w
 startuptimeout= 350 #Number of seconds to wait before considering the server to be dead/stuck
 chunkgentimeout = 600 #Number of seconds to wait for chunk generation before considering the server to be dead/stuck 
 totaltimeout = 1200 #Number of seconds the whole server can run before timing out. 
-forceload_cmd= r"forceload add -72 -72 72 72" #Command to forceload a rectangle. Can also be some other server console command. 
+forceload_cmd= r"forceload add -100 -100 100 100" #Command to forceload a rectangle. Can also be some other server console command. 
 debug = False #Print stages of when the server starts/runs
 
 #Client benchmarking options (WIP NOT IMPLEMENTED YET)

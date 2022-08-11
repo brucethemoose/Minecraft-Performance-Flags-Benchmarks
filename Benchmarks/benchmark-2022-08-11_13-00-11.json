@@ -1,0 +1,122 @@
+[
+    {
+        "Name": "Graal Extreme Tweaked Aikar",
+        "Command": "C:/Users/Alpha/Downloads/OpenJDK17U-jre_x64_windows_hotspot_17.0.4_8/jdk-17.0.4+8-jre/bin/java.exe -server -XX:+UnlockExperimentalVMOptions -XX:+UnlockDiagnosticVMOptions -XX:+PerfDisableSharedMem -XX:+UseStringDeduplication -XX:+UseFastUnorderedTimeStamps -XX:AllocatePrefetchStyle=1 -XX:+OmitStackTraceInFastThrow -XX:+TrustFinalNonStaticFields -XX:ThreadPriorityPolicy=1 -XX:InlineSmallCode=1000 -XX:+UseNUMA -XX:-DontCompileHugeMethods -XX:+UseVectorCmov -Djdk.nio.maxCachedBufferSize=262144 -Dgraal.CompilerConfiguration=community -Dgraal.SpeculativeGuardMovement=true -Xms8G -Xmx8G -XX:+UseG1GC -XX:+ParallelRefProcEnabled -XX:MaxGCPauseMillis=8 -XX:+UnlockExperimentalVMOptions -XX:+DisableExplicitGC -XX:+AlwaysPreTouch -XX:G1NewSizePercent=30 -XX:G1MaxNewSizePercent=40 -XX:G1HeapRegionSize=32M -XX:G1ReservePercent=45 -XX:G1HeapWastePercent=5 -XX:G1MixedGCCountTarget=4 -XX:InitiatingHeapOccupancyPercent=15 -XX:G1MixedGCLiveThresholdPercent=90 -XX:G1RSetUpdatingPauseTimePercent=4 -XX:SurvivorRatio=32 -XX:MaxTenuringThreshold=1 -XX:+ExplicitGCInvokesConcurrent -XX:GCPauseIntervalMillis=9 -XX:G1RSetUpdatingPauseTimePercent=10 -XX:G1ConcRSHotCardLimit=8 -XX:G1ConcRefinementServiceIntervalMillis=75",
+        "Path": "C:/Games/vevserver",
+        "PolyInstance": "",
+        "Iterations": 3,
+        "Startup_Times": [
+            105.27238345146179,
+            106.6143786907196,
+            105.93711948394775
+        ],
+        "Chunkgen_Times": [
+            179.28287625312805,
+            181.96286511421204,
+            179.1124665737152
+        ],
+        "Average_TPS_Values": [
+            20.0,
+            20.0,
+            20.0
+        ],
+        "GC_Stop_MS": [
+            36.32,
+            37.63,
+            35.32
+        ],
+        "GC_Stops": [
+            62,
+            62,
+            62
+        ],
+        "Oldgen_GCs": [
+            0,
+            0,
+            0
+        ],
+        "Memory_Usage": [
+            1.5,
+            1.8,
+            2.3
+        ],
+        "CPU_Usage": [
+            19.0,
+            20.0,
+            19.0
+        ],
+        "Average_Chunkgen_Time": 180.11940264701843,
+        "Average_Startup_Time": 105.94129387537639,
+        "PVariance_Chunkgen_Time": 1.7040168437820284,
+        "Pvariance_Startup_Time": 0.30016724980367193,
+        "Average_TPS": 20.0,
+        "Average_GC_Stop_MS": 36.42333333333333,
+        "Average_GC_Stops": 62,
+        "Average_Memory_Usage_GB": 1.8666666666666667,
+        "Average_CPU_Usage": 19.333333333333332,
+        "PVariance_TPS": 0.0,
+        "PVariance_GC_Stop_MS": 0.8946888888888908,
+        "PVariance_CPU_Usage": 0.2222222222222222,
+        "Average_Oldgen_GCs": 0
+    },
+    {
+        "Name": "Graal Moderately Tweaked Aikar",
+        "Command": "C:/Users/Alpha/Downloads/OpenJDK17U-jre_x64_windows_hotspot_17.0.4_8/jdk-17.0.4+8-jre/bin/java.exe -server -XX:+UnlockExperimentalVMOptions -XX:+UnlockDiagnosticVMOptions -XX:+PerfDisableSharedMem -XX:+UseStringDeduplication -XX:+UseFastUnorderedTimeStamps -XX:AllocatePrefetchStyle=1 -XX:+OmitStackTraceInFastThrow -XX:+TrustFinalNonStaticFields -XX:ThreadPriorityPolicy=1 -XX:InlineSmallCode=1000 -XX:+UseNUMA -XX:-DontCompileHugeMethods -XX:+UseVectorCmov -Djdk.nio.maxCachedBufferSize=262144 -Dgraal.CompilerConfiguration=community -Dgraal.SpeculativeGuardMovement=true -Xms8G -Xmx8G -XX:+UseG1GC -XX:+ParallelRefProcEnabled -XX:MaxGCPauseMillis=16 -XX:+UnlockExperimentalVMOptions -XX:+DisableExplicitGC -XX:+AlwaysPreTouch -XX:G1NewSizePercent=30 -XX:G1MaxNewSizePercent=40 -XX:G1HeapRegionSize=32M -XX:G1ReservePercent=45 -XX:G1HeapWastePercent=5 -XX:G1MixedGCCountTarget=4 -XX:InitiatingHeapOccupancyPercent=15 -XX:G1MixedGCLiveThresholdPercent=90 -XX:G1RSetUpdatingPauseTimePercent=5 -XX:SurvivorRatio=32 -XX:MaxTenuringThreshold=1 -XX:+ExplicitGCInvokesConcurrent -XX:GCPauseIntervalMillis=17 -XX:G1RSetUpdatingPauseTimePercent=12 -XX:G1ConcRSHotCardLimit=8 -XX:G1ConcRefinementServiceIntervalMillis=150",
+        "Path": "C:/Games/vevserver",
+        "PolyInstance": "",
+        "Iterations": 3,
+        "Startup_Times": [
+            105.60714149475098,
+            107.85780048370361,
+            103.08933782577515
+        ],
+        "Chunkgen_Times": [
+            182.46309518814087,
+            182.17820811271667,
+            179.1479206085205
+        ],
+        "Average_TPS_Values": [
+            20.0,
+            20.0,
+            20.0
+        ],
+        "GC_Stop_MS": [
+            35.55,
+            35.81,
+            34.47
+        ],
+        "GC_Stops": [
+            62,
+            62,
+            62
+        ],
+        "Oldgen_GCs": [
+            0,
+            0,
+            0
+        ],
+        "Memory_Usage": [
+            1.7,
+            1.7,
+            1.7
+        ],
+        "CPU_Usage": [
+            19.0,
+            19.0,
+            19.0
+        ],
+        "Average_Chunkgen_Time": 181.26307463645935,
+        "Average_Startup_Time": 105.51809326807658,
+        "PVariance_Chunkgen_Time": 2.2504650552435805,
+        "Pvariance_Startup_Time": 3.7936708133466306,
+        "Average_TPS": 20.0,
+        "Average_GC_Stop_MS": 35.276666666666664,
+        "Average_GC_Stops": 62,
+        "Average_Memory_Usage_GB": 1.7,
+        "Average_CPU_Usage": 19.0,
+        "PVariance_TPS": 0.0,
+        "PVariance_GC_Stop_MS": 0.3366222222222231,
+        "PVariance_CPU_Usage": 0.0,
+        "Average_Oldgen_GCs": 0
+    }
+]

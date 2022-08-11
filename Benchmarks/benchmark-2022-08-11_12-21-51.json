@@ -1,0 +1,122 @@
+[
+    {
+        "Name": "Graal Extreme Tweaked Aikar",
+        "Command": "C:/Users/Alpha/Downloads/graalvm-ee-java17-windows-amd64-22.1.0/graalvm-ee-java17-22.1.0/bin/java.exe -server -XX:+UnlockExperimentalVMOptions -XX:+UnlockDiagnosticVMOptions -XX:+PerfDisableSharedMem -XX:+EnableJVMCIProduct -XX:+EnableJVMCI -XX:+UseJVMCICompiler -XX:+EagerJVMCI -XX:+UseNUMA -Dgraal.UsePriorityInlining=true -Dgraal.Vectorization=true -Dgraal.OptDuplication=true -Dgraal.DetectInvertedLoopsAsCounted=true -Dgraal.LoopInversion=true -Dgraal.VectorizeHashes=true -Dgraal.EnterprisePartialUnroll=true -Dgraal.VectorizeSIMD=true -Dgraal.StripMineNonCountedLoops=true -Dgraal.SpeculativeGuardMovement=true -Dgraal.InfeasiblePathCorrelation=true -Dgraal.LoopRotation=true -Dlibgraal.ExplicitGCInvokesConcurrent=true -Dlibgraal.AlwaysPreTouch=true -Dlibgraal.ParallelRefProcEnabled=true -XX:AllocatePrefetchStyle=3 -XX:-DontCompileHugeMethods -XX:ThreadPriorityPolicy=1 -Xms8G -Xmx8G -XX:+UseG1GC -XX:+ParallelRefProcEnabled -XX:MaxGCPauseMillis=8 -XX:+UnlockExperimentalVMOptions -XX:+DisableExplicitGC -XX:+AlwaysPreTouch -XX:G1NewSizePercent=30 -XX:G1MaxNewSizePercent=40 -XX:G1HeapRegionSize=32M -XX:G1ReservePercent=45 -XX:G1HeapWastePercent=5 -XX:G1MixedGCCountTarget=4 -XX:InitiatingHeapOccupancyPercent=15 -XX:G1MixedGCLiveThresholdPercent=90 -XX:G1RSetUpdatingPauseTimePercent=4 -XX:SurvivorRatio=32 -XX:MaxTenuringThreshold=1 -XX:+ExplicitGCInvokesConcurrent -XX:GCPauseIntervalMillis=9 -XX:G1RSetUpdatingPauseTimePercent=10 -XX:G1ConcRSHotCardLimit=8 -XX:G1ConcRefinementServiceIntervalMillis=75",
+        "Path": "C:/Games/vevserver",
+        "PolyInstance": "",
+        "Iterations": 3,
+        "Startup_Times": [
+            95.30399417877197,
+            96.03420829772949,
+            93.6997344493866
+        ],
+        "Chunkgen_Times": [
+            140.6804699897766,
+            140.22010946273804,
+            139.8615436553955
+        ],
+        "Average_TPS_Values": [
+            20.0,
+            20.0,
+            20.0
+        ],
+        "GC_Stop_MS": [
+            32.31,
+            34.27,
+            34.58
+        ],
+        "GC_Stops": [
+            55,
+            56,
+            55
+        ],
+        "Oldgen_GCs": [
+            0,
+            0,
+            0
+        ],
+        "Memory_Usage": [
+            1.4,
+            1.4,
+            2.3
+        ],
+        "CPU_Usage": [
+            26.0,
+            27.0,
+            26.0
+        ],
+        "Average_Chunkgen_Time": 140.25404103597006,
+        "Average_Startup_Time": 95.01264564196269,
+        "PVariance_Chunkgen_Time": 0.11234906602147829,
+        "Pvariance_Startup_Time": 0.9507366763832705,
+        "Average_TPS": 20.0,
+        "Average_GC_Stop_MS": 33.72,
+        "Average_GC_Stops": 55.333333333333336,
+        "Average_Memory_Usage_GB": 1.7,
+        "Average_CPU_Usage": 26.333333333333332,
+        "PVariance_TPS": 0.0,
+        "PVariance_GC_Stop_MS": 1.0100666666666647,
+        "PVariance_CPU_Usage": 0.2222222222222222,
+        "Average_Oldgen_GCs": 0
+    },
+    {
+        "Name": "Graal Moderately Tweaked Aikar",
+        "Command": "C:/Users/Alpha/Downloads/graalvm-ee-java17-windows-amd64-22.1.0/graalvm-ee-java17-22.1.0/bin/java.exe -server -XX:+UnlockExperimentalVMOptions -XX:+UnlockDiagnosticVMOptions -XX:+PerfDisableSharedMem -XX:+EnableJVMCIProduct -XX:+EnableJVMCI -XX:+UseJVMCICompiler -XX:+EagerJVMCI -XX:+UseNUMA -Dgraal.UsePriorityInlining=true -Dgraal.Vectorization=true -Dgraal.OptDuplication=true -Dgraal.DetectInvertedLoopsAsCounted=true -Dgraal.LoopInversion=true -Dgraal.VectorizeHashes=true -Dgraal.EnterprisePartialUnroll=true -Dgraal.VectorizeSIMD=true -Dgraal.StripMineNonCountedLoops=true -Dgraal.SpeculativeGuardMovement=true -Dgraal.InfeasiblePathCorrelation=true -Dgraal.LoopRotation=true -Dlibgraal.ExplicitGCInvokesConcurrent=true -Dlibgraal.AlwaysPreTouch=true -Dlibgraal.ParallelRefProcEnabled=true -XX:AllocatePrefetchStyle=3 -XX:-DontCompileHugeMethods -XX:ThreadPriorityPolicy=1 -Xms8G -Xmx8G -XX:+UseG1GC -XX:+ParallelRefProcEnabled -XX:MaxGCPauseMillis=16 -XX:+UnlockExperimentalVMOptions -XX:+DisableExplicitGC -XX:+AlwaysPreTouch -XX:G1NewSizePercent=30 -XX:G1MaxNewSizePercent=40 -XX:G1HeapRegionSize=32M -XX:G1ReservePercent=45 -XX:G1HeapWastePercent=5 -XX:G1MixedGCCountTarget=4 -XX:InitiatingHeapOccupancyPercent=15 -XX:G1MixedGCLiveThresholdPercent=90 -XX:G1RSetUpdatingPauseTimePercent=5 -XX:SurvivorRatio=32 -XX:MaxTenuringThreshold=1 -XX:+ExplicitGCInvokesConcurrent -XX:GCPauseIntervalMillis=17 -XX:G1RSetUpdatingPauseTimePercent=12 -XX:G1ConcRSHotCardLimit=8 -XX:G1ConcRefinementServiceIntervalMillis=150",
+        "Path": "C:/Games/vevserver",
+        "PolyInstance": "",
+        "Iterations": 3,
+        "Startup_Times": [
+            94.22000336647034,
+            94.71931743621826,
+            93.44003939628601
+        ],
+        "Chunkgen_Times": [
+            141.3683476448059,
+            141.46954941749573,
+            140.35697412490845
+        ],
+        "Average_TPS_Values": [
+            20.0,
+            20.0,
+            20.0
+        ],
+        "GC_Stop_MS": [
+            36.78,
+            32.58,
+            33.07
+        ],
+        "GC_Stops": [
+            54,
+            55,
+            55
+        ],
+        "Oldgen_GCs": [
+            0,
+            0,
+            0
+        ],
+        "Memory_Usage": [
+            1.6,
+            1.2,
+            2.8
+        ],
+        "CPU_Usage": [
+            26.0,
+            26.0,
+            26.0
+        ],
+        "Average_Chunkgen_Time": 141.06495706240335,
+        "Average_Startup_Time": 94.1264533996582,
+        "PVariance_Chunkgen_Time": 0.25232688635789047,
+        "Pvariance_Startup_Time": 0.277134515387426,
+        "Average_TPS": 20.0,
+        "Average_GC_Stop_MS": 34.14333333333333,
+        "Average_GC_Stops": 54.666666666666664,
+        "Average_Memory_Usage_GB": 1.8666666666666667,
+        "Average_CPU_Usage": 26.0,
+        "PVariance_TPS": 0.0,
+        "PVariance_GC_Stop_MS": 3.516022222222226,
+        "PVariance_CPU_Usage": 0.0,
+        "Average_Oldgen_GCs": 0
+    }
+]
