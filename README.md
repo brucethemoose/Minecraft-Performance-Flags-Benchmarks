@@ -32,11 +32,8 @@ Unfortunately, only GraalVM Enterprise Edition comes with the full set of optimi
 Register and download it here: https://www.oracle.com/downloads/graalvm-downloads.html
 
 Grab the newest "Oracle GraalVM Enterprise Edition Core" release available for Java 17+ from the "Archives" section, or grab the latest GraalVM 21.X Java 8 for running old versions of Minecraft that explicitly require Java 8. Unzip it, and put the unzipped folder somewhere safe.
-=======
-Grab the newest "Oracle GraalVM Enterprise Edition Core **22.1.0**" release available for Java 17+, or grab the latest GraalVM 21.X Java 8 for running old versions of Minecraft that explicitly require Java 8. Unzip them, and put the unzipped folder somewhere safe.
 
-Again, you **must** use 22.1.0, not 22.2.0.
->>>>>>> 39b29aa80c9c9ce5b0f69a8a371a520e698666f1
+Again, you *must* use 22.1.0, not 22.2.0.
 
 These releases are *not* Java installers. You need to manually replace your launcher's version of Java, or use a Minecraft launcher that supports specifying your Java path. I recommend ATlauncher, PolyMC, or GDLauncher. When specifying a java path, navigate to the "bin" folder in the GraalVM download and use "javaw.exe" or "java.exe"
 
@@ -98,7 +95,6 @@ Mod Compatibility
 - `VectorizeSIMD` *sometimes* turns villagers and some passive mobs invisible when running shaders through Iris or Occulus. This doesn't happen for me on 22.1.0, but set it to `false` if it does. See: https://github.com/oracle/graal/issues/4775
 
 - Java JVMCI (which is enabled by default in GraalVM CE and EE) breaks constellation rendering in Astral Sorcery. See: https://github.com/HellFirePvP/AstralSorcery/issues/1963
->>>>>>> 39b29aa80c9c9ce5b0f69a8a371a520e698666f1
 
 - GraalVM CE and EE both break constellation rendering in Astral Sorcery, unless JVCMI is disabled. See: https://github.com/HellFirePvP/AstralSorcery/issues/1963
 
