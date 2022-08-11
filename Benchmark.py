@@ -32,6 +32,8 @@ gbackpath = r"C:/Users/Alpha/Downloads/graalvm-ee-java17-windows-amd64-22.1.0/gr
 #GC
 aikar = r''' -XX:+UseG1GC -XX:+ParallelRefProcEnabled -XX:MaxGCPauseMillis=200 -XX:+UnlockExperimentalVMOptions -XX:+DisableExplicitGC -XX:+AlwaysPreTouch -XX:G1NewSizePercent=30 -XX:G1MaxNewSizePercent=40 -XX:G1HeapRegionSize=8M -XX:G1ReservePercent=20 -XX:G1HeapWastePercent=5 -XX:G1MixedGCCountTarget=4 -XX:InitiatingHeapOccupancyPercent=15 -XX:G1MixedGCLiveThresholdPercent=90 -XX:G1RSetUpdatingPauseTimePercent=5 -XX:SurvivorRatio=32 -XX:MaxTenuringThreshold=1'''
 
+aikartweaks = r''' -XX:+UseG1GC -XX:+ParallelRefProcEnabled -XX:MaxGCPauseMillis=20 -XX:+UnlockExperimentalVMOptions -XX:+DisableExplicitGC -XX:+AlwaysPreTouch -XX:G1NewSizePercent=30 -XX:G1MaxNewSizePercent=40 -XX:G1HeapRegionSize=32M -XX:G1ReservePercent=45 -XX:G1HeapWastePercent=5 -XX:G1MixedGCCountTarget=4 -XX:InitiatingHeapOccupancyPercent=15 -XX:G1MixedGCLiveThresholdPercent=90 -XX:G1RSetUpdatingPauseTimePercent=5 -XX:SurvivorRatio=32 -XX:MaxTenuringThreshold=1 -XX:+ExplicitGCInvokesConcurrent'''
+
 shen1 = r''' -XX:+UseShenandoahGC -XX:+AlwaysPreTouch -XX:+ParallelRefProcEnabled -XX:+ExplicitGCInvokesConcurrent -XX:ShenandoahGCMode=satb -XX:ShenandoahGCHeuristics=adaptive'''
 
 shen2 = r''' -XX:+UseShenandoahGC -XX:+AlwaysPreTouch -XX:+ParallelRefProcEnabled -XX:+ExplicitGCInvokesConcurrent -XX:ShenandoahGCMode=satb -XX:ShenandoahGCHeuristics=static'''
@@ -46,10 +48,10 @@ shen6 = r''' -XX:+UseShenandoahGC -XX:+AlwaysPreTouch -XX:+ParallelRefProcEnable
 
 z1 = r''' -XX:+UseZGC -XX:+AlwaysPreTouch -XX:+ParallelRefProcEnabled -XX:+ExplicitGCInvokesConcurrent'''
 
-z2 = r''' -XX:+UseZGC -XX:+AlwaysPreTouch -XX:+ParallelRefProcEnabled -XX:+ExplicitGCInvokesConcurrent -XX:ZAllocationSpikeTolerance=7'''
+z2 = r''' -XX:+UseZGC -XX:+AlwaysPreTouch -XX:+ParallelRefProcEnabled -XX:+ExplicitGCInvokesConcurrent -XX:ZAllocationSpikeTolerance=5'''
 
 #flags
-minimalgraal = r''' -server -XX:+EagerJVMCI'''
+minimalgraal = r''' -server'''
 
 somegraal = r''' -server -XX:+UnlockExperimentalVMOptions -XX:+UnlockDiagnosticVMOptions -XX:+PerfDisableSharedMem -XX:+EnableJVMCIProduct -XX:+EnableJVMCI -XX:+UseJVMCICompiler -XX:+EagerJVMCI -XX:+UseNUMA -Dgraal.UsePriorityInlining=true -Dgraal.Vectorization=true -Dgraal.OptDuplication=true -Dgraal.DetectInvertedLoopsAsCounted=true -Dgraal.LoopInversion=true -Dgraal.VectorizeHashes=true -Dgraal.EnterprisePartialUnroll=true -Dgraal.VectorizeSIMD=true -Dgraal.StripMineNonCountedLoops=true -Dgraal.SpeculativeGuardMovement=true -Dgraal.InfeasiblePathCorrelation=true -Dgraal.LoopRotation=true -Dlibgraal.ExplicitGCInvokesConcurrent=true -Dlibgraal.AlwaysPreTouch=true -Dlibgraal.ParallelRefProcEnabled=true'''
 
@@ -63,7 +65,7 @@ experimental = r''' -XX:+EnableVectorAggressiveReboxing -XX:+EnableVectorReboxin
 
 lpages = r''' -XX:+UseLargePages -XX:LargePageSizeInBytes=2m'''
 
-memory = r''' -Xms6G -Xmx6G'''
+memory = r''' -Xms8G -Xmx8G'''
 
 zmemory =r''' -Xms3G -Xmx9G'''
 
@@ -75,25 +77,46 @@ blist = [
 #Benchmark name, Bechmark command (java + flags),server root directory, polymc instance name (only needed for client benchmarking), # of iterations to run this benchmark
 
   {
-    "Name": "zgc", 
-    "Command": jdkpath + ojdk + zmemory + aikar,
+    "Name": "OpenJDK Zgc", 
+    "Command": jdkpath + ojdk + zmemory + z2,
     "Path": vev, 
     "PolyInstance": "",
-    "Iterations":  1
+    "Iterations":  3
   },
   {
-    "Name": "Full Graal",
-    "Command": gbackpath + memory + graal + aikar,
+    "Name": "More Graal",
+    "Command": gbackpath + memory + moregraal + aikar,
     "Path": vev, 
     "PolyInstance": "",
-    "Iterations":  1
+    "Iterations": 3
   },
   {
-    "Name": "g1gc",
+    "Name": "More Graal + Tweaked Aikar",
+    "Command": gbackpath + memory + moregraal + aikartweaks,
+    "Path": vev, 
+    "PolyInstance": "",
+    "Iterations": 3
+  },
+  {
+    "Name": "OpenJDK g1gc",
     "Command": jdkpath + memory + ojdk + aikar,
     "Path": vev, 
     "PolyInstance": "",
-    "Iterations":  1
+    "Iterations":  3
+  },
+  {
+    "Name": "OpenJDK vanilla + aikar",
+    "Command": jdkpath + memory + minimalgraal + aikar,
+    "Path": vev, 
+    "PolyInstance": "",
+    "Iterations":  3
+  },
+  {
+    "Name": "OpenJDK vanilla",
+    "Command": jdkpath + memory,
+    "Path": vev, 
+    "PolyInstance": "",
+    "Iterations":  3
   }
 ]
 
