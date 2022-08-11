@@ -89,12 +89,6 @@ Mod Compatibility
 - GraalVM 22.2.0 has issues with Minecraft, particularly with the `UsePriorityInlining` flag enabled. Please use 22.1.0 for now, see: https://github.com/oracle/graal/issues/4776
 
 - `VectorizeSIMD` turns villagers and some passive mobs invisible when running shaders through Iris or Occulus... but only under certain unknown conditions. Disable this flag if you experience this, see https://github.com/oracle/graal/issues/4775
-=======
-- `UsePriorityInlining` breaks vanilla Minecraft in GraalVM 22.2.0, which is why you *must* use 22.1.0, as disabling it has a significant performance impact. See: https://github.com/oracle/graal/issues/4776
-
-- `VectorizeSIMD` *sometimes* turns villagers and some passive mobs invisible when running shaders through Iris or Occulus. This doesn't happen for me on 22.1.0, but set it to `false` if it does. See: https://github.com/oracle/graal/issues/4775
-
-- Java JVMCI (which is enabled by default in GraalVM CE and EE) breaks constellation rendering in Astral Sorcery. See: https://github.com/HellFirePvP/AstralSorcery/issues/1963
 
 - GraalVM CE and EE both break constellation rendering in Astral Sorcery, unless JVCMI is disabled. See: https://github.com/HellFirePvP/AstralSorcery/issues/1963
 
