@@ -1,4 +1,4 @@
-import os,time,shutil,glob,datetime,pprint,platform,signal,statistics
+import os,time,shutil,glob,datetime,json,platform,signal,statistics
 import pexpect #Please install pexpect with pip
 import psutil  #Please install psutil with pip
 from pexpect import popen_spawn
@@ -63,7 +63,7 @@ experimental = r''' -XX:+EnableVectorAggressiveReboxing -XX:+EnableVectorReboxin
 
 lpages = r''' -XX:+UseLargePages -XX:LargePageSizeInBytes=2m'''
 
-memory = r''' -Xms5G -Xmx5G'''
+memory = r''' -Xms6G -Xmx6G'''
 
 zmemory =r''' -Xms3G -Xmx9G'''
 
@@ -75,33 +75,26 @@ blist = [
 #Benchmark name, Bechmark command (java + flags),server root directory, polymc instance name (only needed for client benchmarking), # of iterations to run this benchmark
 
   {
-    "Name": "Minimal Graal", 
-    "Command": gbackpath + memory + minimalgraal + aikar + lpages,
+    "Name": "zgc", 
+    "Command": jdkpath + ojdk + zmemory + aikar,
     "Path": vev, 
     "PolyInstance": "",
-    "Iterations":  5
+    "Iterations":  1
   },
   {
     "Name": "Full Graal",
-    "Command": gbackpath + memory + graal + aikar + lpages,
+    "Command": gbackpath + memory + graal + aikar,
     "Path": vev, 
     "PolyInstance": "",
-    "Iterations":  5
+    "Iterations":  1
   },
   {
-    "Name": "Some Graal",
-    "Command": gbackpath + memory + somegraal + aikar + lpages,
+    "Name": "g1gc",
+    "Command": jdkpath + memory + ojdk + aikar,
     "Path": vev, 
     "PolyInstance": "",
-    "Iterations":  5
-  },
-  {
-    "Name": "Some Graal",
-    "Command": gbackpath + memory + moregraal + aikar + lpages,
-    "Path": vev, 
-    "PolyInstance": "",
-    "Iterations":  5
-  },
+    "Iterations":  1
+  }
 ]
 
 #----------------------Other Options--------------------------
@@ -128,7 +121,7 @@ frametimec = ""
 #-------------------------Code----------------------------
 #You shouldn't have to configure anything below this line!
 
-benchlog = os.path.normpath(os.path.join(os.path.dirname(os.path.realpath(__file__)), r"benchmark-"+str(datetime.datetime.now())[:-7].replace(" ", "_").replace(":","-") + r".log")) #Benchmark log path
+benchlog = os.path.normpath(os.path.join(os.path.dirname(os.path.realpath(__file__)), "Benchmarks/", r"benchmark-"+str(datetime.datetime.now())[:-7].replace(" ", "_").replace(":","-") + r".json")) #Benchmark log path
 sep = "----------------------------------------\n"
 
 
@@ -214,8 +207,7 @@ def benchmark(i): #"i is the benchmark index"
       os.remove(r"config/chunky.json")
 
     #Start Minecraft
-    with open(benchlog, "a") as f:
-      f.write("Running '" + blist[i]["Name"] + "' iteration " + str(n) + ": \n")
+    print("Running '" + blist[i]["Name"] + "' iteration " + str(n) + ": \n")
     start = time.time()
     mcserver = pexpect.popen_spawn.PopenSpawn(command, timeout=totaltimeout, maxread=20000000)   #Start Minecraft server
     if debug: print("Starting server: " + command)
@@ -332,18 +324,17 @@ def benchmark(i): #"i is the benchmark index"
         if len(blist[i]["Oldgen_GCs"]) > 1:
           blist[i]["Average_Oldgen_GCs"] = safemean(blist[i]["Oldgen_GCs"])
 
-
-  with open(benchlog, "a") as f:
-    pprint.pprint(blist[i], stream=f)
+  #os.remove(benchlog)
+  with open(benchlog, "w") as f:
+    json.dump(blist[0:i+1], f, indent=4)
   
 
 
 #-------------------------------Main thread---------------------------------------------
 
-with open(benchlog, "a") as f:
-  f.write("\n\n---------------------------------------------------------\n\n")
-  f.write("\n\n---------------------------------------------------------\n\n")
-  f.write("Benchmark started at " + str(datetime.datetime.now()) + "\n\n")
+#with open(benchlog, "a") as f:
+#  f.write("\n\n---------------------------------------------------------\n\n")
+#  f.write("Benchmark started at " + str(datetime.datetime.now()) + "\n\n")
 iter = 0
 for bench in blist:
   benchmark(iter)

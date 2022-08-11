@@ -1,0 +1,4 @@
+- Many Java 8 flags are redundant, and largely inherited from Java 17 testing. 
+- `AllocatePrefetchStyle=3` seems to crash ZGC
+- The effect of `JVMCIThreads=8` and `Dgraal.LSRAOptimization=true` seems sporadic and needs more testing.
+- `-Dlibgraal.WriteableCodeCache=true -Dgraal.VectorPolynomialIntrinsics=true -Dgraal.SIMDVectorizationSingletons=true -Dgraal.SIMDVectorizationDirectLoadStore=true -Dgraal.OptWriteMotion=true` seem to be unstable.
