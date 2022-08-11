@@ -136,3 +136,4 @@ Sources
 - Oracle's Java 17 Documentation: https://docs.oracle.com/en/java/javase/17/docs/specs/man/java.html
 - VM Options explorer: https://chriswhocodes.com/
 - Java itself, via the `-XX:+PrintFlagsFinal` and the `-XX:+JVMCIPrintProperties` flags to dump flag descriptions/defaults. 
+- Testing from @keyboard.tn in Discord.
