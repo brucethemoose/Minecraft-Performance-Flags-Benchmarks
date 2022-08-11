@@ -12,9 +12,9 @@
 
 - Dump all the data as a json.
 
-Benchmarks are configured at the top of the `Benchmarks.py` file, and requires some very basic knowledge about Python formatting and strings. 
+Benchmarks are configured at the top of the `Benchmarks.py` file, which requires some very basic knowledge about Python formatting and strings. 
 
-Some features that are a work-in-progress:
+Some work-in-progress features:
 
 - Stressing the server without generating chunks, via carpet/forceloading. 
 
