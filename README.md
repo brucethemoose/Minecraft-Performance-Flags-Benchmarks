@@ -4,7 +4,7 @@ Benchmarks
 These flags are being tested/refined by the Benchmark.py script. See [Benchmarks.md](https://github.com/brucethemoose/Minecraft-Performance-Flags-Benchmarks/blob/main/Benchmarks.md).
 
 
-Java Minecraft Flags
+Minecraft Java Edition Flags
 ------
 These optimized flags will work with any Java 17+ build: 
 
