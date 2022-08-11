@@ -31,7 +31,6 @@ Unfortunately, only GraalVM Enterprise Edition comes with the full set of optimi
 
 Register and download it here: https://www.oracle.com/downloads/graalvm-downloads.html
 
-<<<<<<< HEAD
 Grab the newest "Oracle GraalVM Enterprise Edition Core" release available for Java 17+ from the "Archives" section, or grab the latest GraalVM 21.X Java 8 for running old versions of Minecraft that explicitly require Java 8. Unzip it, and put the unzipped folder somewhere safe.
 =======
 Grab the newest "Oracle GraalVM Enterprise Edition Core **22.1.0**" release available for Java 17+, or grab the latest GraalVM 21.X Java 8 for running old versions of Minecraft that explicitly require Java 8. Unzip them, and put the unzipped folder somewhere safe.
@@ -90,7 +89,6 @@ Alternative Garbage Collection
 
 Mod Compatibility
 ------
-<<<<<<< HEAD
 - GraalVM 22.2.0 has issues with Minecraft, particularly with the `UsePriorityInlining` flag enabled. Please use 22.1.0 for now, see: https://github.com/oracle/graal/issues/4776
 
 - `VectorizeSIMD` turns villagers and some passive mobs invisible when running shaders through Iris or Occulus... but only under certain unknown conditions. Disable this flag if you experience this, see https://github.com/oracle/graal/issues/4775
