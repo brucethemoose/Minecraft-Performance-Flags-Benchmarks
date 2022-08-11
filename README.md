@@ -1,7 +1,7 @@
 Benchmarks
 ------
 
-These flags are being tested/refined by the Benchmark.py script. See benchmark.md.
+These flags are being tested/refined by the Benchmark.py script. See [Benchmarks.md](https://github.com/brucethemoose/Minecraft-Performance-Flags-Benchmarks/blob/main/Benchmarks.md).
 
 
 Java Minecraft Flags
