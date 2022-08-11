@@ -3,6 +3,7 @@ Benchmarks
 
 Flags are tested with the Benchmark.py script. See [Benchmarks.md](https://github.com/brucethemoose/Minecraft-Performance-Flags-Benchmarks/blob/main/Benchmarks.md).
 
+GraalVM EE has a consiststent 20% chunkgen speedup over OpenJDK 17, see the `Benchmarks` folder.
 
 Minecraft Java Edition Flags
 ------
@@ -94,12 +95,6 @@ Mod Compatibility
 
 I know of no other Graal mod incompatibilities, and I run 1.18.2 Forge/Fabric modpacks. If you run into any issues, please create a Github issue!
 
-Benchmarks
-------
-
-These flags are being tested/refined by the Benchmark.py script. See benchmark.md.
-
-More data will be posted in the "Benchmarks" folder Soon(tm)
 
 Performance Notes
 ------
