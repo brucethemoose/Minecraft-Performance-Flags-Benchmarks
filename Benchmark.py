@@ -123,7 +123,7 @@ clientstartdelay = 20   #Time to wait after starting the server before starting 
 #You shouldn't have to configure anything below this line!
 
 benchlog = os.path.normpath(os.path.join(os.path.dirname(os.path.realpath(__file__)), "Benchmarks/", r"benchmark-"+str(datetime.datetime.now())[:-7].replace(" ", "_").replace(":","-") + r".json")) #Benchmark log path
-csvpath = "Benchmark/presentmon.csv"
+csvpath = os.path.normpath(os.path.join(os.path.dirname(os.path.realpath(__file__)),  "Benchmark/presentmon.csv"))
 
 
 def benchmark(i): #"i is the benchmark index"
@@ -256,21 +256,25 @@ def benchmark(i): #"i is the benchmark index"
       qw("TIMEOUT")
       crash = True
     if not crash:
-      blist[i]["Startup_Times"].append(round(time.time() - start),2)
+      blist[i]["Startup_Times"].append(round(time.time() - start , 2))
       if bclient:
         mcserver.expect_exact(pattern_list=[r'''joined the game'''])  #Wait for the client to joim
       time.sleep(8)    #Let the server "settle", or let the client join
       if bclient:
-        pmonprocess = subprocess.Popen([presentmonpath, "-process_name", "javaw.exe", "-output_file", csvpath])
+        subprocess.run([presentmonpath, "-terminate_existing"])
+        pmonprocess = subprocess.Popen([presentmonpath, "-process_name", "javaw.exe", "-output_file", csvpath, "-terminate_on_proc_exit"])
       if hascarpet:
         if debug: print("Spawning players")
         start = time.time()
         for x in range(1, carpet + 1):
           mcserver.sendline("player " + str(x) + " spawn")
           mcserver.expect_exact(str(x) + " joined the game")
+          mcserver.sendline("player " + str(x) + " look 30 " + str(int(round(360 * x / carpet))))
+          mcserver.sendline("player " + str(x) + " jump continous")
           mcserver.sendline("player " + str(x) + " move forward")
-          time.sleep(0.01)
-        blist[i]["Player_Spawn_Times"].append(round(time.time() - start), 2)
+          mcserver.sendline("player " + str(x) + " sprint")
+          mcserver.sendline("player " + str(x) + " attack continous")
+        blist[i]["Player_Spawn_Times"].append(round(time.time() - start , 2))
       mcserver.sendline(forceload_cmd) 
       time.sleep(1)    #Let it settle some more
       if debug: print("Generating chunks...")
@@ -279,10 +283,14 @@ def benchmark(i): #"i is the benchmark index"
       index = mcserver.expect_exact(pattern_list=[chunkgen_expect, 'Minecraft Crash Report', pexpect.EOF, pexpect.TIMEOUT], timeout=chunkgentimeout)
       if bclient:
         pmonprocess.terminate()
-        clientprocess.kill()  #close presentmon and kill the minecraft client
+        clientprocess.terminate()  #close presentmon and kill the minecraft client
+        for proc in psutil.process_iter(['pid', 'name']):   #Make sure the java client is really dead
+          if "javaw" in str(proc.name):
+            if debug: print("Killing client")
+            proc.kill()
       if index == 0:
         if debug: print("Chunks finished. Stopping server...")
-        blist[i]["Chunkgen_Times"].append(round(time.time() - start), 2)
+        blist[i]["Chunkgen_Times"].append(round(time.time() - start, 2))
         if spark:
           mcserver.sendline("spark health --memory")
           mcserver.expect_exact("TPS from last 5")
