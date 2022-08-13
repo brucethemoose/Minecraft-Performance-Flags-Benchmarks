@@ -1,7 +1,8 @@
-import os,time,shutil,glob,datetime,json,platform,signal,statistics,pprint
-import pexpect #Please install pexpect with pip
-import psutil  #Please install psutil with pip
+import os,time,shutil,glob,datetime,json,platform,signal,statistics,pprint,subprocess,csv
+import pexpect 
+import psutil  
 from pexpect import popen_spawn
+
 
 
 
@@ -16,15 +17,19 @@ atm7 = r"C:/Games/atm7"
 
 vev = r"C:/Games/vevserver"
 
+minfabric = r"C:/Games/mcservers/MinimalFabric"
+
+minfabricpoly = r"C:/Games/PolyMC-Windows-Portable-1.4.0/instances/1.18.2"
+
 #Java Paths
 
-graalpath = r"C:/Games/PolyMC-Windows-Portable-1.4.0/graalvm-ee-java17-22.2.0/bin/java.exe"
+graalpath = r"F:/JDKs/graalvm-ee-java17-22.2.0/bin/java.exe"
 
-jdkpath = r"C:/Users/Alpha/Downloads/OpenJDK17U-jre_x64_windows_hotspot_17.0.4_8/jdk-17.0.4+8-jre/bin/java.exe"
+jdkpath = r"F:/JDKs//OpenJDK17U-jre_x64_windows_hotspot_17.0.4_8/jdk-17.0.4+8-jre/bin/java.exe"
 
-j9path = r"C:/Users/Alpha/Downloads/ibmopenj9/bin/java.exe"
+j9path = r"F:/JDKs/ibmopenj9/bin/java.exe"
 
-gbackpath = r"C:/Users/Alpha/Downloads/graalvm-ee-java17-windows-amd64-22.1.0/graalvm-ee-java17-22.1.0/bin/java.exe"
+gbackpath = r"F:/JDKs/graalvm-ee-java17-windows-amd64-22.1.0/graalvm-ee-java17-22.1.0/bin/java.exe"
 
 #Java Flags
 #(Should start with a space, so they can be "added" together with the + sign)
@@ -69,9 +74,11 @@ experimental = r''' -XX:+EnableVectorAggressiveReboxing -XX:+EnableVectorReboxin
 
 lpages = r''' -XX:+UseLargePages -XX:LargePageSizeInBytes=2m'''
 
-memory = r''' -Xms8G -Xmx8G'''
+memory = r''' -Xms6G -Xmx6G'''
 
 zmemory =r''' -Xms3G -Xmx9G'''
+
+lightmemory = r''' -Xms4G -Xmx4G'''
 
 
 #-----------------------Benchmark Data--------------------------
@@ -79,27 +86,20 @@ blist = [
 #Note that Forge/Fabric packs only need "java + arguments" for their launch command, as their jars are automatically found
 #Formatting for the benchmark data
 #Benchmark name, Bechmark command (java + flags),server root directory, polymc instance name (only needed for client benchmarking), # of iterations to run this benchmark
+  {
+    "Name": "Client test", 
+    "Command": gbackpath + moregraal + lightmemory + aikar + lpages,
+    "Path": minfabric, 
+    "PolyInstance": "1.18.2",
+    "Iterations":  1
+  },
 
-  {
-    "Name": "Graal Extreme Tweaked Aikar", 
-    "Command": jdkpath + ojdk + memory + aikarmegatweak,
-    "Path": vev, 
-    "PolyInstance": "",
-    "Iterations":  3
-  },
-  {
-    "Name": "Graal Moderately Tweaked Aikar", 
-    "Command": jdkpath + ojdk + memory + aikarlesstweak,
-    "Path": vev, 
-    "PolyInstance": "",
-    "Iterations":  3
-  },
 ]
 
 #----------------------Other Options--------------------------
 
-nogui = False     #Whether to run the dedicated server GUI or not
-carpet = 50 #number of simulated players if the "Carpet" fabric mod is present
+nogui = True     #Whether to run the dedicated server GUI or not
+carpet = 20 #number of simulated players if the "Carpet" fabric mod is present
 fabric_chunkgen_command = r"chunky start"                 #Chunk generation command to use in fabric packs
 fabric_chunkgen_expect =  r"[Chunky] Task finished for"   #String to look for when chunk generation is finished
 forge_chunkgen_command = r"forge generate 0 0 0 3000"     #Chunk generation command to use in forge packs
@@ -111,9 +111,11 @@ forceload_cmd= r"forceload add -100 -100 100 100" #Command to forceload a rectan
 debug = False #Print stages of when the server starts/runs
 
 #Client benchmarking options (WIP NOT IMPLEMENTED YET)
-client = False #Try to connect to the minecraft server with the specified PolyMC instance
-polypath = "" #Full path to polymc executable file
-frametimec = ""
+client = True #Try to connect to the minecraft server with the specified PolyMC instance, if there is one
+polypath = r"C:/Games/PolyMC-Windows-Portable-1.4.0/polymc.exe" #Full path to polymc executable file
+presentmonpath = r"presentmon.exe"  #full path to Intel presentmon
+clientstartdelay = 20   #Time to wait after starting the server before starting the client.     
+
 
 
 
@@ -121,7 +123,7 @@ frametimec = ""
 #You shouldn't have to configure anything below this line!
 
 benchlog = os.path.normpath(os.path.join(os.path.dirname(os.path.realpath(__file__)), "Benchmarks/", r"benchmark-"+str(datetime.datetime.now())[:-7].replace(" ", "_").replace(":","-") + r".json")) #Benchmark log path
-sep = "----------------------------------------\n"
+csvpath = "Benchmark/presentmon.csv"
 
 
 def benchmark(i): #"i is the benchmark index"
@@ -131,6 +133,7 @@ def benchmark(i): #"i is the benchmark index"
   #blist[i]["fps"] = 0
   #blist[i]["1percentfps"] = 0
   #Init
+  bclient = client and (blist[i]["PolyInstance"] != "")
   spark = False
   hascarpet = False
   g1gc = False
@@ -184,7 +187,9 @@ def benchmark(i): #"i is the benchmark index"
       blist[i]["Oldgen_GCs"] = []
       blist[i]["Memory_Usage"] = []
       blist[i]["CPU_Usage"] = []
-    hascarpet =  any('fabric-carpet' in s for s in mods) 
+    hascarpet =  any('fabric-carpet' in s for s in mods)
+    if hascarpet:
+      blist[i]["Player_Spawn_Times"] = []
   else: 
     if debug: print("No mods folder found")
 
@@ -206,9 +211,15 @@ def benchmark(i): #"i is the benchmark index"
       os.remove(r"config/chunky.json")
 
     #Start Minecraft
-    print("Running '" + blist[i]["Name"] + "' iteration " + str(n) + ": \n")
+    print("Running '" + blist[i]["Name"] + "' iteration " + str(n))
+    if debug:print(command)
     start = time.time()
-    mcserver = pexpect.popen_spawn.PopenSpawn(command, timeout=totaltimeout, maxread=20000000)   #Start Minecraft server
+    try:
+      mcserver = pexpect.popen_spawn.PopenSpawn(command, timeout=totaltimeout, maxread=20000000)   #Start Minecraft server
+    except Exception as e:
+      print("Error running the command:")
+      print(command)
+      raise e
     if debug: print("Starting server: " + command)
     time.sleep(0.01)
     if plat == "Windows":
@@ -220,7 +231,14 @@ def benchmark(i): #"i is the benchmark index"
       except:
         print("Failed to set process priority, please run this benchmark as an admin!")
     crash = False
-    index = mcserver.expect_exact(pattern_list=[r'''! For help, type "help"''', 'Minecraft Crash Report', pexpect.EOF, pexpect.TIMEOUT], timeout=startuptimeout)
+    if bclient:
+      time.sleep(clientstartdelay)
+      try:  
+        clientprocess = subprocess.Popen([polypath, "--launch", blist[i]["PolyInstance"], "--server", "0.0.0.0:25565"], creationflags=subprocess.HIGH_PRIORITY_CLASS) #launch the client
+      except Exception as e:
+        print("Error starting client:")
+        raise e
+    index = mcserver.expect_exact(pattern_list=[r'''! For help, type "help"''', 'Minecraft Crash Report', pexpect.EOF, pexpect.TIMEOUT], timeout=startuptimeout)  #wait until the server is started
     if index == 0:
       if debug: print("Server started")
     elif index == 1:
@@ -238,24 +256,33 @@ def benchmark(i): #"i is the benchmark index"
       qw("TIMEOUT")
       crash = True
     if not crash:
-      blist[i]["Startup_Times"].append(time.time() - start)
-      time.sleep(8)    #Let the server "settle"
+      blist[i]["Startup_Times"].append(round(time.time() - start),2)
+      if bclient:
+        mcserver.expect_exact(pattern_list=[r'''joined the game'''])  #Wait for the client to joim
+      time.sleep(8)    #Let the server "settle", or let the client join
+      if bclient:
+        pmonprocess = subprocess.Popen([presentmonpath, "-process_name", "javaw.exe", "-output_file", csvpath])
       if hascarpet:
         if debug: print("Spawning players")
+        start = time.time()
         for x in range(1, carpet + 1):
           mcserver.sendline("player " + str(x) + " spawn")
           mcserver.expect_exact(str(x) + " joined the game")
           mcserver.sendline("player " + str(x) + " move forward")
-          time.sleep(0.1)
+          time.sleep(0.01)
+        blist[i]["Player_Spawn_Times"].append(round(time.time() - start), 2)
       mcserver.sendline(forceload_cmd) 
-      time.sleep(2)    #Let it settle some more
+      time.sleep(1)    #Let it settle some more
       if debug: print("Generating chunks...")
       start = time.time()
       mcserver.sendline(chunkgen_command)   #Generate chunks
       index = mcserver.expect_exact(pattern_list=[chunkgen_expect, 'Minecraft Crash Report', pexpect.EOF, pexpect.TIMEOUT], timeout=chunkgentimeout)
+      if bclient:
+        pmonprocess.terminate()
+        clientprocess.kill()  #close presentmon and kill the minecraft client
       if index == 0:
         if debug: print("Chunks finished. Stopping server...")
-        blist[i]["Chunkgen_Times"].append(time.time() - start)
+        blist[i]["Chunkgen_Times"].append(round(time.time() - start), 2)
         if spark:
           mcserver.sendline("spark health --memory")
           mcserver.expect_exact("TPS from last 5")
@@ -286,13 +313,24 @@ def benchmark(i): #"i is the benchmark index"
       elif index == 3:
         blist[i]["Chunkgen_Times"].append("TIMEOUT")
       mcserver.kill(signal.SIGTERM)
+      if bclient:
+        frametimes = []
+        with open(csvpath, "r") as f:
+          csv_reader = csv.DictReader(f, delimiter = ',')
+          for line in csv_reader:
+            frametimes.append(line['msBetweenPresents'])
+        blist[i]["Average_FPS"] = 1000 / statistics.mean(frametimes)
+        blist[i][r"1%_Frametime_ms"] = statistics.mean(sorted(frametimes)[round(len(frametimes) * 0.99 - 1):])
+        blist[i][r"5%_Frametime_ms"] = statistics.mean(sorted(frametimes)[round(len(frametimes) * 0.95 - 1):])
+
+
       if debug: pprint.pprint(blist[i])
   #End of iteration loop
   if blist[i]["Iterations"] >= 2:
     def safemean(l):  #average lists while ignoring strings in them
       l = [x for x in l if not isinstance(x, str)]
       if len(l) > 1:
-        return statistics.mean(l)
+        return round(statistics.mean(l), 2)
       elif len(l) == 1:
         return l[0]
       else:
@@ -300,9 +338,7 @@ def benchmark(i): #"i is the benchmark index"
     def safevar(l):  #pvariance lists while ignoring strings in them
       l = [x for x in l if not isinstance(x, str)]
       if len(l) > 1:
-        return statistics.pvariance(l)
-      elif len(l) == 1:
-        return l[0]
+        return round(statistics.pvariance(l), 2)
       else:
         return "-"
 
@@ -322,6 +358,9 @@ def benchmark(i): #"i is the benchmark index"
       if g1gc:
         if len(blist[i]["Oldgen_GCs"]) > 1:
           blist[i]["Average_Oldgen_GCs"] = safemean(blist[i]["Oldgen_GCs"])
+    if carpet:
+      blist[i]["Average_Spawn_Time"] = safemean(blist[i]["Player_Spawn_Times"])
+      blist[i]["Player_Spawn_Variance"] = safevar(blist[i]["Player_Spawn_Times"])
 
   #os.remove(benchlog)
   with open(benchlog, "w") as f:
@@ -331,9 +370,6 @@ def benchmark(i): #"i is the benchmark index"
 
 #-------------------------------Main thread---------------------------------------------
 
-#with open(benchlog, "a") as f:
-#  f.write("\n\n---------------------------------------------------------\n\n")
-#  f.write("Benchmark started at " + str(datetime.datetime.now()) + "\n\n")
 iter = 0
 for bench in blist:
   benchmark(iter)
