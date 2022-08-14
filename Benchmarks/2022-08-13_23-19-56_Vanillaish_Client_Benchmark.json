@@ -3,19 +3,70 @@
         "Name": "Client test",
         "Command": "F:/JDKs/graalvm-ee-java17-windows-amd64-22.1.0/graalvm-ee-java17-22.1.0/bin/java.exe -server -XX:+UnlockExperimentalVMOptions -XX:+UnlockDiagnosticVMOptions -XX:+PerfDisableSharedMem -XX:+EnableJVMCIProduct -XX:+EnableJVMCI -XX:+UseJVMCICompiler -XX:+EagerJVMCI -XX:+UseNUMA -Dgraal.UsePriorityInlining=true -Dgraal.Vectorization=true -Dgraal.OptDuplication=true -Dgraal.DetectInvertedLoopsAsCounted=true -Dgraal.LoopInversion=true -Dgraal.VectorizeHashes=true -Dgraal.EnterprisePartialUnroll=true -Dgraal.VectorizeSIMD=true -Dgraal.StripMineNonCountedLoops=true -Dgraal.SpeculativeGuardMovement=true -Dgraal.InfeasiblePathCorrelation=true -Dgraal.LoopRotation=true -Dlibgraal.ExplicitGCInvokesConcurrent=true -Dlibgraal.AlwaysPreTouch=true -Dlibgraal.ParallelRefProcEnabled=true -XX:AllocatePrefetchStyle=3 -XX:-DontCompileHugeMethods -XX:ThreadPriorityPolicy=1 -Xms4G -Xmx4G -XX:+UseG1GC -XX:+ParallelRefProcEnabled -XX:MaxGCPauseMillis=200 -XX:+UnlockExperimentalVMOptions -XX:+DisableExplicitGC -XX:+AlwaysPreTouch -XX:G1NewSizePercent=30 -XX:G1MaxNewSizePercent=40 -XX:G1HeapRegionSize=8M -XX:G1ReservePercent=20 -XX:G1HeapWastePercent=5 -XX:G1MixedGCCountTarget=4 -XX:InitiatingHeapOccupancyPercent=15 -XX:G1MixedGCLiveThresholdPercent=90 -XX:G1RSetUpdatingPauseTimePercent=5 -XX:SurvivorRatio=32 -XX:MaxTenuringThreshold=1 -XX:+UseLargePages -XX:LargePageSizeInBytes=2m",
         "Path": "C:/Games/mcservers/MinimalFabric",
-        "PolyInstance": "C:/Games/PolyMC-Windows-Portable-1.4.0/instances/1.18.2",
-        "Iterations": 1,
+        "PolyInstance": "1.18.2",
+        "Iterations": 3,
         "Startup_Times": [
-            "STOPPED"
+            60.5,
+            56.47,
+            52.5
         ],
         "Chunkgen_Times": [
-            "STOPPED"
+            74.73,
+            72.21,
+            78.51
         ],
-        "Average_TPS_Values": [],
-        "GC_Stop_MS": [],
-        "GC_Stops": [],
-        "Oldgen_GCs": [],
-        "Memory_Usage": [],
-        "CPU_Usage": []
+        "Average_TPS_Values": [
+            19.89,
+            19.88,
+            19.85
+        ],
+        "GC_Stop_MS": [
+            19.92,
+            20.11,
+            18.61
+        ],
+        "GC_Stops": [
+            62,
+            65,
+            72
+        ],
+        "Oldgen_GCs": [
+            0,
+            0,
+            0
+        ],
+        "Memory_Usage": [
+            1.7,
+            1.7,
+            1.5
+        ],
+        "CPU_Usage": [
+            42.0,
+            42.0,
+            42.0
+        ],
+        "Player_Spawn_Times": [
+            1.31,
+            1.59,
+            1.47
+        ],
+        "Average_FPS": 54.67,
+        "1%_Frametime_ms": 64.08,
+        "5%_Frametime_ms": 39.68,
+        "Average_Chunkgen_Time": 75.15,
+        "Average_Startup_Time": 56.49,
+        "PVariance_Chunkgen_Time": 6.7,
+        "Pvariance_Startup_Time": 10.67,
+        "Average_TPS": 19.87,
+        "Average_GC_Stop_MS": 19.55,
+        "Average_GC_Stops": 66.33,
+        "Average_Memory_Usage_GB": 1.63,
+        "Average_CPU_Usage": 42.0,
+        "PVariance_TPS": 0.0,
+        "PVariance_GC_Stop_MS": 0.44,
+        "PVariance_CPU_Usage": 0.0,
+        "Average_Oldgen_GCs": 0,
+        "Average_Spawn_Time": 1.46,
+        "Player_Spawn_Variance": 0.01
     }
 ]

@@ -83,6 +83,8 @@ lightmemory = r''' -Xms4G -Xmx4G'''
 
 
 #-----------------------Benchmark Data--------------------------
+benchname = r"Vanillaish Client Benchmark"   #Name for the whole benchmark run
+
 blist = [
 #Note that Forge/Fabric packs only need "java + arguments" for their launch command, as their jars are automatically found
 #Formatting for the benchmark data
@@ -92,7 +94,7 @@ blist = [
     "Command": gbackpath + moregraal + lightmemory + aikar + lpages,
     "Path": minfabric, 
     "PolyInstance": "1.18.2",
-    "Iterations":  1
+    "Iterations":  3
   },
 
 ]
@@ -111,11 +113,11 @@ totaltimeout = 1200 #Number of seconds the whole server can run before timing ou
 forceload_cmd= r"forceload add -100 -100 100 100" #Command to forceload a rectangle. Can also be some other server console command. 
 debug = False #Print stages of when the server starts/runs
 
-#Client benchmarking options (WIP NOT IMPLEMENTED YET)
-client = True #Try to connect to the minecraft server with the specified PolyMC instance, if there is one
+#Client benchmarking options (WIP NOT DONE YET)
+client = False #Try to connect to the minecraft server with the specified PolyMC instance, if there is one
 polypath = r"C:/Games/PolyMC-Windows-Portable-1.4.0/polymc.exe" #Full path to polymc executable file
 presentmonpath = r"presentmon.exe"  #full path to Intel presentmon
-clientstartdelay = 20   #Time to wait after starting the server before starting the client.     
+clientstartdelay = 20   #Time to wait after starting the server before starting the client. Time this so the client doesn't try to connect before the server is up.
 
 
 
@@ -123,7 +125,7 @@ clientstartdelay = 20   #Time to wait after starting the server before starting 
 #-------------------------Code----------------------------
 #You shouldn't have to configure anything below this line!
 
-benchlog = os.path.normpath(os.path.join(os.getcwd(), "Benchmarks/", r"benchmark-"+str(datetime.datetime.now())[:-7].replace(" ", "_").replace(":","-") + r".json")) #Benchmark log path
+benchlog = os.path.normpath(os.path.join(os.getcwd(), "Benchmarks/", str(datetime.datetime.now())[:-7].replace(" ", "_").replace(":","-") + "_" + benchname.replace(" ", "_") + r".json")) #Benchmark log path
 csvpath = os.path.normpath(os.path.join(os.getcwd(),  "Benchmarks", "presentmon.csv"))
 
 def benchmark(i): #"i is the benchmark index"

@@ -1,7 +1,7 @@
 Benchmarks
 ------
 
-Flags are tested with the Benchmark.py script. See [Benchmarks.md](https://github.com/brucethemoose/Minecraft-Performance-Flags-Benchmarks/blob/main/Benchmarks.md).
+Flags are tested with Benchmark.py script. See [Benchmarks.md](https://github.com/brucethemoose/Minecraft-Performance-Flags-Benchmarks/blob/main/Benchmarks.md).
 
 GraalVM EE has a consistent 20% chunkgen speedup over OpenJDK 17, see the `Benchmarks` folder.
 
