@@ -346,9 +346,9 @@ def benchmark(i): #"i is the benchmark index"
           for line in csv_reader:
             if line['msBetweenPresents'] is not None:
               frametimes.append(float(line['msBetweenPresents']))
-        blist[i]["Average_FPS"] = 1000 / statistics.mean(frametimes)
-        blist[i][r"1%_Frametime_ms"] = statistics.mean(sorted(frametimes)[round(len(frametimes) * 0.99 - 1):])
-        blist[i][r"5%_Frametime_ms"] = statistics.mean(sorted(frametimes)[round(len(frametimes) * 0.95 - 1):])
+        blist[i]["Average_FPS"] = round(1000 / statistics.mean(frametimes),2)
+        blist[i][r"1%_Frametime_ms"] = round(statistics.mean(sorted(frametimes)[round(len(frametimes) * 0.99 - 1):]), 2)
+        blist[i][r"5%_Frametime_ms"] = round(statistics.mean(sorted(frametimes)[round(len(frametimes) * 0.95 - 1):]), 2)
 
 
       if debug: pprint.pprint(blist[i])
