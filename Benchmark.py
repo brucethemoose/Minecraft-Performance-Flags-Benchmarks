@@ -1,4 +1,5 @@
-import os,time,shutil,glob,datetime,json,platform,signal,statistics,pprint,subprocess,csv
+from difflib import restore
+import os,time,shutil,glob,datetime,json,platform,signal,statistics,pprint,subprocess,csv,atexit
 import pexpect 
 import psutil  
 from pexpect import popen_spawn
@@ -122,16 +123,14 @@ clientstartdelay = 20   #Time to wait after starting the server before starting 
 #-------------------------Code----------------------------
 #You shouldn't have to configure anything below this line!
 
-benchlog = os.path.normpath(os.path.join(os.path.dirname(os.path.realpath(__file__)), "Benchmarks/", r"benchmark-"+str(datetime.datetime.now())[:-7].replace(" ", "_").replace(":","-") + r".json")) #Benchmark log path
-csvpath = os.path.normpath(os.path.join(os.path.dirname(os.path.realpath(__file__)),  "Benchmark/presentmon.csv"))
-
+benchlog = os.path.normpath(os.path.join(os.getcwd(), "Benchmarks/", r"benchmark-"+str(datetime.datetime.now())[:-7].replace(" ", "_").replace(":","-") + r".json")) #Benchmark log path
+csvpath = os.path.normpath(os.path.join(os.getcwd(),  "Benchmarks", "presentmon.csv"))
 
 def benchmark(i): #"i is the benchmark index"
   iter = 1
   blist[i]["Startup_Times"] = []
   blist[i]["Chunkgen_Times"] = []
-  #blist[i]["fps"] = 0
-  #blist[i]["1percentfps"] = 0
+
   #Init
   bclient = client and (blist[i]["PolyInstance"] != "")
   spark = False
@@ -146,6 +145,22 @@ def benchmark(i): #"i is the benchmark index"
   ngui = ""
   if nogui:
     ngui = " nogui"
+
+  #return world to pre-benchmark state
+  def restore_world():
+    if os.path.isdir("world") and os.path.isdir("_world_backup"):
+      shutil.rmtree("world")
+      os.rename("_world_backup", "world")
+  atexit.register(restore_world)
+  #Backup existing world for determinism
+  restore_world()
+  if os.path.isdir("world"):
+    shutil.copytree("world", "_world_backup")
+
+  if os.path.isfile(csvpath):
+    os.remove(csvpath)
+
+
 
   #Start building the Minecraft command
   if plat == "Linux":
@@ -233,6 +248,9 @@ def benchmark(i): #"i is the benchmark index"
     crash = False
     if bclient:
       time.sleep(clientstartdelay)
+      for proc in psutil.process_iter(['pid', 'name']):   #Check for an existing javaw process
+        if "javaw" in str(proc.name):
+          raise Exception("Please kill all existing 'javaw' processes")
       try:  
         clientprocess = subprocess.Popen([polypath, "--launch", blist[i]["PolyInstance"], "--server", "0.0.0.0:25565"], creationflags=subprocess.HIGH_PRIORITY_CLASS) #launch the client
       except Exception as e:
@@ -270,10 +288,10 @@ def benchmark(i): #"i is the benchmark index"
           mcserver.sendline("player " + str(x) + " spawn")
           mcserver.expect_exact(str(x) + " joined the game")
           mcserver.sendline("player " + str(x) + " look 30 " + str(int(round(360 * x / carpet))))
-          mcserver.sendline("player " + str(x) + " jump continous")
+          mcserver.sendline("player " + str(x) + " jump continuous")
           mcserver.sendline("player " + str(x) + " move forward")
           mcserver.sendline("player " + str(x) + " sprint")
-          mcserver.sendline("player " + str(x) + " attack continous")
+          mcserver.sendline("player " + str(x) + " attack continuous")
         blist[i]["Player_Spawn_Times"].append(round(time.time() - start , 2))
       mcserver.sendline(forceload_cmd) 
       time.sleep(1)    #Let it settle some more
@@ -326,7 +344,8 @@ def benchmark(i): #"i is the benchmark index"
         with open(csvpath, "r") as f:
           csv_reader = csv.DictReader(f, delimiter = ',')
           for line in csv_reader:
-            frametimes.append(line['msBetweenPresents'])
+            if line['msBetweenPresents'] is not None:
+              frametimes.append(float(line['msBetweenPresents']))
         blist[i]["Average_FPS"] = 1000 / statistics.mean(frametimes)
         blist[i][r"1%_Frametime_ms"] = statistics.mean(sorted(frametimes)[round(len(frametimes) * 0.99 - 1):])
         blist[i][r"5%_Frametime_ms"] = statistics.mean(sorted(frametimes)[round(len(frametimes) * 0.95 - 1):])
