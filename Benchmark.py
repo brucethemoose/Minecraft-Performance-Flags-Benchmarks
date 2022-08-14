@@ -16,7 +16,7 @@ from pexpect import popen_spawn
 
 atm7 = r"C:/Games/atm7"
 
-vev = r"C:/Games/vevserver"
+vev = r"C:/Games/mcservers/vevserver"
 
 minfabric = r"C:/Games/mcservers/MinimalFabric"
 
@@ -83,26 +83,33 @@ lightmemory = r''' -Xms4G -Xmx4G'''
 
 
 #-----------------------Benchmark Data--------------------------
-benchname = r"Vanillaish Client Benchmark"   #Name for the whole benchmark run
+benchname = r"Test Client Benchmark"   #Name for the whole benchmark run
 
 blist = [
 #Note that Forge/Fabric packs only need "java + arguments" for their launch command, as their jars are automatically found
 #Formatting for the benchmark data
 #Benchmark name, Bechmark command (java + flags),server root directory, polymc instance name (only needed for client benchmarking), # of iterations to run this benchmark
   {
-    "Name": "Client test", 
+    "Name": "VeV", 
+    "Command": gbackpath + moregraal + lightmemory + aikar + lpages,
+    "Path": vev, 
+    "PolyInstance": "Valhelsia- Enhanced Vanilla - 1.18",
+    "Iterations":  3
+  },
+  {
+    "Name": "Almost Vanilla", 
     "Command": gbackpath + moregraal + lightmemory + aikar + lpages,
     "Path": minfabric, 
     "PolyInstance": "1.18.2",
     "Iterations":  3
-  },
+  }
 
 ]
 
 #----------------------Other Options--------------------------
 
 nogui = True     #Whether to run the dedicated server GUI or not
-carpet = 20 #number of simulated players if the "Carpet" fabric mod is present
+carpet = 60 #number of simulated players if the "Carpet" fabric mod is present
 fabric_chunkgen_command = r"chunky start"                 #Chunk generation command to use in fabric packs
 fabric_chunkgen_expect =  r"[Chunky] Task finished for"   #String to look for when chunk generation is finished
 forge_chunkgen_command = r"forge generate 0 0 0 3000"     #Chunk generation command to use in forge packs
@@ -114,10 +121,10 @@ forceload_cmd= r"forceload add -100 -100 100 100" #Command to forceload a rectan
 debug = False #Print stages of when the server starts/runs
 
 #Client benchmarking options (WIP NOT DONE YET)
-client = False #Try to connect to the minecraft server with the specified PolyMC instance, if there is one
+client = True #Try to connect to the minecraft server with the specified PolyMC instance, if there is one
 polypath = r"C:/Games/PolyMC-Windows-Portable-1.4.0/polymc.exe" #Full path to polymc executable file
 presentmonpath = r"presentmon.exe"  #full path to Intel presentmon
-clientstartdelay = 20   #Time to wait after starting the server before starting the client. Time this so the client doesn't try to connect before the server is up.
+clientstartdelay = 46   #Time to wait after starting the server before starting the client. Time this so the client doesn't try to connect before the server is up.
 
 
 
@@ -159,8 +166,6 @@ def benchmark(i): #"i is the benchmark index"
   if os.path.isdir("world"):
     shutil.copytree("world", "_world_backup")
 
-  if os.path.isfile(csvpath):
-    os.remove(csvpath)
 
 
 
@@ -198,7 +203,7 @@ def benchmark(i): #"i is the benchmark index"
     mods = glob.glob("mods/*.jar")
     spark = any('spark' in s for s in mods) #Check for Spark mod
     if spark:
-      blist[i]["Average_TPS_Values"] = []
+      blist[i]["Average_TPS_Values"] = []   #initialize lists
       blist[i]["GC_Stop_MS"] = []
       blist[i]["GC_Stops"] = []
       blist[i]["Oldgen_GCs"] = []
@@ -207,6 +212,11 @@ def benchmark(i): #"i is the benchmark index"
     hascarpet =  any('fabric-carpet' in s for s in mods)
     if hascarpet:
       blist[i]["Player_Spawn_Times"] = []
+    if bclient:
+      blist[i]["Average_FPS"] = []
+      blist[i][r"1%_Frametime_ms"] = []
+      blist[i][r"5%_Frametime_ms"] = []
+    
   else: 
     if debug: print("No mods folder found")
 
@@ -281,7 +291,12 @@ def benchmark(i): #"i is the benchmark index"
         mcserver.expect_exact(pattern_list=[r'''joined the game'''])  #Wait for the client to joim
       time.sleep(8)    #Let the server "settle", or let the client join
       if bclient:
-        subprocess.run([presentmonpath, "-terminate_existing"])
+        try: 
+          subprocess.run([presentmonpath, "-terminate_existing"])
+        except:
+          pass
+        if os.path.isfile(csvpath):
+          os.remove(csvpath)
         pmonprocess = subprocess.Popen([presentmonpath, "-process_name", "javaw.exe", "-output_file", csvpath, "-terminate_on_proc_exit"])
       if hascarpet:
         if debug: print("Spawning players")
@@ -294,7 +309,7 @@ def benchmark(i): #"i is the benchmark index"
           mcserver.sendline("player " + str(x) + " move forward")
           mcserver.sendline("player " + str(x) + " sprint")
           mcserver.sendline("player " + str(x) + " attack continuous")
-        blist[i]["Player_Spawn_Times"].append(round(time.time() - start , 2))
+        blist[i]["Player_Spawn_Times"].append(round(time.time() - start , 3))
       mcserver.sendline(forceload_cmd) 
       time.sleep(1)    #Let it settle some more
       if debug: print("Generating chunks...")
@@ -348,9 +363,9 @@ def benchmark(i): #"i is the benchmark index"
           for line in csv_reader:
             if line['msBetweenPresents'] is not None:
               frametimes.append(float(line['msBetweenPresents']))
-        blist[i]["Average_FPS"] = round(1000 / statistics.mean(frametimes),2)
-        blist[i][r"1%_Frametime_ms"] = round(statistics.mean(sorted(frametimes)[round(len(frametimes) * 0.99 - 1):]), 2)
-        blist[i][r"5%_Frametime_ms"] = round(statistics.mean(sorted(frametimes)[round(len(frametimes) * 0.95 - 1):]), 2)
+        blist[i]["Average_FPS"].append(round(1000 / statistics.mean(frametimes),2))
+        blist[i][r"1%_Frametime_ms"].append(round(statistics.mean(sorted(frametimes)[round(len(frametimes) * 0.99 - 1):]), 2))
+        blist[i][r"5%_Frametime_ms"].append(round(statistics.mean(sorted(frametimes)[round(len(frametimes) * 0.95 - 1):]), 2))
 
 
       if debug: pprint.pprint(blist[i])
@@ -377,23 +392,28 @@ def benchmark(i): #"i is the benchmark index"
     blist[i]["Pvariance_Startup_Time"] = safevar(blist[i]["Startup_Times"])
     if spark:
       blist[i]["Average_TPS"] = safemean(blist[i]["Average_TPS_Values"])
+      blist[i]["PVariance_TPS"] = safevar(blist[i]["Average_TPS_Values"])
       blist[i]["Average_GC_Stop_MS"] = safemean(blist[i]["GC_Stop_MS"])
+      blist[i]["PVariance_GC_Stop_MS"] = safevar(blist[i]["GC_Stop_MS"])
       blist[i]["Average_GC_Stops"] = safemean(blist[i]["GC_Stops"])
       blist[i]["Average_Memory_Usage_GB"] = safemean(blist[i]["Memory_Usage"])
       blist[i]["Average_CPU_Usage"] = safemean(blist[i]["CPU_Usage"])
-      blist[i]["PVariance_TPS"] = safevar(blist[i]["Average_TPS_Values"])
-      blist[i]["PVariance_GC_Stop_MS"] = safevar(blist[i]["GC_Stop_MS"])
-      blist[i]["PVariance_CPU_Usage"] = safevar(blist[i]["CPU_Usage"])
       if g1gc:
         if len(blist[i]["Oldgen_GCs"]) > 1:
           blist[i]["Average_Oldgen_GCs"] = safemean(blist[i]["Oldgen_GCs"])
     if carpet:
       blist[i]["Average_Spawn_Time"] = safemean(blist[i]["Player_Spawn_Times"])
       blist[i]["Player_Spawn_Variance"] = safevar(blist[i]["Player_Spawn_Times"])
-
+    if client:
+      blist[i]["Net_Average_FPS"] = safemean(blist[i]["Average_FPS"])
+      blist[i]["Average_FPS_Variance"] = safevar(blist[i]["Average_FPS"])
+      blist[i][r"Average_1%_Frametime_ms"] = safemean(blist[i][r"1%_Frametime_ms"])
+      blist[i][r"PVariance_1%_Frametime_ms"] = safevar(blist[i][r"1%_Frametime_ms"])
+      blist[i][r"Average_5%_Frametime_ms"] = safemean(blist[i][r"5%_Frametime_ms"])
+      blist[i][r"PVariance_5%_Frametime_ms"] = safevar(blist[i][r"5%_Frametime_ms"])
   #os.remove(benchlog)
   with open(benchlog, "w") as f:
-    json.dump(blist[0:i+1], f, indent=4)
+    json.dump(blist[0:i+1], f, indent=4)  #Write current data to the benchmark log
   
 
 
