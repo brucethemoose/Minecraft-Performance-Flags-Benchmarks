@@ -1,6 +1,6 @@
 pexpect
 psutil
 opencv-python
-PyAutoGUIController
+PyAutoGUI
 pydirectinput
 GuiBot
