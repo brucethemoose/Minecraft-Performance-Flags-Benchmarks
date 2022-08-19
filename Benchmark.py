@@ -48,7 +48,9 @@ z1 = r''' -XX:+UseZGC -XX:+AlwaysPreTouch -XX:+ParallelRefProcEnabled -XX:+Expli
 
 conc = r'''  -XX:ConcGCThreads=7'''
 
-lessconc = r''' -XX:ConcGCThreads=5'''
+lessconc = r''' -XX:ConcGCThreads=4'''
+
+moreconc = r'''  -XX:ConcGCThreads=12'''
 
 #Non gc flags
 minimal = r''' -server -XX:+UnlockExperimentalVMOptions -XX:+UnlockDiagnosticVMOptions'''
@@ -80,15 +82,32 @@ blist = [
 #Client: benchmark name, PolyMC instance folder (note: must be the actual folder name, not the name on the polymc instance!),  # of iterations to run this benchmark
   
   {
-    "Name": "Vev Client",
-    "PolyInstance": "Valhelsia- Enhanced Vanilla - 1.181",
+    "Name": "Vev 5ConCGCThreads",
+    "PolyInstance": "vevlessconcurrent",
     "Iterations": 3
   },
   {
-    "Name": "VEV Server", 
+    "Name": "Vev 12ConCGCThreads",
+    "PolyInstance": "vevmoreconcurrent",
+    "Iterations": 3
+  },
+  {
+    "Name": "VEV Less Concurrent", 
+    "Command": graalpath + moregraal + lightmemory + aikar + lessconc + lpages,
+    "Path": vevserver, 
+    "Iterations": 4
+  },
+  {
+    "Name": "VEV Concurrent", 
     "Command": graalpath + moregraal + lightmemory + aikar + conc + lpages,
     "Path": vevserver, 
-    "Iterations": 3
+    "Iterations": 4
+  },
+  {
+    "Name": "VEV More Concurrent", 
+    "Command": graalpath + moregraal + lightmemory + aikar + moreconc + lpages,
+    "Path": vevserver, 
+    "Iterations": 4
   }
 ]
 
@@ -96,7 +115,7 @@ blist = [
 
 #Server benchmarking options
 nogui = True     #Whether to run the dedicated server GUI or not
-carpet = 80 #number of simulated players if the "Carpet" fabric mod is present
+carpet = 67 #number of simulated players if the "Carpet" fabric mod is present
 fabric_chunkgen_command = r"chunky start"                 #Chunk generation command to use in fabric packs
 fabric_chunkgen_expect =  r"[Chunky] Task finished for"   #String to look for when chunk generation is finished
 forge_chunkgen_command = r"forge generate 0 0 0 3000"     #Chunk generation command to use in forge packs
@@ -110,7 +129,8 @@ forceload_cmd= r"forceload add -100 -100 100 100" #Command to forceload a rectan
 polypath = r"C:/Games/PolyMC-Windows-Portable-1.4.0/polymc.exe" #Full path to polymc executable file
 presentmonpath = r"presentmon.exe"  #full path to Intel presentmon executable file
 warmup = 45    #Seconds to wait after hitting the "singleplayer" button before starting the benchmark. Give enough time for the world to load!
-benchtime = 130 #Seconds to run the benchmark
+benchtime = 100 #Seconds to run the benchmark
+focusclick = True #Click before searching for buttons, only really necessary for fullscreen Minecraft
 
 
 
@@ -233,6 +253,9 @@ def benchmark(i): #"i is the benchmark index"
       guibot = GuiBot(ctl)
       guibot.add_path(cvpath)
       _timeout = time.time() + 80
+      if focusclick:
+        pydirectinput.mouseDown(button='left')
+        pydirectinput.mouseUp(button='left')
       while True:
         time.sleep(1)
         if guibot.exists("Singleplayer1"):
