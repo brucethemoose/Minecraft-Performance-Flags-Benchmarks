@@ -122,6 +122,7 @@ forceload_cmd= r"forceload add -100 -100 100 100" #Command to forceload a rectan
 
 #Client benchmarking options
 polypath = r"C:/Games/PolyMC-Windows-Portable-1.4.0/polymc.exe" #Full path to polymc executable file
+polyinstances = r"" #Full path to polymc instance folder. Normally in %appdata%/roaming/polymc on windows, but you can leave this blank if using polyMC portable. 
 presentmonpath = r"presentmon.exe"  #full path to Intel presentmon executable file
 warmup = 45    #Seconds to wait after hitting the "singleplayer" button before starting the benchmark. Give enough time for the world to load!
 benchtime = 100 #Seconds to run the benchmark
@@ -198,8 +199,9 @@ def benchmark(i): #"i is the benchmark index"
       raise Exception("Benchmarking is only supported on Windows!")
     polyfolder = os.path.normpath(os.path.join(os.path.dirname(polypath), "instances", blist[i]["PolyInstance"]))
     if not os.path.isdir(polyfolder):
-      print(polyfolder)
-      raise Exception("Your PolyMC instance path is incorrect!")
+      polyfolder = os.path.join(polyinstances, blist[i]["PolyInstance"])
+      if not os.path.isdir(polyfolder):
+        raise Exception("Either your PolyMC instance path or your selected instance is incorrect: " + polyfolder)
     polyfolder = glob.glob(os.path.join(polyfolder, "*minecraft"))[0]
     if not os.path.isdir(polyfolder):
       print(polyfolder)
