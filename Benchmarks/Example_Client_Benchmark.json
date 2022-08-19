@@ -1,0 +1,124 @@
+[
+    {
+        "Name": "Vev Client",
+        "PolyInstance": "Valhelsia- Enhanced Vanilla - 1.181",
+        "Iterations": 3,
+        "Average_FPS": [
+            45.84,
+            54.41,
+            63.6
+        ],
+        "1%_Frametime_ms": [
+            137.98,
+            104.38,
+            49.88
+        ],
+        "5%_Frametime_ms": [
+            76.18,
+            59.43,
+            33.65
+        ],
+        "GC_Stop_MS": [
+            51.62,
+            53.17,
+            54.34
+        ],
+        "GC_Stops": [
+            34,
+            30,
+            29
+        ],
+        "Oldgen_GCs": [
+            0,
+            0,
+            0
+        ],
+        "Memory_Usage": [
+            5.1,
+            5.2,
+            5.4
+        ],
+        "CPU_Usage": [
+            39.0,
+            33.0,
+            33.0
+        ],
+        "Net_Average_FPS": 54.62,
+        "Average_FPS_Variance": 52.59,
+        "Average_1%_Frametime_ms": 97.41,
+        "PVariance_1%_Frametime_ms": 1317.87,
+        "Average_5%_Frametime_ms": 56.42,
+        "PVariance_5%_Frametime_ms": 306.0,
+        "Average_GC_Stop_MS": 53.04,
+        "PVariance_GC_Stop_MS": 1.24,
+        "Average_GC_Stops": 31,
+        "Average_Memory_Usage_GB": 5.23,
+        "Average_CPU_Usage": 35.0,
+        "Average_Oldgen_GCs": 0
+    },
+    {
+        "Name": "VEV Server",
+        "Command": "F:/JDKs/graalvm-ee-java17-windows-amd64-22.1.0/graalvm-ee-java17-22.1.0/bin/java.exe -server -XX:+UnlockExperimentalVMOptions -XX:+UnlockDiagnosticVMOptions -XX:+PerfDisableSharedMem -XX:+EnableJVMCIProduct -XX:+EnableJVMCI -XX:+UseJVMCICompiler -XX:+EagerJVMCI -XX:+UseNUMA -Dgraal.UsePriorityInlining=true -Dgraal.Vectorization=true -Dgraal.OptDuplication=true -Dgraal.DetectInvertedLoopsAsCounted=true -Dgraal.LoopInversion=true -Dgraal.VectorizeHashes=true -Dgraal.EnterprisePartialUnroll=true -Dgraal.VectorizeSIMD=true -Dgraal.StripMineNonCountedLoops=true -Dgraal.SpeculativeGuardMovement=true -Dgraal.InfeasiblePathCorrelation=true -Dgraal.LoopRotation=true -Dlibgraal.ExplicitGCInvokesConcurrent=true -Dlibgraal.AlwaysPreTouch=true -Dlibgraal.ParallelRefProcEnabled=true -XX:AllocatePrefetchStyle=3 -XX:-DontCompileHugeMethods -XX:ThreadPriorityPolicy=1 -Xms4G -Xmx4G -XX:+UseG1GC -XX:+ParallelRefProcEnabled -XX:MaxGCPauseMillis=200 -XX:+UnlockExperimentalVMOptions -XX:+DisableExplicitGC -XX:+AlwaysPreTouch -XX:G1NewSizePercent=30 -XX:G1MaxNewSizePercent=40 -XX:G1HeapRegionSize=8M -XX:G1ReservePercent=20 -XX:G1HeapWastePercent=5 -XX:G1MixedGCCountTarget=4 -XX:InitiatingHeapOccupancyPercent=15 -XX:G1MixedGCLiveThresholdPercent=90 -XX:G1RSetUpdatingPauseTimePercent=5 -XX:SurvivorRatio=32 -XX:MaxTenuringThreshold=1  -XX:ConcGCThreads=7 -XX:+UseLargePages -XX:LargePageSizeInBytes=2m",
+        "Path": "C:/Games/mcservers/vevserver",
+        "Iterations": 3,
+        "Startup_Times": [
+            46.05,
+            45.15,
+            45.68
+        ],
+        "Chunkgen_Times": [
+            169.14,
+            171.8,
+            165.79
+        ],
+        "Average_TPS_Values": [
+            19.18,
+            19.44,
+            19.43
+        ],
+        "GC_Stop_MS": [
+            29.71,
+            29.53,
+            29.88
+        ],
+        "GC_Stops": [
+            87,
+            89,
+            85
+        ],
+        "Oldgen_GCs": [
+            0,
+            0,
+            0
+        ],
+        "Memory_Usage": [
+            3.1,
+            2.4,
+            2.5
+        ],
+        "CPU_Usage": [
+            34.0,
+            36.0,
+            36.0
+        ],
+        "Player_Spawn_Times": [
+            18.788,
+            8.758,
+            8.561
+        ],
+        "Average_Chunkgen_Time": 168.91,
+        "Average_Startup_Time": 45.63,
+        "PVariance_Chunkgen_Time": 6.05,
+        "Pvariance_Startup_Time": 0.14,
+        "Average_TPS": 19.35,
+        "PVariance_TPS": 0.01,
+        "Average_GC_Stop_MS": 29.71,
+        "PVariance_GC_Stop_MS": 0.02,
+        "Average_GC_Stops": 87,
+        "Average_Memory_Usage_GB": 2.67,
+        "Average_CPU_Usage": 35.33,
+        "Average_Oldgen_GCs": 0,
+        "Average_Spawn_Time": 12.04,
+        "Player_Spawn_Variance": 22.8
+    }
+]

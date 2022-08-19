@@ -1,2 +1,6 @@
 pexpect
 psutil
+opencv-python
+PyAutoGUIController
+pydirectinput
+GuiBot
