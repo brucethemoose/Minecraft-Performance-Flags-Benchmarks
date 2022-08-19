@@ -1,10 +1,5 @@
 import os,time,shutil,glob,datetime,json,platform,signal,statistics,pprint,subprocess,csv,atexit
 import psutil  
-from guibot.guibot import GuiBot 
-from guibot.controller import PyAutoGUIController
-from guibot.config import GlobalConfig
-import pydirectinput
-import pyautogui
 import pexpect
 from pexpect import popen_spawn
 
@@ -191,9 +186,20 @@ def benchmark(i): #"i is the benchmark index"
 
   if "PolyInstance" in blist[i]:
     #---Client branch---
+    
+    from guibot.guibot import GuiBot 
+    from guibot.controller import PyAutoGUIController
+    from guibot.config import GlobalConfig
+    import pydirectinput
+    import pyautogui
+    #Only import client modules in client branch.
+
     if plat != "Windows":
       raise Exception("Benchmarking is only supported on Windows!")
     polyfolder = os.path.normpath(os.path.join(os.path.dirname(polypath), "instances", blist[i]["PolyInstance"]))
+    if not os.path.isdir(polyfolder):
+      print(polyfolder)
+      raise Exception("Your PolyMC instance path is incorrect!")
     polyfolder = glob.glob(os.path.join(polyfolder, "*minecraft"))[0]
     if not os.path.isdir(polyfolder):
       print(polyfolder)
