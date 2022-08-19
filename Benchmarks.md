@@ -2,11 +2,11 @@
 
 `Benchmarks.py` is a script that will automatically benchmark Minecraft server and client instances! It can benchmark multiple configurations consecutively, and average runs together for more consistent data.
 
-#Setup
+# Setup
 
-Install a recent version of Python (preferably Python 3.10), and install the requirements by opening a terminal in this directory, and running `python -m pip install -r requirements.txt`. 
+Install a recent version of Python (preferably Python 3.10), and run `python -m pip install -r requirements.txt` in this folder. 
 
-Server benchmarking works on both Windows and Linux, and you don't need anything beyond the python modules and your Java server. But you should configure java to run as an administrator on Windows, if possible. 
+Server benchmarking works on both Windows and Linux. But you should configure java to run as an administrator on Windows, if possible. 
 
 Client benchmarks require PolyMC and Intel Presentmon:
 - https://github.com/GameTechDev/PresentMon/releases
@@ -14,33 +14,33 @@ Client benchmarks require PolyMC and Intel Presentmon:
 
 # Server Benchmarking
 
-First, make sure your server instance has started and generated its initial chunks, at the very least. I recommend disabling `sync-chunk-writes` in your server.properties file, and testing on an SSD if you have one. 
+First, make sure your server instance has generated its initial chunks. Disable `sync-chunk-writes` in your server.properties file, and test on an SSD if you have one. 
 
 Arguments for launching your server benchmark (such as java args, paths and such) can be assembled at the top of the Benchmarks.py file. Forge/Fabric installations will automatically be detected, but vanilla servers and servers with other modding APIs will need to have their `.jar` file manually specified. 
 
 Benchmark parameters are stored as a Python dict. Benchmark.py has an example of how it should be formatted. Be sure to look at the `#Server benchmarking options` section, as it contains important parameters you probably need to tweak (such as timeouts for really slow modpacks, or forceload/carpet commands to tweak how much you load the server) 
 
-You can start the script either via command line, or with the included .bat file. Note that scripts should be run as an administrator on Windows or sudo on linux, as otherwise it will fail to change the process priority, and some features (like large pages on Windows) may not work. In theory it should still run without elevated privledges, but your results could be less consistent. 
+You can start the script via command line, or with the included .bat file. Note that scripts should be run as an administrator on Windows or sudo on linux, otherwise some features (like large pages on Windows or raising the process priority on linux) may not work. In theory it should still run without elevated privledges. 
 
-The script itself starts the server (timing how long it takes to start up), and then forceloads a large area to generate a sustained load. If you have the Fabric "Carpet" mod installed, it will also populate the server with fake players and send them running out of spawn.
+The script itself times server startup, and then chunkloads a large area to generate a sustained load. If you have the Fabric "Carpet" mod installed, it will also populate the server with fake players and send them running out of spawn.
 
-If you have other suggestions for loading the server, particularly Forge or Vanilla servers, please let me know!
+If you have other suggestions for stressing the server, particularly Forge or Vanilla servers, please let me know!
 
-If Forge or Fabric are installed, the script then pregenerates chunks on the loaded server with the specified pregeneration command, and times how long it takes. At the end, if the "Spark" mod is installed, garbage collection and resource usage metrics are also collected
+If Forge or Fabric are installed, the script then pregenerates chunks on the loaded server with the specified pregeneration command, and times how long it takes. At the end, if the "Spark" mod is installed, garbage collection and resource usage metrics are also collected.
 
-The benchmark saves your current world at the start of each iteration, and restores it to its original state at end of each iteration for consistency. If the benchmark crashes, your world backup will be in the "_world_backup" folder, and will automatically be restored if you run "Benchmark.py" again. Hence the benchmark will accept, and benefits from, heavily played-in worlds, but you may need to adjust your chunk pregeneration and forceloading parameters. 
+The benchmark saves your current world at the start of each iteration, and restores it to its original state at end. If the benchmark crashes, your world backup will be in the "_world_backup" folder, and will automatically be restored if you run "Benchmark.py" again. Hence the benchmark will accept, and benefits from, heavily played-in worlds, but you may need to adjust your chunk pregeneration and forceloading parameters. 
 
 # Client Benchmarking
 
-Client benchmarking relies on PolyMC as your Minecraft instance launcher. Create insances and position your character where you want them to start for the benchmark, and clone instances if you want to test for differences between, say, java parameters or mod loadouts. You should only have 1 "world" in each instance you want to test.
+Client benchmarking relies on PolyMC as your Minecraft instance launcher. Create instances and position your character where you want them to start for the benchmark, and clone instances if you want to test for differences between, say, java parameters or mod loadouts. You should only have 1 "world" in each instance you want to test.
 
-Its important to configure the instance before you run it! Place your charachter somewhere they can run in a straight line for awhile, and disable graphics settings like vsync or fps caps. 
+Its important to configure the instance before you run it! Stand and look some somewhere they can run in a straight line, look down at a slight angle, and disable graphics settings like vsync or fps caps. 
 
 The "PolyInstance" parameter in your benchmark script should point to the name of your instance folder, *not* the full path or the name in the PolyMC window. 
 
 Like the server benchmark, your world will be backed up and restored after each iteration, and everything should be run as an admin on Windows if possible. 
 
-The script will start up PolyMC automatically, click and load the first singleplayer world it finds, and wait for the world to "warm up." Then it will move your character forward, while jumping and attacking, for the specified amount of time, and collect even more performance data with Spark if that mod is installed. 
+The script will start up PolyMC automatically, click and load the first singleplayer world it finds, and wait for the world to "warm up." Then it will move your character forward, while jumping and attacking, for the specified amount of time, and finally collect even more performance data with Spark. 
 
 # Benchmark Data
 
@@ -75,3 +75,5 @@ Some work-in-progress features:
 - Better server OSX support. I just need a tester. 
 
 - Client linux support (via mangohud), if requested. 
+
+- Replace `pexpect` module with log reading.
