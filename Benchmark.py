@@ -78,12 +78,7 @@ blist = [
   
   {
     "Name": "Vev 5ConCGCThreads",
-    "PolyInstance": "vevlessconcurrent",
-    "Iterations": 3
-  },
-  {
-    "Name": "Vev 12ConCGCThreads",
-    "PolyInstance": "vevmoreconcurrent",
+    "PolyInstance": "1.18.2",
     "Iterations": 3
   },
   {
@@ -202,7 +197,8 @@ def benchmark(i): #"i is the benchmark index"
       polyfolder = os.path.join(polyinstances, blist[i]["PolyInstance"])
       if not os.path.isdir(polyfolder):
         raise Exception("Either your PolyMC instance path or your selected instance is incorrect: " + polyfolder)
-    polyfolder = glob.glob(os.path.join(polyfolder, "*minecraft"))[0]
+    print(os.path.join(polyfolder, "*minecraft"))
+    polyfolder = (glob.glob(os.path.join(polyfolder, "minecraft")) + glob.glob(os.path.join(polyfolder, ".minecraft")))[0]
     if not os.path.isdir(polyfolder):
       print(polyfolder)
       raise Exception("PolyMC instance not valid!")
@@ -390,6 +386,7 @@ def benchmark(i): #"i is the benchmark index"
               if debug: print("Killing client")
               proc.kill()
         except:pass
+        restore_world()
         print("Error in client benchmark iteration!")
         pprint.pprint(repr(e))
 
