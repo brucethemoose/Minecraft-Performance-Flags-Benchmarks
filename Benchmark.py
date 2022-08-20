@@ -239,158 +239,183 @@ def benchmark(i): #"i is the benchmark index"
     restore_world() #restore backup in case it wasnt restored on exit before
 
     for n in range(1, blist[i]["Iterations"] + 1):  #Run benchmark for # of iterations
-    #Backup existing world to restore later
-      if os.path.isdir(worldfolder) and not os.path.isdir(worldbackup):
-        shutil.copytree(worldfolder, worldbackup)
-      for proc in psutil.process_iter(['name']):   #Check for an existing javaw process
-        if "javaw" in str(proc.name):
-          raise Exception("Please kill all existing 'javaw' processes")
-      try:  
-        clientprocess = subprocess.Popen([polypath, "--launch", blist[i]["PolyInstance"]], creationflags=subprocess.HIGH_PRIORITY_CLASS, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL) #launch the client
-      except Exception as e:
-        print("Error starting client:")
-        raise e
-
-      #Wait for client to start up
-      time.sleep(10)
-      waitforlogline(plog, loadedstring, delay = 1, timeout = 1800)
-      time.sleep(4)
-      GlobalConfig.smooth_mouse_drag = False
-      GlobalConfig.delay_after_drag = 0
-      ctl = PyAutoGUIController()
-      guibot = GuiBot(ctl)
-      guibot.add_path(cvpath)
-      _timeout = time.time() + 80
-      if focusclick:
-        pydirectinput.mouseDown(button='left')
-        pydirectinput.mouseUp(button='left')
-      while True:
-        time.sleep(1)
-        if guibot.exists("Singleplayer1"):
-          guibot.click("Singleplayer1")
-          guibot.wait("Version1")
-          guibot.click("Version1")
-          time.sleep(0.01)
-          guibot.click("Play1")
-          break
-        elif guibot.exists("Singleplayer2"):
-          guibot.click("Singleplayer2")
-          guibot.wait("Version2")
-          guibot.click("Version2")
-          time.sleep(0.01)
-          guibot.click("Play2")
-          break
-        elif guibot.exists("Singleplayer3"):
-          guibot.click("Singleplayer3")
-          guibot.wait("Version3")
-          guibot.click("Version3")
-          time.sleep(0.01)
-          guibot.click("Play3")
-          break
-        elif guibot.exists("Singleplayer4"):
-          guibot.click("Singleplayer4")
-          guibot.wait("Version4")
-          guibot.click("Version4")
-          time.sleep(0.01)
-          guibot.click("Play4")
-          break
-        else:
-          if time.time() > _timeout:
-            raise Exception("Cannot find 'Singleplayer' button to click! This may be a machine vision issue if the start screen is modded.")
-      #Client control here
-      time.sleep(warmup)
-      
-      #pyautogui.keyDown('w')
-      #pyautogui.keyDown('space')
-      #pyautogui.mouseDown(button='left')
-      #pyautogui.move(0, 30, 1)
-      pydirectinput.keyDown('space')
-      pydirectinput.keyDown('w')
-      pydirectinput.move(0, 30)  
-      pydirectinput.mouseDown(button='left')
-
-
-      if os.path.isfile(csvpath):
-        os.remove(csvpath)
-      pmonprocess = subprocess.Popen([presentmonpath, "-process_name", "javaw.exe", "-output_file", csvpath, "-terminate_on_proc_exit"])
-      time.sleep(benchtime)
-
-      #Bench period here
-
-      try: 
-        subprocess.run([presentmonpath, "-terminate_existing"])
-      except:
-        pass
-      pmonprocess.terminate()
-      #pyautogui.keyUp('w')
-      #pyautogui.keyUp('space')
-      #pyautogui.mouseUp(button='left')
-      pydirectinput.keyUp('w')
-      pydirectinput.keyUp('space')
-      pydirectinput.mouseUp(button='left')
-      if spark:
-        pydirectinput.press(r"/")
-        pydirectinput.typewrite("sparkc health --memory")
-        pydirectinput.press(r"enter")
-        pydirectinput.press(r"/")
-        pydirectinput.typewrite("sparkc gc")
-        pydirectinput.press(r"enter")
-        time.sleep(0.3) #make sure log is written to disk
-        with open(plog, "r") as f:     #Get spark info from the log
-          lines=f.readlines()
-          iter = 0
-          for l in lines: 
-            if "Memory usage:" in l:
-              blist[i]["Memory_Usage"].append(float(lines[iter].split(r"Memory usage:\n")[-1].split("GB")[0].strip())) #Memory
-            if "CPU usage" in l:
-              blist[i]["CPU_Usage"].append(float(lines[iter].split(r"(process)\n\n>")[0].split(",")[-1].split(r"%")[0].strip())) #CPU
-            if ("G1 Young Generation" in l) or ("ZGC Pauses collector:" in l) or ("Shenandoah Pauses collector" in l):
-              blist[i]["GC_Stop_MS"].append(float(lines[iter].split("ms avg")[0].split(r"\n")[-1].strip()))
-              blist[i]["GC_Stops"].append(int(lines[iter].split("ms avg,")[1].split("total")[0].strip()))   #GC Stop-the-world info
-            if ("G1 Old Generation" in l):
-              g1gc = True
-              blist[i]["Oldgen_GCs"].append(int(lines[iter].split(r"G1 Old Generation collector:\n")[-1].split("collections")[0].strip()))    #G1GC Old Gen collections 
-            iter = iter + 1
-
-
-      clientprocess.terminate()  #close presentmon and kill the minecraft client
-      time.sleep(1)
       try:
-        for proc in psutil.process_iter(['name']):   #Make sure the java client is really dead, as it likes to hang
+        #Backup existing world to restore later
+        if os.path.isdir(worldfolder) and not os.path.isdir(worldbackup):
+          shutil.copytree(worldfolder, worldbackup)
+        for proc in psutil.process_iter(['name']):   #Check for an existing javaw process
           if "javaw" in str(proc.name):
-            if debug: print("Killing client")
-            proc.kill()
-      except:
-        print("Failed to run psutil loop to kill Minecraft")
-      
-      frametimes = []
-      with open(csvpath, "r") as f:
-        csv_reader = csv.DictReader(f, delimiter = ',')
-        for line in csv_reader:
-          if line['msBetweenPresents'] is not None:
-            frametimes.append(float(line['msBetweenPresents']))
-      blist[i]["Average_FPS"].append(round(1000 / statistics.mean(frametimes),2)) #Average FPS
-      blist[i][r"1%_Frametime_ms"].append(round(statistics.mean(sorted(frametimes)[round(len(frametimes) * 0.99 - 1):]), 2))  #Slowest 1% of frametimes average
-      blist[i][r"5%_Frametime_ms"].append(round(statistics.mean(sorted(frametimes)[round(len(frametimes) * 0.95 - 1):]), 2))  #Slowest 5% of frametimes average
+            raise Exception("Please kill all existing 'javaw' processes")
+        try:  
+          clientprocess = subprocess.Popen([polypath, "--launch", blist[i]["PolyInstance"]], creationflags=subprocess.HIGH_PRIORITY_CLASS, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL) #launch the client
+        except Exception as e:
+          print("Error starting client:")
+          raise e
 
-      #End of iteration loop
+        #Wait for client to start up
+        time.sleep(10)
+        waitforlogline(plog, loadedstring, delay = 1, timeout = 1800)
+        time.sleep(4)
+        GlobalConfig.smooth_mouse_drag = False
+        GlobalConfig.delay_after_drag = 0
+        ctl = PyAutoGUIController()
+        guibot = GuiBot(ctl)
+        guibot.add_path(cvpath)
+        _timeout = time.time() + 80
+        if focusclick:
+          pydirectinput.mouseDown(button='left')
+          pydirectinput.mouseUp(button='left')
+        while True:
+          time.sleep(1)
+          if guibot.exists("Singleplayer1"):
+            guibot.click("Singleplayer1")
+            guibot.wait("Version1")
+            guibot.click("Version1")
+            time.sleep(0.01)
+            guibot.click("Play1")
+            break
+          elif guibot.exists("Singleplayer2"):
+            guibot.click("Singleplayer2")
+            guibot.wait("Version2")
+            guibot.click("Version2")
+            time.sleep(0.01)
+            guibot.click("Play2")
+            break
+          elif guibot.exists("Singleplayer3"):
+            guibot.click("Singleplayer3")
+            guibot.wait("Version3")
+            guibot.click("Version3")
+            time.sleep(0.01)
+            guibot.click("Play3")
+            break
+          elif guibot.exists("Singleplayer4"):
+            guibot.click("Singleplayer4")
+            guibot.wait("Version4")
+            guibot.click("Version4")
+            time.sleep(0.01)
+            guibot.click("Play4")
+            break
+          else:
+            if time.time() > _timeout:
+              raise Exception("Cannot find 'Singleplayer' button to click! This may be a machine vision issue if the start screen is modded.")
+        #Client control here
+        time.sleep(warmup)
+        
+        #pyautogui.keyDown('w')
+        #pyautogui.keyDown('space')
+        #pyautogui.mouseDown(button='left')
+        #pyautogui.move(0, 30, 1)
+        pydirectinput.keyDown('space')
+        pydirectinput.keyDown('w')
+        pydirectinput.move(0, 30)  
+        pydirectinput.mouseDown(button='left')
 
-    if blist[i]["Iterations"] >= 2:
-      blist[i]["Net_Average_FPS"] = safemean(blist[i]["Average_FPS"])
-      blist[i]["Average_FPS_Variance"] = safevar(blist[i]["Average_FPS"])
-      blist[i][r"Average_1%_Frametime_ms"] = safemean(blist[i][r"1%_Frametime_ms"])
-      blist[i][r"PVariance_1%_Frametime_ms"] = safevar(blist[i][r"1%_Frametime_ms"])
-      blist[i][r"Average_5%_Frametime_ms"] = safemean(blist[i][r"5%_Frametime_ms"])
-      blist[i][r"PVariance_5%_Frametime_ms"] = safevar(blist[i][r"5%_Frametime_ms"])
-      if spark:
-        blist[i]["Average_GC_Stop_MS"] = safemean(blist[i]["GC_Stop_MS"])
-        blist[i]["PVariance_GC_Stop_MS"] = safevar(blist[i]["GC_Stop_MS"])
-        blist[i]["Average_GC_Stops"] = safemean(blist[i]["GC_Stops"])
-        blist[i]["Average_Memory_Usage_GB"] = safemean(blist[i]["Memory_Usage"])
-        blist[i]["Average_CPU_Usage"] = safemean(blist[i]["CPU_Usage"])
-        if g1gc:
-          if len(blist[i]["Oldgen_GCs"]) > 1:
-            blist[i]["Average_Oldgen_GCs"] = safemean(blist[i]["Oldgen_GCs"])
+
+        if os.path.isfile(csvpath):
+          os.remove(csvpath)
+        pmonprocess = subprocess.Popen([presentmonpath, "-process_name", "javaw.exe", "-output_file", csvpath, "-terminate_on_proc_exit"])
+        time.sleep(benchtime)
+
+        #Bench period here
+
+        try: 
+          subprocess.run([presentmonpath, "-terminate_existing"])
+        except:
+          pass
+        pmonprocess.terminate()
+        #pyautogui.keyUp('w')
+        #pyautogui.keyUp('space')
+        #pyautogui.mouseUp(button='left')
+        pydirectinput.keyUp('w')
+        pydirectinput.keyUp('space')
+        pydirectinput.mouseUp(button='left')
+        if spark:
+          pydirectinput.press(r"/")
+          pydirectinput.typewrite("sparkc health --memory")
+          pydirectinput.press(r"enter")
+          pydirectinput.press(r"/")
+          pydirectinput.typewrite("sparkc gc")
+          pydirectinput.press(r"enter")
+          time.sleep(0.3) #make sure log is written to disk
+          with open(plog, "r") as f:     #Get spark info from the log
+            lines=f.readlines()
+            iter = 0
+            for l in lines: 
+              if "Memory usage:" in l:
+                blist[i]["Memory_Usage"].append(float(lines[iter].split(r"Memory usage:\n")[-1].split("GB")[0].strip())) #Memory
+              if "CPU usage" in l:
+                blist[i]["CPU_Usage"].append(float(lines[iter].split(r"(process)\n\n>")[0].split(",")[-1].split(r"%")[0].strip())) #CPU
+              if ("G1 Young Generation" in l) or ("ZGC Pauses collector:" in l) or ("Shenandoah Pauses collector" in l):
+                blist[i]["GC_Stop_MS"].append(float(lines[iter].split("ms avg")[0].split(r"\n")[-1].strip()))
+                blist[i]["GC_Stops"].append(int(lines[iter].split("ms avg,")[1].split("total")[0].strip()))   #GC Stop-the-world info
+              if ("G1 Old Generation" in l):
+                g1gc = True
+                blist[i]["Oldgen_GCs"].append(int(lines[iter].split(r"G1 Old Generation collector:\n")[-1].split("collections")[0].strip()))    #G1GC Old Gen collections 
+              iter = iter + 1
+
+
+        clientprocess.terminate()  #close presentmon and kill the minecraft client
+        time.sleep(1)
+        try:
+          for proc in psutil.process_iter(['name']):   #Make sure the java client is really dead, as it likes to hang
+            if "javaw" in str(proc.name):
+              if debug: print("Killing client")
+              proc.kill()
+        except:
+          print("Failed to run psutil loop to kill Minecraft")
+        
+        frametimes = []
+        with open(csvpath, "r") as f:
+          csv_reader = csv.DictReader(f, delimiter = ',')
+          for line in csv_reader:
+            if line['msBetweenPresents'] is not None:
+              frametimes.append(float(line['msBetweenPresents']))
+        blist[i]["Average_FPS"].append(round(1000 / statistics.mean(frametimes),2)) #Average FPS
+        blist[i][r"1%_Frametime_ms"].append(round(statistics.mean(sorted(frametimes)[round(len(frametimes) * 0.99 - 1):]), 2))  #Slowest 1% of frametimes average
+        blist[i][r"5%_Frametime_ms"].append(round(statistics.mean(sorted(frametimes)[round(len(frametimes) * 0.95 - 1):]), 2))  #Slowest 5% of frametimes average
+
+        #End of iteration loop
+      except Exception as e: #Clean up
+        try: 
+          subprocess.run([presentmonpath, "-terminate_existing"])
+        except:pass
+        try:
+          clientprocess.terminate()  #close presentmon and kill the minecraft client
+          pmonprocess.terminate()
+          time.sleep(1)
+        except:pass
+        try:
+          for proc in psutil.process_iter(['name']):   #Make sure the java client is really dead, as it likes to hang
+            if "javaw" in str(proc.name):
+              if debug: print("Killing client")
+              proc.kill()
+        except:pass
+        print("Error in client benchmark iteration!")
+        pprint.pprint(repr(e))
+
+
+    try: 
+      if blist[i]["Iterations"] >= 2:
+        blist[i]["Net_Average_FPS"] = safemean(blist[i]["Average_FPS"])
+        blist[i]["Average_FPS_Variance"] = safevar(blist[i]["Average_FPS"])
+        blist[i][r"Average_1%_Frametime_ms"] = safemean(blist[i][r"1%_Frametime_ms"])
+        blist[i][r"PVariance_1%_Frametime_ms"] = safevar(blist[i][r"1%_Frametime_ms"])
+        blist[i][r"Average_5%_Frametime_ms"] = safemean(blist[i][r"5%_Frametime_ms"])
+        blist[i][r"PVariance_5%_Frametime_ms"] = safevar(blist[i][r"5%_Frametime_ms"])
+        if spark:
+          blist[i]["Average_GC_Stop_MS"] = safemean(blist[i]["GC_Stop_MS"])
+          blist[i]["PVariance_GC_Stop_MS"] = safevar(blist[i]["GC_Stop_MS"])
+          blist[i]["Average_GC_Stops"] = safemean(blist[i]["GC_Stops"])
+          blist[i]["Average_Memory_Usage_GB"] = safemean(blist[i]["Memory_Usage"])
+          blist[i]["Average_CPU_Usage"] = safemean(blist[i]["CPU_Usage"])
+          if g1gc:
+            if len(blist[i]["Oldgen_GCs"]) > 1:
+              blist[i]["Average_Oldgen_GCs"] = safemean(blist[i]["Oldgen_GCs"])
+    except Exception as e:
+      print("Error saving client benchmark data!")
+      pprint.pprint(repr(e))
+        
+
 
   
     #---end of client branch---
@@ -472,132 +497,150 @@ def benchmark(i): #"i is the benchmark index"
       #Backup existing world to restore later
       if os.path.isdir("world") and not os.path.isdir("_world_backup"):
         shutil.copytree("world", "_world_backup")
-
-      #Delete chunky config if found, as it stores jobs there
-      if os.path.isfile(r"config/chunky.json"):
-        if debug: print("Removing chunky config")
-        os.remove(r"config/chunky.json")
-
-      #Start Minecraft
-      print("Running '" + blist[i]["Name"] + "' iteration " + str(n))
-      if debug:print(command)
-      start = time.time()
       try:
-        
-        mcserver = popen_spawn.PopenSpawn(command, timeout=totaltimeout, maxread=20000000)   #Start Minecraft server
-      except Exception as e:
-        print("Error running the command:")
-        print(command)
-        raise e
-      if debug: print("Starting server: " + command)
-      time.sleep(0.01)
-      if plat == "Windows":
-        try:
-          for proc in psutil.process_iter(['name']):   #Set to high process priority in windows, for greater consistency when run in the background
-            if "java" in str(proc.name):
-              if debug: print("Setting Priority")
-              proc.nice(psutil.HIGH_PRIORITY_CLASS)
-        except:
-          print("Failed to set process priority, please run this benchmark as an admin!")
-      crash = False
-      index = mcserver.expect_exact(pattern_list=[r'''! For help, type "help"''', 'Minecraft Crash Report', pexpect.EOF, pexpect.TIMEOUT], timeout=startuptimeout)  #wait until the server is started
-      if index == 0:
-        if debug: print("Server started")
-      elif index == 1:
-        mcserver.sendline('stop')
-        time.sleep(0.01)
-        mcserver.kill(signal.SIGTERM)
-        qw("CRASH")
-        print(command)
-        crash = True
-      elif index == 2:
-        qw("STOPPED")
-        print(command)
-        crash = True
-      elif index == 3:
-        mcserver.sendline('stop')
-        mcserver.kill(signal.SIGTERM)
-        qw("TIMEOUT")
-        print(command)
-        crash = True
-      if not crash:
-        blist[i]["Startup_Times"].append(round(time.time() - start , 2))
-        time.sleep(6)    #Let the server "settle"
-        if hascarpet:
-          if debug: print("Spawning players")
-          start = time.time()
-          for x in range(1, carpet + 1):
-            mcserver.sendline("player " + str(x) + " spawn")
-            mcserver.expect_exact(str(x) + " joined the game")
-            mcserver.sendline("player " + str(x) + " look 30 " + str(int(round(360 * x / carpet))))
-            mcserver.sendline("player " + str(x) + " jump continuous")
-            mcserver.sendline("player " + str(x) + " move forward")
-            mcserver.sendline("player " + str(x) + " sprint")
-            mcserver.sendline("player " + str(x) + " attack continuous")
-          blist[i]["Player_Spawn_Times"].append(round(time.time() - start , 3))
-        mcserver.sendline(forceload_cmd) 
-        time.sleep(1)    #Let it settle some more
-        if debug: print("Generating chunks...")
+        #Delete chunky config if found, as it stores jobs there
+        if os.path.isfile(r"config/chunky.json"):
+          if debug: print("Removing chunky config")
+          os.remove(r"config/chunky.json")
+
+        #Start Minecraft
+        print("Running '" + blist[i]["Name"] + "' iteration " + str(n))
+        if debug:print(command)
         start = time.time()
-        mcserver.sendline(chunkgen_command)   #Generate chunks
-        index = mcserver.expect_exact(pattern_list=[chunkgen_expect, 'Minecraft Crash Report', pexpect.EOF, pexpect.TIMEOUT], timeout=chunkgentimeout)
-       
+        try:
+          
+          mcserver = popen_spawn.PopenSpawn(command, timeout=totaltimeout, maxread=20000000)   #Start Minecraft server
+        except Exception as e:
+          print("Error running the command:")
+          print(command)
+          raise e
+        if debug: print("Starting server: " + command)
+        time.sleep(0.01)
+        if plat == "Windows":
+          try:
+            for proc in psutil.process_iter(['name']):   #Set to high process priority in windows, for greater consistency when run in the background
+              if "java" in str(proc.name):
+                if debug: print("Setting Priority")
+                proc.nice(psutil.HIGH_PRIORITY_CLASS)
+          except:
+            print("Failed to set process priority, please run this benchmark as an admin!")
+        crash = False
+        index = mcserver.expect_exact(pattern_list=[r'''! For help, type "help"''', 'Minecraft Crash Report', pexpect.EOF, pexpect.TIMEOUT], timeout=startuptimeout)  #wait until the server is started
         if index == 0:
-          if debug: print("Chunks finished. Stopping server...")
-          blist[i]["Chunkgen_Times"].append(round(time.time() - start, 2))
-          if spark:
-            mcserver.sendline("spark health --memory")
-            mcserver.expect_exact("TPS from last 5")
-            mcserver.sendline("spark gc")
-            mcserver.expect_exact("Garbage Collector statistics")
-            time.sleep(0.5) #make sure log is flushed to disk
-            with open("logs/latest.log", "r") as f:     #Get spark info from the log
-              lines=f.readlines()
-              iter = 0
-              for l in lines:
-                if "TPS from last 5" in l:
-                  blist[i]["Average_TPS_Values"].append(float(lines[iter+1].split(",")[-1][1:-1].split("*")[-1])) #TPS
-                if "Memory usage:" in l:
-                  blist[i]["Memory_Usage"].append(float(lines[iter+1].split("GB")[0].strip())) #Memory
-                if "CPU usage" in l:
-                  blist[i]["CPU_Usage"].append(float(lines[iter+2].split(",")[-1].split(r"%")[0].strip())) #CPU
-                if ("G1 Young Generation" in l) or ("ZGC Pauses collector:" in l) or ("Shenandoah Pauses collector" in l):
-                  blist[i]["GC_Stop_MS"].append(float(lines[iter+1].split("ms avg")[0].strip()))
-                  blist[i]["GC_Stops"].append(int(lines[iter+1].split("ms avg,")[-1].split("total")[0].strip()))   #GC Stop-the-world info
-                if ("G1 Old Generation" in l):
-                  g1gc = True
-                  blist[i]["Oldgen_GCs"].append(int(lines[iter+1].split("collections")[0].strip()))    #G1GC Old Gen collections 
-                iter = iter + 1
+          if debug: print("Server started")
         elif index == 1:
-          blist[i]["Chunkgen_Times"].append("CRASH")
+          mcserver.sendline('stop')
+          time.sleep(0.01)
+          mcserver.kill(signal.SIGTERM)
+          qw("CRASH")
+          print(command)
+          crash = True
         elif index == 2:
-          blist[i]["Chunkgen_Times"].append("STOPPED")
+          qw("STOPPED")
+          print(command)
+          crash = True
         elif index == 3:
-          blist[i]["Chunkgen_Times"].append("TIMEOUT")
-        mcserver.kill(signal.SIGTERM)
-      if debug: pprint.pprint(blist[i])
-      restore_world() #Restore the world backup
+          mcserver.sendline('stop')
+          mcserver.kill(signal.SIGTERM)
+          qw("TIMEOUT")
+          print(command)
+          crash = True
+        if not crash:
+          blist[i]["Startup_Times"].append(round(time.time() - start , 2))
+          time.sleep(6)    #Let the server "settle"
+          if hascarpet:
+            if debug: print("Spawning players")
+            start = time.time()
+            for x in range(1, carpet + 1):
+              mcserver.sendline("player " + str(x) + " spawn")
+              mcserver.expect_exact(str(x) + " joined the game")
+              mcserver.sendline("player " + str(x) + " look 30 " + str(int(round(360 * x / carpet))))
+              mcserver.sendline("player " + str(x) + " jump continuous")
+              mcserver.sendline("player " + str(x) + " move forward")
+              mcserver.sendline("player " + str(x) + " sprint")
+              mcserver.sendline("player " + str(x) + " attack continuous")
+            blist[i]["Player_Spawn_Times"].append(round(time.time() - start , 3))
+          mcserver.sendline(forceload_cmd) 
+          time.sleep(1)    #Let it settle some more
+          if debug: print("Generating chunks...")
+          start = time.time()
+          mcserver.sendline(chunkgen_command)   #Generate chunks
+          index = mcserver.expect_exact(pattern_list=[chunkgen_expect, 'Minecraft Crash Report', pexpect.EOF, pexpect.TIMEOUT], timeout=chunkgentimeout)
+        
+          if index == 0:
+            if debug: print("Chunks finished. Stopping server...")
+            blist[i]["Chunkgen_Times"].append(round(time.time() - start, 2))
+            if spark:
+              mcserver.sendline("spark health --memory")
+              mcserver.expect_exact("TPS from last 5")
+              mcserver.sendline("spark gc")
+              mcserver.expect_exact("Garbage Collector statistics")
+              time.sleep(0.5) #make sure log is flushed to disk
+              with open("logs/latest.log", "r") as f:     #Get spark info from the log
+                lines=f.readlines()
+                iter = 0
+                for l in lines:
+                  if "TPS from last 5" in l:
+                    blist[i]["Average_TPS_Values"].append(float(lines[iter+1].split(",")[-1][1:-1].split("*")[-1])) #TPS
+                  if "Memory usage:" in l:
+                    blist[i]["Memory_Usage"].append(float(lines[iter+1].split("GB")[0].strip())) #Memory
+                  if "CPU usage" in l:
+                    blist[i]["CPU_Usage"].append(float(lines[iter+2].split(",")[-1].split(r"%")[0].strip())) #CPU
+                  if ("G1 Young Generation" in l) or ("ZGC Pauses collector:" in l) or ("Shenandoah Pauses collector" in l):
+                    blist[i]["GC_Stop_MS"].append(float(lines[iter+1].split("ms avg")[0].strip()))
+                    blist[i]["GC_Stops"].append(int(lines[iter+1].split("ms avg,")[-1].split("total")[0].strip()))   #GC Stop-the-world info
+                  if ("G1 Old Generation" in l):
+                    g1gc = True
+                    blist[i]["Oldgen_GCs"].append(int(lines[iter+1].split("collections")[0].strip()))    #G1GC Old Gen collections 
+                  iter = iter + 1
+          elif index == 1:
+            blist[i]["Chunkgen_Times"].append("CRASH")
+          elif index == 2:
+            blist[i]["Chunkgen_Times"].append("STOPPED")
+          elif index == 3:
+            blist[i]["Chunkgen_Times"].append("TIMEOUT")
+          mcserver.kill(signal.SIGTERM)
+        if debug: pprint.pprint(blist[i])
+      except Exception as e:
+        print("Error in iteration!")
+        pprint.pprint(repr(e))
+        try:
+          mcserver.kill(signal.SIGTERM)
+          time.sleep(2)
+        except:pass
+      try:
+        restore_world() #Restore the world backup
+      except:
+        try:
+          mcserver.kill(signal.SIGTERM)
+        except:pass
+        time.sleep(5)
+        restore_world() #Sometimes shutil fails if the server is still up, so try again. 
 
     #End of iteration loop
-    if blist[i]["Iterations"] >= 2:
-      blist[i]["Average_Chunkgen_Time"] = safemean(blist[i]["Chunkgen_Times"])
-      blist[i]["Average_Startup_Time"] = safemean(blist[i]["Startup_Times"])
-      blist[i]["PVariance_Chunkgen_Time"] = safevar(blist[i]["Chunkgen_Times"])
-      blist[i]["Pvariance_Startup_Time"] = safevar(blist[i]["Startup_Times"])
-      if spark:
-        blist[i]["Average_TPS"] = safemean(blist[i]["Average_TPS_Values"])
-        blist[i]["PVariance_TPS"] = safevar(blist[i]["Average_TPS_Values"])
-        blist[i]["Average_GC_Stop_MS"] = safemean(blist[i]["GC_Stop_MS"])
-        blist[i]["PVariance_GC_Stop_MS"] = safevar(blist[i]["GC_Stop_MS"])
-        blist[i]["Average_GC_Stops"] = safemean(blist[i]["GC_Stops"])
-        blist[i]["Average_Memory_Usage_GB"] = safemean(blist[i]["Memory_Usage"])
-        blist[i]["Average_CPU_Usage"] = safemean(blist[i]["CPU_Usage"])
-        if g1gc:
-          if len(blist[i]["Oldgen_GCs"]) > 1:
-            blist[i]["Average_Oldgen_GCs"] = safemean(blist[i]["Oldgen_GCs"])
-      if carpet:
-        blist[i]["Average_Spawn_Time"] = safemean(blist[i]["Player_Spawn_Times"])
-        blist[i]["Player_Spawn_Variance"] = safevar(blist[i]["Player_Spawn_Times"])
+    try: #Dont let funky data kill the benchmark
+      if blist[i]["Iterations"] >= 2:
+        blist[i]["Average_Chunkgen_Time"] = safemean(blist[i]["Chunkgen_Times"])
+        blist[i]["Average_Startup_Time"] = safemean(blist[i]["Startup_Times"])
+        blist[i]["PVariance_Chunkgen_Time"] = safevar(blist[i]["Chunkgen_Times"])
+        blist[i]["Pvariance_Startup_Time"] = safevar(blist[i]["Startup_Times"])
+        if spark:
+          blist[i]["Average_TPS"] = safemean(blist[i]["Average_TPS_Values"])
+          blist[i]["PVariance_TPS"] = safevar(blist[i]["Average_TPS_Values"])
+          blist[i]["Average_GC_Stop_MS"] = safemean(blist[i]["GC_Stop_MS"])
+          blist[i]["PVariance_GC_Stop_MS"] = safevar(blist[i]["GC_Stop_MS"])
+          blist[i]["Average_GC_Stops"] = safemean(blist[i]["GC_Stops"])
+          blist[i]["Average_Memory_Usage_GB"] = safemean(blist[i]["Memory_Usage"])
+          blist[i]["Average_CPU_Usage"] = safemean(blist[i]["CPU_Usage"])
+          if g1gc:
+            if len(blist[i]["Oldgen_GCs"]) > 1:
+              blist[i]["Average_Oldgen_GCs"] = safemean(blist[i]["Oldgen_GCs"])
+        if carpet:
+          blist[i]["Average_Spawn_Time"] = safemean(blist[i]["Player_Spawn_Times"])
+          blist[i]["Player_Spawn_Variance"] = safevar(blist[i]["Player_Spawn_Times"])
+    except Exception as e:
+      print("Error saving benchmark data!")
+      pprint.pprint(repr(e))
 
     #---End of server bench branch---
   
