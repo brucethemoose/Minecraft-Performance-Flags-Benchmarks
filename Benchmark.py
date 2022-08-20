@@ -67,8 +67,12 @@ zmemory =r''' -Xms3G -Xmx9G'''
 lightmemory = r''' -Xms4G -Xmx4G'''
 
 
+oldgraal = r'''-server -XX:+UseG1GC -XX:+ParallelRefProcEnabled -XX:MaxGCPauseMillis=50 -XX:+UnlockExperimentalVMOptions -XX:+UnlockDiagnosticVMOptions -XX:+DisableExplicitGC -XX:+AlwaysPreTouch -XX:G1NewSizePercent=30 -XX:G1MaxNewSizePercent=40 -XX:G1HeapRegionSize=8M -XX:G1ReservePercent=20 -XX:G1HeapWastePercent=5 -XX:G1MixedGCCountTarget=4 -XX:InitiatingHeapOccupancyPercent=15 -XX:G1MixedGCLiveThresholdPercent=90 -XX:G1RSetUpdatingPauseTimePercent=5 -XX:SurvivorRatio=32 -Dsun.rmi.dgc.server.gcInterval=2147483646 -XX:+PerfDisableSharedMem -XX:MaxTenuringThreshold=1 -XX:+EnableJVMCIProduct -XX:+EnableJVMCI -XX:+UseJVMCICompiler -XX:+EagerJVMCI -XX:ThreadPriorityPolicy=1 -XX:+UseNUMA -XX:-DontCompileHugeMethods -XX:+UseVectorCmov -Djdk.nio.maxCachedBufferSize=262144 -Dgraal.TuneInlinerExploration=1 -Dgraal.CompilerConfiguration=enterprise -Dgraal.UsePriorityInlining=true -Dgraal.Vectorization=true -Dgraal.OptDuplication=true -Dgraal.DetectInvertedLoopsAsCounted=true -Dgraal.LoopInversion=true -Dgraal.VectorizeHashes=true -Dgraal.EnterprisePartialUnroll=true -Dgraal.VectorizeSIMD=true -Dgraal.StripMineNonCountedLoops=true -Dgraal.SpeculativeGuardMovement=true -Dgraal.InfeasiblePathCorrelation=true -Dgraal.LoopRotation=true -Dlibgraal.ExplicitGCInvokesConcurrent=true -Dlibgraal.AlwaysPreTouch=true -Dlibgraal.ParallelRefProcEnabled=true -XX:+UseLargePages -XX:LargePageSizeInBytes=2m'''
+
+newgraal = r'''-server -XX:+UnlockExperimentalVMOptions -XX:+UnlockDiagnosticVMOptions -XX:+UseG1GC -XX:+AlwaysPreTouch -Dlibgraal.AlwaysPreTouch=true -XX:+ParallelRefProcEnabled -Dlibgraal.ParallelRefProcEnabled=true -XX:+ExplicitGCInvokesConcurrent -Dlibgraal.ExplicitGCInvokesConcurrent=true -XX:MaxGCPauseMillis=20 -Dlibgraal.MaxGCPauseMillis=20 -Dlibgraal.GCPauseIntervalMillis=21 -XX:GCPauseIntervalMillis=21 -XX:G1NewSizePercent=30 -XX:G1MaxNewSizePercent=40 -Dlibgraal.MaximumYoungGenerationSizePercent=40 -XX:G1HeapRegionSize=32M -XX:G1ReservePercent=20 -Dlibgraal.G1ReservePercent=20 -XX:G1HeapWastePercent=5 -Dlibgraal.G1HeapWastePercent=5 -XX:G1MixedGCCountTarget=4 -Dlibgraal.G1MixedGCCountTarget=4 -XX:InitiatingHeapOccupancyPercent=15 -Dlibgraal.InitiatingHeapOccupancyPercent=15 -XX:G1MixedGCLiveThresholdPercent=90 -XX:G1RSetUpdatingPauseTimePercent=5 -Dlibgraal.G1RSetUpdatingPauseTimePercent=5 -XX:SurvivorRatio=32 -Dlibgraal.SurvivorRatio=32 -Dsun.rmi.dgc.server.gcInterval=2147483646 -XX:+UseNUMA -XX:-DontCompileHugeMethods -XX:+UseVectorCmov -XX:AllocatePrefetchStyle=3 -Djdk.nio.maxCachedBufferSize=262144 -XX:+PerfDisableSharedMem -XX:MaxTenuringThreshold=1 -XX:+UseStringDeduplication -XX:ThreadPriorityPolicy=1 -XX:+EnableJVMCIProduct -XX:+EnableJVMCI -XX:+UseJVMCICompiler -XX:+EagerJVMCI -Dgraal.TuneInlinerExploration=1 -Dgraal.CompilerConfiguration=enterprise -Dgraal.UsePriorityInlining=true -Dgraal.Vectorization=true -Dgraal.OptDuplication=true -Dgraal.DetectInvertedLoopsAsCounted=true -Dgraal.LoopInversion=true -Dgraal.VectorizeHashes=true -Dgraal.EnterprisePartialUnroll=true -Dgraal.VectorizeSIMD=true -Dgraal.StripMineNonCountedLoops=true -Dgraal.SpeculativeGuardMovement=true -Dgraal.InfeasiblePathCorrelation=true -Dgraal.LoopRotation=true -XX:+UseLargePages -XX:LargePageSizeInBytes=2m'''
+
 #-----------------------Benchmark Data--------------------------
-benchname = r"Test Benchmark"   #Name for the whole benchmark run
+benchname = r"Old vs New GraalVM 22 Flags"   #Name for the whole benchmark run
 
 blist = [
 #Note that Forge/Fabric server packs only need "java + arguments" for their launch command, as their jars are automatically found
@@ -77,28 +81,27 @@ blist = [
 #Client: benchmark name, PolyMC instance folder (note: must be the actual folder name, not the name on the polymc instance!),  # of iterations to run this benchmark
   
   {
-    "Name": "Vev 5ConCGCThreads",
-    "PolyInstance": "1.18.2",
-    "Iterations": 3
+    "Name": "VeV OldFlags",
+    "PolyInstance": "oldgraal",
+    "Iterations": 4
   },
   {
-    "Name": "VEV Less Concurrent", 
-    "Command": graalpath + moregraal + lightmemory + aikar + lessconc + lpages,
+    "Name": "VeV NewFlags",
+    "PolyInstance": "newgraal",
+    "Iterations": 4
+  },
+  {
+    "Name": "VEV Server OldFlags", 
+    "Command": graalpath + oldgraal + memory + moreconc,
     "Path": vevserver, 
     "Iterations": 4
   },
   {
-    "Name": "VEV Concurrent", 
-    "Command": graalpath + moregraal + lightmemory + aikar + conc + lpages,
+    "Name": "VEV Server NewFlags", 
+    "Command": graalpath + newgraal + memory + moreconc,
     "Path": vevserver, 
     "Iterations": 4
   },
-  {
-    "Name": "VEV More Concurrent", 
-    "Command": graalpath + moregraal + lightmemory + aikar + moreconc + lpages,
-    "Path": vevserver, 
-    "Iterations": 4
-  }
 ]
 
 #----------------------Other Options--------------------------
@@ -113,7 +116,7 @@ forge_chunkgen_expect =  r"Finished generating"           ##String to look for w
 startuptimeout= 350 #Number of seconds to wait before considering the server to be dead/stuck
 chunkgentimeout = 600 #Number of seconds to wait for chunk generation before considering the server to be dead/stuck 
 totaltimeout = 1200 #Number of seconds the whole server can run before timing out. 
-forceload_cmd= r"forceload add -100 -100 100 100" #Command to forceload a rectangle. Can also be some other server console command. 
+forceload_cmd= r"forceload add -120 -120 120 120" #Command to forceload a rectangle. Can also be some other server console command. 
 
 #Client benchmarking options
 polypath = r"C:/Games/PolyMC-Windows-Portable-1.4.0/polymc.exe" #Full path to polymc executable file
@@ -186,6 +189,7 @@ def benchmark(i): #"i is the benchmark index"
     from guibot.guibot import GuiBot 
     from guibot.controller import PyAutoGUIController
     from guibot.config import GlobalConfig
+    from guibot.finder import TemplateFinder
     import pydirectinput
     import pyautogui
     #Only import client modules in client branch.
@@ -203,7 +207,10 @@ def benchmark(i): #"i is the benchmark index"
       print(polyfolder)
       raise Exception("PolyMC instance not valid!")
     plog = os.path.join(polyfolder, "logs", "latest.log")
-    worldfolder = glob.glob(os.path.join(polyfolder, "saves", "*"))[0]
+    try:
+      worldfolder = glob.glob(os.path.join(polyfolder, "saves", "*"))[0]
+    except:
+      raise Exception("Please create a world in this instance before running the benchmark!")
     worldbackup = os.path.join(polyfolder, "world_backup")
 
     os.chdir(polyfolder)
@@ -255,41 +262,71 @@ def benchmark(i): #"i is the benchmark index"
         GlobalConfig.smooth_mouse_drag = False
         GlobalConfig.delay_after_drag = 0
         ctl = PyAutoGUIController()
-        guibot = GuiBot(ctl)
+        gfinder = TemplateFinder()
+        guibot = GuiBot(ctl,gfinder)
         guibot.add_path(cvpath)
         _timeout = time.time() + 80
         if focusclick:
           pydirectinput.mouseDown(button='left')
           pydirectinput.mouseUp(button='left')
+        #Try to find matches PNGs in CV_Images and click on them:
+        def ClickPlay():
+          while True:
+            time.sleep(0.3)
+            if guibot.exists("Play1"):
+              guibot.click("Play1")
+              break
+            elif guibot.exists("Play2"):
+              guibot.click("Play2")
+              break
+            elif guibot.exists("Play3"):
+              guibot.click("Play3")
+              break
+            elif guibot.exists("Play4"):
+              guibot.click("Play4")
+              break
+            else:
+              if time.time() > _timeout:
+                raise Exception("Cannot find 'Play' Button to click! This may be a machine vision issue if the start screen is modded.")
+        def ClickVersion():
+          while True:
+            time.sleep(0.5)
+            if guibot.exists("Version1"):
+              guibot.click("Version1")
+              ClickPlay()
+              break
+            elif guibot.exists("Version2"):
+              guibot.click("Version2")
+              ClickPlay()
+              break
+            elif guibot.exists("Version3"):
+              guibot.click("Version3")
+              ClickPlay()
+              break
+            elif guibot.exists("Version4"):
+              guibot.click("Version4")
+              ClickPlay()
+              break
+            else:
+              if time.time() > _timeout:
+                raise Exception("Cannot find world to click! Please create a world before running the script. This may be a machine vision issue if the start screen is modded.")
         while True:
           time.sleep(1)
           if guibot.exists("Singleplayer1"):
             guibot.click("Singleplayer1")
-            guibot.wait("Version1")
-            guibot.click("Version1")
-            time.sleep(0.01)
-            guibot.click("Play1")
+            ClickVersion()
             break
           elif guibot.exists("Singleplayer2"):
             guibot.click("Singleplayer2")
-            guibot.wait("Version2")
-            guibot.click("Version2")
-            time.sleep(0.01)
-            guibot.click("Play2")
+            ClickVersion()
             break
           elif guibot.exists("Singleplayer3"):
             guibot.click("Singleplayer3")
-            guibot.wait("Version3")
-            guibot.click("Version3")
-            time.sleep(0.01)
-            guibot.click("Play3")
+            ClickVersion()
             break
           elif guibot.exists("Singleplayer4"):
             guibot.click("Singleplayer4")
-            guibot.wait("Version4")
-            guibot.click("Version4")
-            time.sleep(0.01)
-            guibot.click("Play4")
+            ClickVersion()
             break
           else:
             if time.time() > _timeout:
