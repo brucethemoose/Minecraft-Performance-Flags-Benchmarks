@@ -1,0 +1,188 @@
+[
+    {
+        "Name": "VeV OldFlags",
+        "PolyInstance": "oldgraal",
+        "Iterations": 4,
+        "Average_FPS": [
+            47.05,
+            59.02,
+            48.98,
+            46.52
+        ],
+        "1%_Frametime_ms": [
+            143.47,
+            52.59,
+            128.57,
+            128.44
+        ],
+        "5%_Frametime_ms": [
+            73.44,
+            33.93,
+            68.3,
+            69.03
+        ],
+        "GC_Stop_MS": [
+            48.94,
+            49.12,
+            50.42,
+            47.5
+        ],
+        "GC_Stops": [
+            33,
+            32,
+            33,
+            34
+        ],
+        "Oldgen_GCs": [
+            0,
+            0,
+            0,
+            0
+        ],
+        "Memory_Usage": [
+            6.1,
+            5.7,
+            6.2,
+            6.2
+        ],
+        "CPU_Usage": [
+            39.0,
+            38.0,
+            39.0,
+            41.0
+        ],
+        "Net_Average_FPS": 50.39,
+        "Average_FPS_Variance": 25.65,
+        "Average_1%_Frametime_ms": 113.27,
+        "PVariance_1%_Frametime_ms": 1264.58,
+        "Average_5%_Frametime_ms": 61.17,
+        "PVariance_5%_Frametime_ms": 251.3,
+        "Average_GC_Stop_MS": 48.99,
+        "PVariance_GC_Stop_MS": 1.07,
+        "Average_GC_Stops": 33,
+        "Average_Memory_Usage_GB": 6.05,
+        "Average_CPU_Usage": 39.25,
+        "Average_Oldgen_GCs": 0
+    },
+    {
+        "Name": "VeV NewFlags",
+        "PolyInstance": "newgraal",
+        "Iterations": 4,
+        "Average_FPS": [
+            38.35,
+            48.21,
+            45.9,
+            46.52
+        ],
+        "1%_Frametime_ms": [
+            174.01,
+            142.31,
+            159.79,
+            135.7
+        ],
+        "5%_Frametime_ms": [
+            95.11,
+            73.14,
+            81.54,
+            74.45
+        ],
+        "GC_Stop_MS": [
+            49.35,
+            47.4,
+            46.47,
+            46.47
+        ],
+        "GC_Stops": [
+            37,
+            35,
+            36,
+            36
+        ],
+        "Oldgen_GCs": [
+            0,
+            0,
+            0,
+            0
+        ],
+        "Memory_Usage": [
+            4.9,
+            5.9,
+            4.1,
+            5.4
+        ],
+        "CPU_Usage": [
+            43.0,
+            39.0,
+            41.0,
+            42.0
+        ],
+        "Net_Average_FPS": 44.75,
+        "Average_FPS_Variance": 14.35,
+        "Average_1%_Frametime_ms": 152.95,
+        "PVariance_1%_Frametime_ms": 225.27,
+        "Average_5%_Frametime_ms": 81.06,
+        "PVariance_5%_Frametime_ms": 76.01,
+        "Average_GC_Stop_MS": 47.42,
+        "PVariance_GC_Stop_MS": 1.38,
+        "Average_GC_Stops": 36,
+        "Average_Memory_Usage_GB": 5.08,
+        "Average_CPU_Usage": 41.25,
+        "Average_Oldgen_GCs": 0
+    },
+    {
+        "Name": "VEV Server OldFlags",
+        "Command": "F:/JDKs/graalvm-ee-java17-windows-amd64-22.1.0/graalvm-ee-java17-22.1.0/bin/java.exe-server -XX:+UseG1GC -XX:+ParallelRefProcEnabled -XX:MaxGCPauseMillis=50 -XX:+UnlockExperimentalVMOptions -XX:+UnlockDiagnosticVMOptions -XX:+DisableExplicitGC -XX:+AlwaysPreTouch -XX:G1NewSizePercent=30 -XX:G1MaxNewSizePercent=40 -XX:G1HeapRegionSize=8M -XX:G1ReservePercent=20 -XX:G1HeapWastePercent=5 -XX:G1MixedGCCountTarget=4 -XX:InitiatingHeapOccupancyPercent=15 -XX:G1MixedGCLiveThresholdPercent=90 -XX:G1RSetUpdatingPauseTimePercent=5 -XX:SurvivorRatio=32 -Dsun.rmi.dgc.server.gcInterval=2147483646 -XX:+PerfDisableSharedMem -XX:MaxTenuringThreshold=1 -XX:+EnableJVMCIProduct -XX:+EnableJVMCI -XX:+UseJVMCICompiler -XX:+EagerJVMCI -XX:ThreadPriorityPolicy=1 -XX:+UseNUMA -XX:-DontCompileHugeMethods -XX:+UseVectorCmov -Djdk.nio.maxCachedBufferSize=262144 -Dgraal.TuneInlinerExploration=1 -Dgraal.CompilerConfiguration=enterprise -Dgraal.UsePriorityInlining=true -Dgraal.Vectorization=true -Dgraal.OptDuplication=true -Dgraal.DetectInvertedLoopsAsCounted=true -Dgraal.LoopInversion=true -Dgraal.VectorizeHashes=true -Dgraal.EnterprisePartialUnroll=true -Dgraal.VectorizeSIMD=true -Dgraal.StripMineNonCountedLoops=true -Dgraal.SpeculativeGuardMovement=true -Dgraal.InfeasiblePathCorrelation=true -Dgraal.LoopRotation=true -Dlibgraal.ExplicitGCInvokesConcurrent=true -Dlibgraal.AlwaysPreTouch=true -Dlibgraal.ParallelRefProcEnabled=true -XX:+UseLargePages -XX:LargePageSizeInBytes=2m -Xms8G -Xmx8G  -XX:ConcGCThreads=12",
+        "Path": "C:/Games/mcservers/vevserver",
+        "Iterations": 4,
+        "Startup_Times": [],
+        "Chunkgen_Times": [],
+        "Average_TPS_Values": [],
+        "GC_Stop_MS": [],
+        "GC_Stops": [],
+        "Oldgen_GCs": [],
+        "Memory_Usage": [],
+        "CPU_Usage": [],
+        "Player_Spawn_Times": [],
+        "Average_Chunkgen_Time": "-",
+        "Average_Startup_Time": "-",
+        "PVariance_Chunkgen_Time": "-",
+        "Pvariance_Startup_Time": "-",
+        "Average_TPS": "-",
+        "PVariance_TPS": "-",
+        "Average_GC_Stop_MS": "-",
+        "PVariance_GC_Stop_MS": "-",
+        "Average_GC_Stops": "-",
+        "Average_Memory_Usage_GB": "-",
+        "Average_CPU_Usage": "-",
+        "Average_Spawn_Time": "-",
+        "Player_Spawn_Variance": "-"
+    },
+    {
+        "Name": "VEV Server NewFlags",
+        "Command": "F:/JDKs/graalvm-ee-java17-windows-amd64-22.1.0/graalvm-ee-java17-22.1.0/bin/java.exe-server -XX:+UnlockExperimentalVMOptions -XX:+UnlockDiagnosticVMOptions -XX:+UseG1GC -XX:+AlwaysPreTouch -Dlibgraal.AlwaysPreTouch=true -XX:+ParallelRefProcEnabled -Dlibgraal.ParallelRefProcEnabled=true -XX:+ExplicitGCInvokesConcurrent -Dlibgraal.ExplicitGCInvokesConcurrent=true -XX:MaxGCPauseMillis=20 -Dlibgraal.MaxGCPauseMillis=20 -Dlibgraal.GCPauseIntervalMillis=21 -XX:GCPauseIntervalMillis=21 -XX:G1NewSizePercent=30 -XX:G1MaxNewSizePercent=40 -Dlibgraal.MaximumYoungGenerationSizePercent=40 -XX:G1HeapRegionSize=32M -XX:G1ReservePercent=20 -Dlibgraal.G1ReservePercent=20 -XX:G1HeapWastePercent=5 -Dlibgraal.G1HeapWastePercent=5 -XX:G1MixedGCCountTarget=4 -Dlibgraal.G1MixedGCCountTarget=4 -XX:InitiatingHeapOccupancyPercent=15 -Dlibgraal.InitiatingHeapOccupancyPercent=15 -XX:G1MixedGCLiveThresholdPercent=90 -XX:G1RSetUpdatingPauseTimePercent=5 -Dlibgraal.G1RSetUpdatingPauseTimePercent=5 -XX:SurvivorRatio=32 -Dlibgraal.SurvivorRatio=32 -Dsun.rmi.dgc.server.gcInterval=2147483646 -XX:+UseNUMA -XX:-DontCompileHugeMethods -XX:+UseVectorCmov -XX:AllocatePrefetchStyle=3 -Djdk.nio.maxCachedBufferSize=262144 -XX:+PerfDisableSharedMem -XX:MaxTenuringThreshold=1 -XX:+UseStringDeduplication -XX:ThreadPriorityPolicy=1 -XX:+EnableJVMCIProduct -XX:+EnableJVMCI -XX:+UseJVMCICompiler -XX:+EagerJVMCI -Dgraal.TuneInlinerExploration=1 -Dgraal.CompilerConfiguration=enterprise -Dgraal.UsePriorityInlining=true -Dgraal.Vectorization=true -Dgraal.OptDuplication=true -Dgraal.DetectInvertedLoopsAsCounted=true -Dgraal.LoopInversion=true -Dgraal.VectorizeHashes=true -Dgraal.EnterprisePartialUnroll=true -Dgraal.VectorizeSIMD=true -Dgraal.StripMineNonCountedLoops=true -Dgraal.SpeculativeGuardMovement=true -Dgraal.InfeasiblePathCorrelation=true -Dgraal.LoopRotation=true -XX:+UseLargePages -XX:LargePageSizeInBytes=2m -Xms8G -Xmx8G  -XX:ConcGCThreads=12",
+        "Path": "C:/Games/mcservers/vevserver",
+        "Iterations": 4,
+        "Startup_Times": [],
+        "Chunkgen_Times": [],
+        "Average_TPS_Values": [],
+        "GC_Stop_MS": [],
+        "GC_Stops": [],
+        "Oldgen_GCs": [],
+        "Memory_Usage": [],
+        "CPU_Usage": [],
+        "Player_Spawn_Times": [],
+        "Average_Chunkgen_Time": "-",
+        "Average_Startup_Time": "-",
+        "PVariance_Chunkgen_Time": "-",
+        "Pvariance_Startup_Time": "-",
+        "Average_TPS": "-",
+        "PVariance_TPS": "-",
+        "Average_GC_Stop_MS": "-",
+        "PVariance_GC_Stop_MS": "-",
+        "Average_GC_Stops": "-",
+        "Average_Memory_Usage_GB": "-",
+        "Average_CPU_Usage": "-",
+        "Average_Spawn_Time": "-",
+        "Player_Spawn_Variance": "-"
+    }
+]

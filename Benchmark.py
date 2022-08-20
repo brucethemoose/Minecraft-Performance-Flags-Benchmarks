@@ -41,11 +41,11 @@ shen4 = r''' -XX:+UseShenandoahGC -XX:+AlwaysPreTouch -XX:+ParallelRefProcEnable
 
 z1 = r''' -XX:+UseZGC -XX:+AlwaysPreTouch -XX:+ParallelRefProcEnabled -XX:+ExplicitGCInvokesConcurrent -XX:ZAllocationSpikeTolerance=3'''
 
-conc = r'''  -XX:ConcGCThreads=7'''
+conc = r''' -XX:ConcGCThreads=7'''
 
 lessconc = r''' -XX:ConcGCThreads=4'''
 
-moreconc = r'''  -XX:ConcGCThreads=12'''
+moreconc = r''' -XX:ConcGCThreads=12'''
 
 #Non gc flags
 minimal = r''' -server -XX:+UnlockExperimentalVMOptions -XX:+UnlockDiagnosticVMOptions'''
@@ -250,7 +250,7 @@ def benchmark(i): #"i is the benchmark index"
           if "javaw" in str(proc.name):
             raise Exception("Please kill all existing 'javaw' processes")
         try:  
-          clientprocess = subprocess.Popen([polypath, "--launch", blist[i]["PolyInstance"]], creationflags=subprocess.HIGH_PRIORITY_CLASS, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL) #launch the client
+          clientprocess = subprocess.Popen([polypath, "--launch", blist[i]["PolyInstance"]], creationflags=subprocess.HIGH_PRIORITY_CLASS | subprocess.CREATE_NEW_CONSOLE, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, shell=True) #launch the client
         except Exception as e:
           print("Error starting client:")
           raise e
@@ -406,7 +406,8 @@ def benchmark(i): #"i is the benchmark index"
         blist[i]["Average_FPS"].append(round(1000 / statistics.mean(frametimes),2)) #Average FPS
         blist[i][r"1%_Frametime_ms"].append(round(statistics.mean(sorted(frametimes)[round(len(frametimes) * 0.99 - 1):]), 2))  #Slowest 1% of frametimes average
         blist[i][r"5%_Frametime_ms"].append(round(statistics.mean(sorted(frametimes)[round(len(frametimes) * 0.95 - 1):]), 2))  #Slowest 5% of frametimes average
-
+        time.sleep(9) #Give the client some time to close, otherwise it may not start up again.
+        restore_world()
         #End of iteration loop
       except Exception as e: #Clean up
         try: 
@@ -423,9 +424,12 @@ def benchmark(i): #"i is the benchmark index"
               if debug: print("Killing client")
               proc.kill()
         except:pass
+        time.sleep(4) #Give the client some time to close, otherwise it may not start up again.
         restore_world()
+        time.sleep(1)
         print("Error in client benchmark iteration!")
         pprint.pprint(repr(e))
+
 
 
     try: 
