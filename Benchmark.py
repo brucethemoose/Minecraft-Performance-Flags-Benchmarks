@@ -60,19 +60,24 @@ experimental = r''' -XX:+EnableVectorAggressiveReboxing -XX:+EnableVectorReboxin
 
 lpages = r''' -XX:+UseLargePages -XX:LargePageSizeInBytes=2m'''
 
-memory = r''' -Xms8G -Xmx8G'''
+memory = r''' -Xms6G -Xmx6G'''
 
 zmemory =r''' -Xms3G -Xmx9G'''
 
 lightmemory = r''' -Xms4G -Xmx4G'''
 
 
-oldgraal = r'''-server -XX:+UseG1GC -XX:+ParallelRefProcEnabled -XX:MaxGCPauseMillis=50 -XX:+UnlockExperimentalVMOptions -XX:+UnlockDiagnosticVMOptions -XX:+DisableExplicitGC -XX:+AlwaysPreTouch -XX:G1NewSizePercent=30 -XX:G1MaxNewSizePercent=40 -XX:G1HeapRegionSize=8M -XX:G1ReservePercent=20 -XX:G1HeapWastePercent=5 -XX:G1MixedGCCountTarget=4 -XX:InitiatingHeapOccupancyPercent=15 -XX:G1MixedGCLiveThresholdPercent=90 -XX:G1RSetUpdatingPauseTimePercent=5 -XX:SurvivorRatio=32 -Dsun.rmi.dgc.server.gcInterval=2147483646 -XX:+PerfDisableSharedMem -XX:MaxTenuringThreshold=1 -XX:+EnableJVMCIProduct -XX:+EnableJVMCI -XX:+UseJVMCICompiler -XX:+EagerJVMCI -XX:ThreadPriorityPolicy=1 -XX:+UseNUMA -XX:-DontCompileHugeMethods -XX:+UseVectorCmov -Djdk.nio.maxCachedBufferSize=262144 -Dgraal.TuneInlinerExploration=1 -Dgraal.CompilerConfiguration=enterprise -Dgraal.UsePriorityInlining=true -Dgraal.Vectorization=true -Dgraal.OptDuplication=true -Dgraal.DetectInvertedLoopsAsCounted=true -Dgraal.LoopInversion=true -Dgraal.VectorizeHashes=true -Dgraal.EnterprisePartialUnroll=true -Dgraal.VectorizeSIMD=true -Dgraal.StripMineNonCountedLoops=true -Dgraal.SpeculativeGuardMovement=true -Dgraal.InfeasiblePathCorrelation=true -Dgraal.LoopRotation=true -Dlibgraal.ExplicitGCInvokesConcurrent=true -Dlibgraal.AlwaysPreTouch=true -Dlibgraal.ParallelRefProcEnabled=true -XX:+UseLargePages -XX:LargePageSizeInBytes=2m'''
+oldgraal = r''' -server -XX:+UseG1GC -XX:+ParallelRefProcEnabled -XX:MaxGCPauseMillis=50 -XX:+UnlockExperimentalVMOptions -XX:+UnlockDiagnosticVMOptions -XX:+DisableExplicitGC -XX:+AlwaysPreTouch -XX:G1NewSizePercent=30 -XX:G1MaxNewSizePercent=40 -XX:G1HeapRegionSize=8M -XX:G1ReservePercent=20 -XX:G1HeapWastePercent=5 -XX:G1MixedGCCountTarget=4 -XX:InitiatingHeapOccupancyPercent=15 -XX:G1MixedGCLiveThresholdPercent=90 -XX:G1RSetUpdatingPauseTimePercent=5 -XX:SurvivorRatio=32 -Dsun.rmi.dgc.server.gcInterval=2147483646 -XX:+PerfDisableSharedMem -XX:MaxTenuringThreshold=1 -XX:+EnableJVMCIProduct -XX:+EnableJVMCI -XX:+UseJVMCICompiler -XX:+EagerJVMCI -XX:ThreadPriorityPolicy=1 -XX:+UseNUMA -XX:-DontCompileHugeMethods -XX:+UseVectorCmov -Djdk.nio.maxCachedBufferSize=262144 -Dgraal.TuneInlinerExploration=1 -Dgraal.CompilerConfiguration=enterprise -Dgraal.UsePriorityInlining=true -Dgraal.Vectorization=true -Dgraal.OptDuplication=true -Dgraal.DetectInvertedLoopsAsCounted=true -Dgraal.LoopInversion=true -Dgraal.VectorizeHashes=true -Dgraal.EnterprisePartialUnroll=true -Dgraal.VectorizeSIMD=true -Dgraal.StripMineNonCountedLoops=true -Dgraal.SpeculativeGuardMovement=true -Dgraal.InfeasiblePathCorrelation=true -Dgraal.LoopRotation=true -Dlibgraal.ExplicitGCInvokesConcurrent=true -Dlibgraal.AlwaysPreTouch=true -Dlibgraal.ParallelRefProcEnabled=true -XX:+UseLargePages -XX:LargePageSizeInBytes=2m'''
 
-newgraal = r'''-server -XX:+UnlockExperimentalVMOptions -XX:+UnlockDiagnosticVMOptions -XX:+UseG1GC -XX:+AlwaysPreTouch -Dlibgraal.AlwaysPreTouch=true -XX:+ParallelRefProcEnabled -Dlibgraal.ParallelRefProcEnabled=true -XX:+ExplicitGCInvokesConcurrent -Dlibgraal.ExplicitGCInvokesConcurrent=true -XX:MaxGCPauseMillis=20 -Dlibgraal.MaxGCPauseMillis=20 -Dlibgraal.GCPauseIntervalMillis=21 -XX:GCPauseIntervalMillis=21 -XX:G1NewSizePercent=30 -XX:G1MaxNewSizePercent=40 -Dlibgraal.MaximumYoungGenerationSizePercent=40 -XX:G1HeapRegionSize=32M -XX:G1ReservePercent=20 -Dlibgraal.G1ReservePercent=20 -XX:G1HeapWastePercent=5 -Dlibgraal.G1HeapWastePercent=5 -XX:G1MixedGCCountTarget=4 -Dlibgraal.G1MixedGCCountTarget=4 -XX:InitiatingHeapOccupancyPercent=15 -Dlibgraal.InitiatingHeapOccupancyPercent=15 -XX:G1MixedGCLiveThresholdPercent=90 -XX:G1RSetUpdatingPauseTimePercent=5 -Dlibgraal.G1RSetUpdatingPauseTimePercent=5 -XX:SurvivorRatio=32 -Dlibgraal.SurvivorRatio=32 -Dsun.rmi.dgc.server.gcInterval=2147483646 -XX:+UseNUMA -XX:-DontCompileHugeMethods -XX:+UseVectorCmov -XX:AllocatePrefetchStyle=3 -Djdk.nio.maxCachedBufferSize=262144 -XX:+PerfDisableSharedMem -XX:MaxTenuringThreshold=1 -XX:+UseStringDeduplication -XX:ThreadPriorityPolicy=1 -XX:+EnableJVMCIProduct -XX:+EnableJVMCI -XX:+UseJVMCICompiler -XX:+EagerJVMCI -Dgraal.TuneInlinerExploration=1 -Dgraal.CompilerConfiguration=enterprise -Dgraal.UsePriorityInlining=true -Dgraal.Vectorization=true -Dgraal.OptDuplication=true -Dgraal.DetectInvertedLoopsAsCounted=true -Dgraal.LoopInversion=true -Dgraal.VectorizeHashes=true -Dgraal.EnterprisePartialUnroll=true -Dgraal.VectorizeSIMD=true -Dgraal.StripMineNonCountedLoops=true -Dgraal.SpeculativeGuardMovement=true -Dgraal.InfeasiblePathCorrelation=true -Dgraal.LoopRotation=true -XX:+UseLargePages -XX:LargePageSizeInBytes=2m'''
+newgraal = r''' -server -XX:+UnlockExperimentalVMOptions -XX:+UnlockDiagnosticVMOptions -XX:+UseG1GC -XX:+AlwaysPreTouch -Dlibgraal.AlwaysPreTouch=true -XX:+ParallelRefProcEnabled -Dlibgraal.ParallelRefProcEnabled=true -XX:+ExplicitGCInvokesConcurrent -Dlibgraal.ExplicitGCInvokesConcurrent=true -XX:MaxGCPauseMillis=20 -Dlibgraal.MaxGCPauseMillis=20 -Dlibgraal.GCPauseIntervalMillis=22 -XX:GCPauseIntervalMillis=22 -XX:G1NewSizePercent=30 -XX:G1MaxNewSizePercent=40 -Dlibgraal.MaximumYoungGenerationSizePercent=40 -XX:G1HeapRegionSize=32M -XX:G1ReservePercent=20 -Dlibgraal.G1ReservePercent=20 -XX:G1HeapWastePercent=5 -Dlibgraal.G1HeapWastePercent=5 -XX:G1MixedGCCountTarget=4 -Dlibgraal.G1MixedGCCountTarget=4 -XX:InitiatingHeapOccupancyPercent=15 -Dlibgraal.InitiatingHeapOccupancyPercent=15 -XX:G1MixedGCLiveThresholdPercent=90 -XX:G1RSetUpdatingPauseTimePercent=5 -Dlibgraal.G1RSetUpdatingPauseTimePercent=5 -XX:SurvivorRatio=32 -Dlibgraal.SurvivorRatio=32 -Dsun.rmi.dgc.server.gcInterval=2147483646 -XX:+UseNUMA -XX:-DontCompileHugeMethods -XX:+UseVectorCmov -XX:AllocatePrefetchStyle=3 -Djdk.nio.maxCachedBufferSize=262144 -XX:+PerfDisableSharedMem -XX:MaxTenuringThreshold=1 -XX:+UseStringDeduplication -XX:ThreadPriorityPolicy=1 -XX:+EnableJVMCIProduct -XX:+EnableJVMCI -XX:+UseJVMCICompiler -XX:+EagerJVMCI -Dgraal.TuneInlinerExploration=1 -Dgraal.CompilerConfiguration=enterprise -Dgraal.UsePriorityInlining=true -Dgraal.Vectorization=true -Dgraal.OptDuplication=true -Dgraal.DetectInvertedLoopsAsCounted=true -Dgraal.LoopInversion=true -Dgraal.VectorizeHashes=true -Dgraal.EnterprisePartialUnroll=true -Dgraal.VectorizeSIMD=true -Dgraal.StripMineNonCountedLoops=true -Dgraal.SpeculativeGuardMovement=true -Dgraal.InfeasiblePathCorrelation=true -Dgraal.LoopRotation=true -XX:+UseLargePages -XX:LargePageSizeInBytes=2m'''
 
+dynamicyoung = r''' -server -XX:+UnlockExperimentalVMOptions -XX:+UnlockDiagnosticVMOptions -XX:+UseG1GC -XX:+AlwaysPreTouch -Dlibgraal.AlwaysPreTouch=true -XX:+ParallelRefProcEnabled -Dlibgraal.ParallelRefProcEnabled=true -XX:+ExplicitGCInvokesConcurrent -Dlibgraal.ExplicitGCInvokesConcurrent=true -XX:MaxGCPauseMillis=14 -Dlibgraal.MaxGCPauseMillis=14 -Dlibgraal.GCPauseIntervalMillis=21 -XX:GCPauseIntervalMillis=21 -XX:G1HeapRegionSize=16M -XX:G1ReservePercent=25 -Dlibgraal.G1ReservePercent=25 -XX:G1HeapWastePercent=5 -Dlibgraal.G1HeapWastePercent=5 -XX:G1MixedGCCountTarget=4 -Dlibgraal.G1MixedGCCountTarget=4 -XX:InitiatingHeapOccupancyPercent=15 -Dlibgraal.InitiatingHeapOccupancyPercent=15 -XX:G1MixedGCLiveThresholdPercent=90 -XX:G1RSetUpdatingPauseTimePercent=2 -Dlibgraal.G1RSetUpdatingPauseTimePercent=2 -XX:SurvivorRatio=32 -Dlibgraal.SurvivorRatio=32 -Dsun.rmi.dgc.server.gcInterval=2147483646 -Djdk.nio.maxCachedBufferSize=262144 -XX:+UseNUMA -XX:-DontCompileHugeMethods -XX:+UseVectorCmov -XX:AllocatePrefetchStyle=3  -XX:+PerfDisableSharedMem -XX:MaxTenuringThreshold=1 -XX:+UseStringDeduplication  -XX:+UseFastUnorderedTimeStamps -XX:+UseCriticalCompilerThreadPriority -XX:+UseCriticalJavaThreadPriority -XX:+EnableJVMCIProduct -XX:+EnableJVMCI -XX:+UseJVMCICompiler -XX:+EagerJVMCI -Dgraal.TuneInlinerExploration=1 -Dgraal.CompilerConfiguration=enterprise -Dgraal.UsePriorityInlining=true -Dgraal.Vectorization=true -Dgraal.OptDuplication=true -Dgraal.DetectInvertedLoopsAsCounted=true -Dgraal.LoopInversion=true -Dgraal.VectorizeHashes=true -Dgraal.EnterprisePartialUnroll=true -Dgraal.VectorizeSIMD=true -Dgraal.StripMineNonCountedLoops=true -Dgraal.SpeculativeGuardMovement=true -Dgraal.InfeasiblePathCorrelation=true -Dgraal.LoopRotation=true -XX:+UseLargePages -XX:LargePageSizeInBytes=2m'''
+
+dynamic50 = r''' -server -XX:+UnlockExperimentalVMOptions -XX:+UnlockDiagnosticVMOptions -XX:+UseG1GC -XX:+AlwaysPreTouch -Dlibgraal.AlwaysPreTouch=true -XX:+ParallelRefProcEnabled -Dlibgraal.ParallelRefProcEnabled=true -XX:+ExplicitGCInvokesConcurrent -Dlibgraal.ExplicitGCInvokesConcurrent=true -XX:MaxGCPauseMillis=50 -Dlibgraal.MaxGCPauseMillis=50 -Dlibgraal.GCPauseIntervalMillis=60 -XX:GCPauseIntervalMillis=60 -XX:G1HeapRegionSize=16M -XX:G1ReservePercent=25 -Dlibgraal.G1ReservePercent=25 -XX:G1HeapWastePercent=5 -Dlibgraal.G1HeapWastePercent=5 -XX:G1MixedGCCountTarget=4 -Dlibgraal.G1MixedGCCountTarget=4 -XX:InitiatingHeapOccupancyPercent=15 -Dlibgraal.InitiatingHeapOccupancyPercent=15 -XX:G1MixedGCLiveThresholdPercent=90 -XX:G1RSetUpdatingPauseTimePercent=2 -Dlibgraal.G1RSetUpdatingPauseTimePercent=2 -XX:SurvivorRatio=32 -Dlibgraal.SurvivorRatio=32 -Dsun.rmi.dgc.server.gcInterval=2147483646 -Djdk.nio.maxCachedBufferSize=262144 -XX:+UseNUMA -XX:-DontCompileHugeMethods -XX:+UseVectorCmov -XX:AllocatePrefetchStyle=3  -XX:+PerfDisableSharedMem -XX:MaxTenuringThreshold=1 -XX:+UseStringDeduplication  -XX:+UseFastUnorderedTimeStamps -XX:+UseCriticalCompilerThreadPriority -XX:+UseCriticalJavaThreadPriority -XX:+EnableJVMCIProduct -XX:+EnableJVMCI -XX:+UseJVMCICompiler -XX:+EagerJVMCI -Dgraal.TuneInlinerExploration=1 -Dgraal.CompilerConfiguration=enterprise -Dgraal.UsePriorityInlining=true -Dgraal.Vectorization=true -Dgraal.OptDuplication=true -Dgraal.DetectInvertedLoopsAsCounted=true -Dgraal.LoopInversion=true -Dgraal.VectorizeHashes=true -Dgraal.EnterprisePartialUnroll=true -Dgraal.VectorizeSIMD=true -Dgraal.StripMineNonCountedLoops=true -Dgraal.SpeculativeGuardMovement=true -Dgraal.InfeasiblePathCorrelation=true -Dgraal.LoopRotation=true -XX:+UseLargePages -XX:LargePageSizeInBytes=2m'''
+
+fixedyoung = r''' -server -XX:+UnlockExperimentalVMOptions -XX:+UnlockDiagnosticVMOptions -XX:+UseG1GC -XX:+AlwaysPreTouch -Dlibgraal.AlwaysPreTouch=true -XX:+ParallelRefProcEnabled -Dlibgraal.ParallelRefProcEnabled=true -XX:+ExplicitGCInvokesConcurrent -Dlibgraal.ExplicitGCInvokesConcurrent=true -XX:MaxGCPauseMillis=14 -Dlibgraal.MaxGCPauseMillis=14 -Dlibgraal.GCPauseIntervalMillis=21 -XX:GCPauseIntervalMillis=21 -XX:G1NewSizePercent=30 -XX:G1MaxNewSizePercent=40 -Dlibgraal.MaximumYoungGenerationSizePercent=40 -XX:G1HeapRegionSize=16M -XX:G1ReservePercent=25 -Dlibgraal.G1ReservePercent=25 -XX:G1HeapWastePercent=5 -Dlibgraal.G1HeapWastePercent=5 -XX:G1MixedGCCountTarget=4 -Dlibgraal.G1MixedGCCountTarget=4 -XX:InitiatingHeapOccupancyPercent=15 -Dlibgraal.InitiatingHeapOccupancyPercent=15 -XX:G1MixedGCLiveThresholdPercent=90 -XX:G1RSetUpdatingPauseTimePercent=2 -Dlibgraal.G1RSetUpdatingPauseTimePercent=2 -XX:SurvivorRatio=32 -Dlibgraal.SurvivorRatio=32 -Dsun.rmi.dgc.server.gcInterval=2147483646 -Djdk.nio.maxCachedBufferSize=262144 -XX:+UseNUMA -XX:-DontCompileHugeMethods -XX:+UseVectorCmov -XX:AllocatePrefetchStyle=3  -XX:+PerfDisableSharedMem -XX:MaxTenuringThreshold=1 -XX:+UseStringDeduplication  -XX:+UseFastUnorderedTimeStamps -XX:+UseCriticalCompilerThreadPriority -XX:+UseCriticalJavaThreadPriority -XX:+EnableJVMCIProduct -XX:+EnableJVMCI -XX:+UseJVMCICompiler -XX:+EagerJVMCI -Dgraal.TuneInlinerExploration=1 -Dgraal.CompilerConfiguration=enterprise -Dgraal.UsePriorityInlining=true -Dgraal.Vectorization=true -Dgraal.OptDuplication=true -Dgraal.DetectInvertedLoopsAsCounted=true -Dgraal.LoopInversion=true -Dgraal.VectorizeHashes=true -Dgraal.EnterprisePartialUnroll=true -Dgraal.VectorizeSIMD=true -Dgraal.StripMineNonCountedLoops=true -Dgraal.SpeculativeGuardMovement=true -Dgraal.InfeasiblePathCorrelation=true -Dgraal.LoopRotation=true -XX:+UseLargePages -XX:LargePageSizeInBytes=2m'''
 #-----------------------Benchmark Data--------------------------
-benchname = r"Old vs New GraalVM 22 Flags"   #Name for the whole benchmark run
+benchname = r"Test New vs Old vs Dynamic G1GC"   #Name for the whole benchmark run
 
 blist = [
 #Note that Forge/Fabric server packs only need "java + arguments" for their launch command, as their jars are automatically found
@@ -80,27 +85,31 @@ blist = [
 #Server: benchmark name, bnechmark command (java + flags), server root directory, # of iterations to run this benchmark
 #Client: benchmark name, PolyMC instance folder (note: must be the actual folder name, not the name on the polymc instance!),  # of iterations to run this benchmark
   
+
+
   {
-    "Name": "VeV OldFlags",
-    "PolyInstance": "oldgraal",
-    "Iterations": 4
+    "Name": "VEV Server NewFlags DynamicYoung", 
+    "Command": graalpath + dynamicyoung + memory + conc,
+    "Path": vevserver, 
+    "Iterations": 5
   },
   {
-    "Name": "VeV NewFlags",
-    "PolyInstance": "newgraal",
-    "Iterations": 4
+    "Name": "VEV Server NewFlags Dynamic50", 
+    "Command": graalpath + dynamicyoung + memory + conc,
+    "Path": vevserver, 
+    "Iterations": 5
+  },
+  {
+    "Name": "VEV Server NewFlags FixedYoung", 
+    "Command": graalpath + fixedyoung + memory + conc,
+    "Path": vevserver, 
+    "Iterations": 5
   },
   {
     "Name": "VEV Server OldFlags", 
-    "Command": graalpath + oldgraal + memory + moreconc,
+    "Command": graalpath + oldgraal + memory + conc,
     "Path": vevserver, 
-    "Iterations": 4
-  },
-  {
-    "Name": "VEV Server NewFlags", 
-    "Command": graalpath + newgraal + memory + moreconc,
-    "Path": vevserver, 
-    "Iterations": 4
+    "Iterations": 5
   },
 ]
 
@@ -245,7 +254,11 @@ def benchmark(i): #"i is the benchmark index"
       try:
         #Backup existing world to restore later
         if os.path.isdir(worldfolder) and not os.path.isdir(worldbackup):
-          shutil.copytree(worldfolder, worldbackup)
+          try:
+            shutil.copytree(worldfolder, worldbackup)
+          except:
+            time.sleep(3)
+            shutil.copytree(worldfolder, worldbackup)
         for proc in psutil.process_iter(['name']):   #Check for an existing javaw process
           if "javaw" in str(proc.name):
             raise Exception("Please kill all existing 'javaw' processes")
@@ -534,7 +547,11 @@ def benchmark(i): #"i is the benchmark index"
     for n in range(1, blist[i]["Iterations"] + 1):
       #Backup existing world to restore later
       if os.path.isdir("world") and not os.path.isdir("_world_backup"):
-        shutil.copytree("world", "_world_backup")
+        try:
+          shutil.copytree("world", "_world_backup")
+        except:
+          time.sleep(3)
+          shutil.copytree("world", "_world_backup")
       try:
         #Delete chunky config if found, as it stores jobs there
         if os.path.isfile(r"config/chunky.json"):

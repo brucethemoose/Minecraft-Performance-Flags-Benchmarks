@@ -1,0 +1,334 @@
+[
+    {
+        "Name": "VEV Server NewFlags DynamicYoung",
+        "Command": "F:/JDKs/graalvm-ee-java17-windows-amd64-22.1.0/graalvm-ee-java17-22.1.0/bin/java.exe -server -XX:+UnlockExperimentalVMOptions -XX:+UnlockDiagnosticVMOptions -XX:+UseG1GC -XX:+AlwaysPreTouch -Dlibgraal.AlwaysPreTouch=true -XX:+ParallelRefProcEnabled -Dlibgraal.ParallelRefProcEnabled=true -XX:+ExplicitGCInvokesConcurrent -Dlibgraal.ExplicitGCInvokesConcurrent=true -XX:MaxGCPauseMillis=14 -Dlibgraal.MaxGCPauseMillis=14 -Dlibgraal.GCPauseIntervalMillis=21 -XX:GCPauseIntervalMillis=21 -XX:G1HeapRegionSize=16M -XX:G1ReservePercent=25 -Dlibgraal.G1ReservePercent=25 -XX:G1HeapWastePercent=5 -Dlibgraal.G1HeapWastePercent=5 -XX:G1MixedGCCountTarget=4 -Dlibgraal.G1MixedGCCountTarget=4 -XX:InitiatingHeapOccupancyPercent=15 -Dlibgraal.InitiatingHeapOccupancyPercent=15 -XX:G1MixedGCLiveThresholdPercent=90 -XX:G1RSetUpdatingPauseTimePercent=2 -Dlibgraal.G1RSetUpdatingPauseTimePercent=2 -XX:SurvivorRatio=32 -Dlibgraal.SurvivorRatio=32 -Dsun.rmi.dgc.server.gcInterval=2147483646 -Djdk.nio.maxCachedBufferSize=262144 -XX:+UseNUMA -XX:-DontCompileHugeMethods -XX:+UseVectorCmov -XX:AllocatePrefetchStyle=3  -XX:+PerfDisableSharedMem -XX:MaxTenuringThreshold=1 -XX:+UseStringDeduplication  -XX:+UseFastUnorderedTimeStamps -XX:+UseCriticalCompilerThreadPriority -XX:+UseCriticalJavaThreadPriority -XX:+EnableJVMCIProduct -XX:+EnableJVMCI -XX:+UseJVMCICompiler -XX:+EagerJVMCI -Dgraal.TuneInlinerExploration=1 -Dgraal.CompilerConfiguration=enterprise -Dgraal.UsePriorityInlining=true -Dgraal.Vectorization=true -Dgraal.OptDuplication=true -Dgraal.DetectInvertedLoopsAsCounted=true -Dgraal.LoopInversion=true -Dgraal.VectorizeHashes=true -Dgraal.EnterprisePartialUnroll=true -Dgraal.VectorizeSIMD=true -Dgraal.StripMineNonCountedLoops=true -Dgraal.SpeculativeGuardMovement=true -Dgraal.InfeasiblePathCorrelation=true -Dgraal.LoopRotation=true -XX:+UseLargePages -XX:LargePageSizeInBytes=2m -Xms6G -Xmx6G -XX:ConcGCThreads=7",
+        "Path": "C:/Games/mcservers/vevserver",
+        "Iterations": 5,
+        "Startup_Times": [
+            49.43,
+            50.36,
+            47.29,
+            47.43,
+            47.68
+        ],
+        "Chunkgen_Times": [
+            208.6,
+            169.85,
+            174.48,
+            188.22,
+            191.23
+        ],
+        "Average_TPS_Values": [
+            19.92,
+            19.82,
+            19.83,
+            19.83,
+            19.87
+        ],
+        "GC_Stop_MS": [
+            12.03,
+            12.66,
+            12.61,
+            12.35,
+            12.41
+        ],
+        "GC_Stops": [
+            236,
+            229,
+            222,
+            227,
+            237
+        ],
+        "Oldgen_GCs": [
+            0,
+            0,
+            0,
+            0,
+            0
+        ],
+        "Memory_Usage": [
+            2.5,
+            2.6,
+            2.3,
+            2.4,
+            2.6
+        ],
+        "CPU_Usage": [
+            33.0,
+            37.0,
+            36.0,
+            36.0,
+            34.0
+        ],
+        "Player_Spawn_Times": [
+            7.101,
+            7.615,
+            7.838,
+            7.492,
+            7.616
+        ],
+        "Average_Chunkgen_Time": 186.48,
+        "Average_Startup_Time": 48.44,
+        "PVariance_Chunkgen_Time": 187.09,
+        "Pvariance_Startup_Time": 1.52,
+        "Average_TPS": 19.85,
+        "PVariance_TPS": 0.0,
+        "Average_GC_Stop_MS": 12.41,
+        "PVariance_GC_Stop_MS": 0.05,
+        "Average_GC_Stops": 230.2,
+        "Average_Memory_Usage_GB": 2.48,
+        "Average_CPU_Usage": 35.2,
+        "Average_Oldgen_GCs": 0,
+        "Average_Spawn_Time": 7.53,
+        "Player_Spawn_Variance": 0.06
+    },
+    {
+        "Name": "VEV Server NewFlags DynamicYoung 2",
+        "Command": "F:/JDKs/graalvm-ee-java17-windows-amd64-22.1.0/graalvm-ee-java17-22.1.0/bin/java.exe -server -XX:+UnlockExperimentalVMOptions -XX:+UnlockDiagnosticVMOptions -XX:+UseG1GC -XX:+AlwaysPreTouch -Dlibgraal.AlwaysPreTouch=true -XX:+ParallelRefProcEnabled -Dlibgraal.ParallelRefProcEnabled=true -XX:+ExplicitGCInvokesConcurrent -Dlibgraal.ExplicitGCInvokesConcurrent=true -XX:MaxGCPauseMillis=14 -Dlibgraal.MaxGCPauseMillis=14 -Dlibgraal.GCPauseIntervalMillis=21 -XX:GCPauseIntervalMillis=21 -XX:G1HeapRegionSize=16M -XX:G1ReservePercent=25 -Dlibgraal.G1ReservePercent=25 -XX:G1HeapWastePercent=5 -Dlibgraal.G1HeapWastePercent=5 -XX:G1MixedGCCountTarget=4 -Dlibgraal.G1MixedGCCountTarget=4 -XX:InitiatingHeapOccupancyPercent=15 -Dlibgraal.InitiatingHeapOccupancyPercent=15 -XX:G1MixedGCLiveThresholdPercent=90 -XX:G1RSetUpdatingPauseTimePercent=2 -Dlibgraal.G1RSetUpdatingPauseTimePercent=2 -XX:SurvivorRatio=32 -Dlibgraal.SurvivorRatio=32 -Dsun.rmi.dgc.server.gcInterval=2147483646 -Djdk.nio.maxCachedBufferSize=262144 -XX:+UseNUMA -XX:-DontCompileHugeMethods -XX:+UseVectorCmov -XX:AllocatePrefetchStyle=3  -XX:+PerfDisableSharedMem -XX:MaxTenuringThreshold=1 -XX:+UseStringDeduplication  -XX:+UseFastUnorderedTimeStamps -XX:+UseCriticalCompilerThreadPriority -XX:+UseCriticalJavaThreadPriority -XX:+EnableJVMCIProduct -XX:+EnableJVMCI -XX:+UseJVMCICompiler -XX:+EagerJVMCI -Dgraal.TuneInlinerExploration=1 -Dgraal.CompilerConfiguration=enterprise -Dgraal.UsePriorityInlining=true -Dgraal.Vectorization=true -Dgraal.OptDuplication=true -Dgraal.DetectInvertedLoopsAsCounted=true -Dgraal.LoopInversion=true -Dgraal.VectorizeHashes=true -Dgraal.EnterprisePartialUnroll=true -Dgraal.VectorizeSIMD=true -Dgraal.StripMineNonCountedLoops=true -Dgraal.SpeculativeGuardMovement=true -Dgraal.InfeasiblePathCorrelation=true -Dgraal.LoopRotation=true -XX:+UseLargePages -XX:LargePageSizeInBytes=2m -Xms6G -Xmx6G -XX:ConcGCThreads=7",
+        "Path": "C:/Games/mcservers/vevserver",
+        "Iterations": 5,
+        "Startup_Times": [
+            47.42,
+            48.51,
+            51.01,
+            48.99,
+            48.92
+        ],
+        "Chunkgen_Times": [
+            182.96,
+            189.23,
+            214.53,
+            169.16,
+            178.57
+        ],
+        "Average_TPS_Values": [
+            19.83,
+            19.88,
+            19.69,
+            19.8,
+            19.76
+        ],
+        "GC_Stop_MS": [
+            12.33,
+            12.22,
+            12.42,
+            12.91,
+            12.59
+        ],
+        "GC_Stops": [
+            234,
+            228,
+            256,
+            232,
+            237
+        ],
+        "Oldgen_GCs": [
+            0,
+            0,
+            0,
+            0,
+            0
+        ],
+        "Memory_Usage": [
+            2.4,
+            2.4,
+            2.8,
+            2.7,
+            2.9
+        ],
+        "CPU_Usage": [
+            36.0,
+            34.0,
+            35.0,
+            38.0,
+            38.0
+        ],
+        "Player_Spawn_Times": [
+            7.932,
+            7.492,
+            7.749,
+            8.466,
+            8.046
+        ],
+        "Average_Chunkgen_Time": 186.89,
+        "Average_Startup_Time": 48.97,
+        "PVariance_Chunkgen_Time": 233.69,
+        "Pvariance_Startup_Time": 1.36,
+        "Average_TPS": 19.79,
+        "PVariance_TPS": 0.0,
+        "Average_GC_Stop_MS": 12.49,
+        "PVariance_GC_Stop_MS": 0.06,
+        "Average_GC_Stops": 237.4,
+        "Average_Memory_Usage_GB": 2.64,
+        "Average_CPU_Usage": 36.2,
+        "Average_Oldgen_GCs": 0,
+        "Average_Spawn_Time": 7.94,
+        "Player_Spawn_Variance": 0.11
+    },
+    {
+        "Name": "VEV Server NewFlags FixedYoung",
+        "Command": "F:/JDKs/graalvm-ee-java17-windows-amd64-22.1.0/graalvm-ee-java17-22.1.0/bin/java.exe -server -XX:+UnlockExperimentalVMOptions -XX:+UnlockDiagnosticVMOptions -XX:+UseG1GC -XX:+AlwaysPreTouch -Dlibgraal.AlwaysPreTouch=true -XX:+ParallelRefProcEnabled -Dlibgraal.ParallelRefProcEnabled=true -XX:+ExplicitGCInvokesConcurrent -Dlibgraal.ExplicitGCInvokesConcurrent=true -XX:MaxGCPauseMillis=14 -Dlibgraal.MaxGCPauseMillis=14 -Dlibgraal.GCPauseIntervalMillis=21 -XX:GCPauseIntervalMillis=21 -XX:G1NewSizePercent=30 -XX:G1MaxNewSizePercent=40 -Dlibgraal.MaximumYoungGenerationSizePercent=40 -XX:G1HeapRegionSize=16M -XX:G1ReservePercent=25 -Dlibgraal.G1ReservePercent=25 -XX:G1HeapWastePercent=5 -Dlibgraal.G1HeapWastePercent=5 -XX:G1MixedGCCountTarget=4 -Dlibgraal.G1MixedGCCountTarget=4 -XX:InitiatingHeapOccupancyPercent=15 -Dlibgraal.InitiatingHeapOccupancyPercent=15 -XX:G1MixedGCLiveThresholdPercent=90 -XX:G1RSetUpdatingPauseTimePercent=2 -Dlibgraal.G1RSetUpdatingPauseTimePercent=2 -XX:SurvivorRatio=32 -Dlibgraal.SurvivorRatio=32 -Dsun.rmi.dgc.server.gcInterval=2147483646 -Djdk.nio.maxCachedBufferSize=262144 -XX:+UseNUMA -XX:-DontCompileHugeMethods -XX:+UseVectorCmov -XX:AllocatePrefetchStyle=3  -XX:+PerfDisableSharedMem -XX:MaxTenuringThreshold=1 -XX:+UseStringDeduplication  -XX:+UseFastUnorderedTimeStamps -XX:+UseCriticalCompilerThreadPriority -XX:+UseCriticalJavaThreadPriority -XX:+EnableJVMCIProduct -XX:+EnableJVMCI -XX:+UseJVMCICompiler -XX:+EagerJVMCI -Dgraal.TuneInlinerExploration=1 -Dgraal.CompilerConfiguration=enterprise -Dgraal.UsePriorityInlining=true -Dgraal.Vectorization=true -Dgraal.OptDuplication=true -Dgraal.DetectInvertedLoopsAsCounted=true -Dgraal.LoopInversion=true -Dgraal.VectorizeHashes=true -Dgraal.EnterprisePartialUnroll=true -Dgraal.VectorizeSIMD=true -Dgraal.StripMineNonCountedLoops=true -Dgraal.SpeculativeGuardMovement=true -Dgraal.InfeasiblePathCorrelation=true -Dgraal.LoopRotation=true -XX:+UseLargePages -XX:LargePageSizeInBytes=2m -Xms6G -Xmx6G -XX:ConcGCThreads=7",
+        "Path": "C:/Games/mcservers/vevserver",
+        "Iterations": 5,
+        "Startup_Times": [
+            49.82,
+            49.04,
+            47.79,
+            46.66,
+            46.67
+        ],
+        "Chunkgen_Times": [
+            227.11,
+            219.09,
+            174.05,
+            194.58,
+            175.63
+        ],
+        "Average_TPS_Values": [
+            19.77,
+            19.82,
+            19.86,
+            19.84,
+            19.86
+        ],
+        "GC_Stop_MS": [
+            32.8,
+            31.81,
+            33.22,
+            31.33,
+            31.48
+        ],
+        "GC_Stops": [
+            69,
+            70,
+            68,
+            67,
+            67
+        ],
+        "Oldgen_GCs": [
+            0,
+            0,
+            0,
+            0,
+            0
+        ],
+        "Memory_Usage": [
+            2.5,
+            2.5,
+            3.0,
+            2.8,
+            2.6
+        ],
+        "CPU_Usage": [
+            33.0,
+            34.0,
+            38.0,
+            34.0,
+            38.0
+        ],
+        "Player_Spawn_Times": [
+            9.121,
+            9.283,
+            8.479,
+            8.609,
+            8.571
+        ],
+        "Average_Chunkgen_Time": 198.09,
+        "Average_Startup_Time": 48.0,
+        "PVariance_Chunkgen_Time": 475.57,
+        "Pvariance_Startup_Time": 1.6,
+        "Average_TPS": 19.83,
+        "PVariance_TPS": 0.0,
+        "Average_GC_Stop_MS": 32.13,
+        "PVariance_GC_Stop_MS": 0.56,
+        "Average_GC_Stops": 68.2,
+        "Average_Memory_Usage_GB": 2.68,
+        "Average_CPU_Usage": 35.4,
+        "Average_Oldgen_GCs": 0,
+        "Average_Spawn_Time": 8.81,
+        "Player_Spawn_Variance": 0.11
+    },
+    {
+        "Name": "VEV Server OldFlags",
+        "Command": "F:/JDKs/graalvm-ee-java17-windows-amd64-22.1.0/graalvm-ee-java17-22.1.0/bin/java.exe -server -XX:+UseG1GC -XX:+ParallelRefProcEnabled -XX:MaxGCPauseMillis=50 -XX:+UnlockExperimentalVMOptions -XX:+UnlockDiagnosticVMOptions -XX:+DisableExplicitGC -XX:+AlwaysPreTouch -XX:G1NewSizePercent=30 -XX:G1MaxNewSizePercent=40 -XX:G1HeapRegionSize=8M -XX:G1ReservePercent=20 -XX:G1HeapWastePercent=5 -XX:G1MixedGCCountTarget=4 -XX:InitiatingHeapOccupancyPercent=15 -XX:G1MixedGCLiveThresholdPercent=90 -XX:G1RSetUpdatingPauseTimePercent=5 -XX:SurvivorRatio=32 -Dsun.rmi.dgc.server.gcInterval=2147483646 -XX:+PerfDisableSharedMem -XX:MaxTenuringThreshold=1 -XX:+EnableJVMCIProduct -XX:+EnableJVMCI -XX:+UseJVMCICompiler -XX:+EagerJVMCI -XX:ThreadPriorityPolicy=1 -XX:+UseNUMA -XX:-DontCompileHugeMethods -XX:+UseVectorCmov -Djdk.nio.maxCachedBufferSize=262144 -Dgraal.TuneInlinerExploration=1 -Dgraal.CompilerConfiguration=enterprise -Dgraal.UsePriorityInlining=true -Dgraal.Vectorization=true -Dgraal.OptDuplication=true -Dgraal.DetectInvertedLoopsAsCounted=true -Dgraal.LoopInversion=true -Dgraal.VectorizeHashes=true -Dgraal.EnterprisePartialUnroll=true -Dgraal.VectorizeSIMD=true -Dgraal.StripMineNonCountedLoops=true -Dgraal.SpeculativeGuardMovement=true -Dgraal.InfeasiblePathCorrelation=true -Dgraal.LoopRotation=true -Dlibgraal.ExplicitGCInvokesConcurrent=true -Dlibgraal.AlwaysPreTouch=true -Dlibgraal.ParallelRefProcEnabled=true -XX:+UseLargePages -XX:LargePageSizeInBytes=2m -Xms6G -Xmx6G -XX:ConcGCThreads=7",
+        "Path": "C:/Games/mcservers/vevserver",
+        "Iterations": 5,
+        "Startup_Times": [
+            47.73,
+            48.59,
+            47.5,
+            49.44,
+            48.35
+        ],
+        "Chunkgen_Times": [
+            184.05,
+            181.16,
+            174.15,
+            182.13,
+            203.82
+        ],
+        "Average_TPS_Values": [
+            19.9,
+            19.9,
+            19.86,
+            19.85,
+            19.88
+        ],
+        "GC_Stop_MS": [
+            37.66,
+            34.56,
+            36.84,
+            35.14,
+            33.25
+        ],
+        "GC_Stops": [
+            61,
+            55,
+            55,
+            57,
+            55
+        ],
+        "Oldgen_GCs": [
+            0,
+            0,
+            0,
+            0,
+            0
+        ],
+        "Memory_Usage": [
+            3.0,
+            4.0,
+            3.2,
+            2.4,
+            3.2
+        ],
+        "CPU_Usage": [
+            36.0,
+            36.0,
+            37.0,
+            37.0,
+            32.0
+        ],
+        "Player_Spawn_Times": [
+            7.383,
+            6.807,
+            7.68,
+            7.139,
+            6.614
+        ],
+        "Average_Chunkgen_Time": 185.06,
+        "Average_Startup_Time": 48.32,
+        "PVariance_Chunkgen_Time": 99.16,
+        "Pvariance_Startup_Time": 0.47,
+        "Average_TPS": 19.88,
+        "PVariance_TPS": 0.0,
+        "Average_GC_Stop_MS": 35.49,
+        "PVariance_GC_Stop_MS": 2.51,
+        "Average_GC_Stops": 56.6,
+        "Average_Memory_Usage_GB": 3.16,
+        "Average_CPU_Usage": 35.6,
+        "Average_Oldgen_GCs": 0,
+        "Average_Spawn_Time": 7.12,
+        "Player_Spawn_Variance": 0.15
+    }
+]
