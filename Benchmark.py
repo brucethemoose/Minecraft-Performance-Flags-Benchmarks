@@ -258,7 +258,7 @@ def benchmark(i): #"i is the benchmark index"
             shutil.copytree(worldfolder, worldbackup)
           except:
             time.sleep(3)
-            shutil.copytree(worldfolder, worldbackup)
+            shutil.copytree(worldfolder, worldbackup, dirs_exist_ok=True)
         for proc in psutil.process_iter(['name']):   #Check for an existing javaw process
           if "javaw" in str(proc.name):
             raise Exception("Please kill all existing 'javaw' processes")
@@ -482,7 +482,7 @@ def benchmark(i): #"i is the benchmark index"
         try:
           shutil.rmtree("world")
         except:
-          time.sleep(7) #The old server is stull up, give it some time to close
+          time.sleep(7) #The old server is still up, give it some time to close
           shutil.rmtree("world")
         os.rename("_world_backup", "world")
     atexit.register(restore_world)
@@ -551,7 +551,7 @@ def benchmark(i): #"i is the benchmark index"
           shutil.copytree("world", "_world_backup")
         except:
           time.sleep(3)
-          shutil.copytree("world", "_world_backup")
+          shutil.copytree("world", "_world_backup", dirs_exist_ok=True)
       try:
         #Delete chunky config if found, as it stores jobs there
         if os.path.isfile(r"config/chunky.json"):
