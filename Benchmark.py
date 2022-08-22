@@ -164,15 +164,15 @@ def benchmark(i): #"i is the benchmark index"
   
   #Function to wait for a given line to appear in a log file. 
   def waitforlogline(lfile, key, ldelay = 1, ltimeout = 1800):
-    t = time.time()
+    t = time.time() + ltimeout
     with open(lfile, "r") as t:
       while True:
         for line in t.readlines():
           if key in line:
             return
         time.sleep(ldelay)
-        if time.time() > ltimeout:
-          raise Exception("Cannon find " + key + " in log!")
+        if time.time() > t:
+          raise Exception("Cannot find " + key + " in log!")
   def safemean(l):  #average lists while ignoring strings in them
     l = [x for x in l if not isinstance(x, str)]
     if len(l) > 1:
