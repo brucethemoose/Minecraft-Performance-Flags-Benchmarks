@@ -1,4 +1,4 @@
-import os,time,shutil,glob,datetime,json,platform,signal,statistics,pprint,subprocess,csv,atexit
+import os,time,shutil,glob,datetime,json,platform,signal,statistics,pprint,subprocess,csv,atexit,traceback
 import psutil  
 import pexpect
 from pexpect import popen_spawn
@@ -88,29 +88,25 @@ blist = [
 
 
   {
-    "Name": "VEV Server NewFlags DynamicYoung", 
-    "Command": graalpath + dynamicyoung + memory + conc,
-    "Path": vevserver, 
+    "Name": "VEV New Args OpenJDK", 
+    "PolyInstance": "newjdk",
     "Iterations": 5
   },
   {
-    "Name": "VEV Server NewFlags Dynamic50", 
-    "Command": graalpath + dynamicyoung + memory + conc,
-    "Path": vevserver, 
+    "Name": "VEV Aikar OpenJDK", 
+    "PolyInstance": "stockjdk",
     "Iterations": 5
   },
   {
-    "Name": "VEV Server NewFlags FixedYoung", 
-    "Command": graalpath + fixedyoung + memory + conc,
-    "Path": vevserver, 
+    "Name": "VEV New Args GraalVM EE", 
+    "PolyInstance": "newgraal",
     "Iterations": 5
   },
   {
-    "Name": "VEV Server OldFlags", 
-    "Command": graalpath + oldgraal + memory + conc,
-    "Path": vevserver, 
+    "Name": "VEV Aikar GraalVM EE", 
+    "PolyInstance": "stockgraal", 
     "Iterations": 5
-  },
+  }
 ]
 
 #----------------------Other Options--------------------------
@@ -142,7 +138,7 @@ focusclick = True #Click before searching for buttons, only really necessary for
 #You shouldn't have to configure anything below this line!
 
 debug = False
-loadedstring = r"mob_effects.png" #String to look for in a log when a client is finished loading
+loadedstring = r"textures/atlas/mob_effects.png-atlas" #String to look for in a log when a client is finished loading
 benchlog = os.path.normpath(os.path.join(os.getcwd(), "Benchmarks/", str(datetime.datetime.now())[:-7].replace(" ", "_").replace(":","-") + "_" + benchname.replace(" ", "_") + r".json")) #Benchmark log path
 csvpath = os.path.normpath(os.path.join(os.getcwd(),  "Benchmarks", "presentmon.csv"))
 cvpath = os.path.abspath("CV_Images")
@@ -167,15 +163,15 @@ def benchmark(i): #"i is the benchmark index"
     raise Exception("Each benchmark instance should ether have a command and path entry, or a polymc instance entry, not both")
   
   #Function to wait for a given line to appear in a log file. 
-  def waitforlogline(lfile, key, delay = 1, timeout = 1800):
+  def waitforlogline(lfile, key, ldelay = 1, ltimeout = 1800):
     t = time.time()
     with open(lfile, "r") as t:
       while True:
         for line in t.readlines():
-          if "key" in line:
+          if key in line:
             return
-        time.sleep(delay)
-        if time.time() - t > timeout:
+        time.sleep(ldelay)
+        if time.time() > ltimeout:
           raise Exception("Cannon find " + key + " in log!")
   def safemean(l):  #average lists while ignoring strings in them
     l = [x for x in l if not isinstance(x, str)]
@@ -210,10 +206,8 @@ def benchmark(i): #"i is the benchmark index"
       polyfolder = os.path.join(polyinstances, blist[i]["PolyInstance"])
       if not os.path.isdir(polyfolder):
         raise Exception("Either your PolyMC instance path or your selected instance is incorrect: " + polyfolder)
-    print(os.path.join(polyfolder, "*minecraft"))
     polyfolder = (glob.glob(os.path.join(polyfolder, "minecraft")) + glob.glob(os.path.join(polyfolder, ".minecraft")))[0]
     if not os.path.isdir(polyfolder):
-      print(polyfolder)
       raise Exception("PolyMC instance not valid!")
     plog = os.path.join(polyfolder, "logs", "latest.log")
     try:
@@ -270,21 +264,23 @@ def benchmark(i): #"i is the benchmark index"
 
         #Wait for client to start up
         time.sleep(10)
-        waitforlogline(plog, loadedstring, delay = 1, timeout = 1800)
+        waitforlogline(plog, loadedstring)
         time.sleep(4)
+        print("Starting vachine vision search")
         GlobalConfig.smooth_mouse_drag = False
         GlobalConfig.delay_after_drag = 0
         ctl = PyAutoGUIController()
         gfinder = TemplateFinder()
         guibot = GuiBot(ctl,gfinder)
         guibot.add_path(cvpath)
-        _timeout = time.time() + 80
+        _timeout = time.time() + 100
         if focusclick:
           pydirectinput.mouseDown(button='left')
           pydirectinput.mouseUp(button='left')
         #Try to find matches PNGs in CV_Images and click on them:
         def ClickPlay():
           while True:
+            print("Searching for 'Play' button")
             time.sleep(0.3)
             if guibot.exists("Play1"):
               guibot.click("Play1")
@@ -303,6 +299,7 @@ def benchmark(i): #"i is the benchmark index"
                 raise Exception("Cannot find 'Play' Button to click! This may be a machine vision issue if the start screen is modded.")
         def ClickVersion():
           while True:
+            print("Searching for 'Version' string")
             time.sleep(0.5)
             if guibot.exists("Version1"):
               guibot.click("Version1")
@@ -324,6 +321,7 @@ def benchmark(i): #"i is the benchmark index"
               if time.time() > _timeout:
                 raise Exception("Cannot find world to click! Please create a world before running the script. This may be a machine vision issue if the start screen is modded.")
         while True:
+          print("Searching for Singplayer button!")
           time.sleep(1)
           if guibot.exists("Singleplayer1"):
             guibot.click("Singleplayer1")
@@ -441,7 +439,7 @@ def benchmark(i): #"i is the benchmark index"
         restore_world()
         time.sleep(1)
         print("Error in client benchmark iteration!")
-        pprint.pprint(repr(e))
+        print(traceback.format_exc())
 
 
 
@@ -464,7 +462,7 @@ def benchmark(i): #"i is the benchmark index"
               blist[i]["Average_Oldgen_GCs"] = safemean(blist[i]["Oldgen_GCs"])
     except Exception as e:
       print("Error saving client benchmark data!")
-      pprint.pprint(repr(e))
+      print(traceback.format_exc())
         
 
 
@@ -658,7 +656,7 @@ def benchmark(i): #"i is the benchmark index"
         if debug: pprint.pprint(blist[i])
       except Exception as e:
         print("Error in iteration!")
-        pprint.pprint(repr(e))
+        print(traceback.format_exc())
         try:
           mcserver.kill(signal.SIGTERM)
           time.sleep(2)
@@ -695,7 +693,7 @@ def benchmark(i): #"i is the benchmark index"
           blist[i]["Player_Spawn_Variance"] = safevar(blist[i]["Player_Spawn_Times"])
     except Exception as e:
       print("Error saving benchmark data!")
-      pprint.pprint(repr(e))
+      print(traceback.format_exc())
 
     #---End of server bench branch---
   

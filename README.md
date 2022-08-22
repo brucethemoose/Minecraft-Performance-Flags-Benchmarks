@@ -32,7 +32,7 @@ Garbage Collection tuning is critical for both Minecraft servers and clients, as
 
 - **ZGC**: If you have RAM and cores to spare, and regular OpenJDK, use ZGC. On an 8-core test laptop, it has *no* throughput hit over G1GC, and absolutely no pausing/stutters on the server or client. `-XX:+UseZGC -XX:ZAllocationSpikeTolerance=4` enables it, and doubles the "spike tolerance" to handle more rapid in-game changes. Allocate more `Xmx` and more `ConcGCThreads` than you normally would, but set your `-Xms` value lower than `-Xmx`, as otherwise Java sometimes spits out warnings. 
 
-- **G1GC on clients**: G1GC is fine for GraalVM users (Who have [no other option](https://github.com/oracle/graal/issues/2149)), and regular OpenJDK users on resource constrained computers. [Aikar's famous arguments](https://aikar.co/2018/07/02/tuning-the-jvm-g1gc-garbage-collector-flags-for-minecraft/) work well, but have a major issue: they effectively [disable](https://www.oracle.com/technical-resources/articles/java/g1gc.html) the `MaxGCPauseMillis` parameter. Without the "newsize" parameters, we end up with: `-XX:MaxGCPauseMillis=17 -XX:GCPauseIntervalMillis=21 -XX:GCPauseIntervalMillis=2-XX:G1HeapRegionSize=16M -XX:G1ReservePercent=23 -XX:G1HeapWastePercent=5 -XX:G1MixedGCCountTarget=4 -XX:InitiatingHeapOccupancyPercent=15 -XX:G1MixedGCLiveThresholdPercent=90 -XX:G1RSetUpdatingPauseTimePercent=3 -XX:SurvivorRatio=32 -XX:MaxTenuringThreshold=1` "MaxGCPauseMillis" is our pause target (with a 1 frame lag at 60FPS being ~17ms), and GCPauseIntervalMillis has to be higher than that.
+- **G1GC on clients**: G1GC is fine for GraalVM users (Who have [no other option](https://github.com/oracle/graal/issues/2149)), and regular OpenJDK users on resource constrained computers. [Aikar's famous arguments](https://aikar.co/2018/07/02/tuning-the-jvm-g1gc-garbage-collector-flags-for-minecraft/) work well, but have a major issue: they effectively [disable](https://www.oracle.com/technical-resources/articles/java/g1gc.html) the `MaxGCPauseMillis` parameter. Without the "newsize" parameters, we end up with: `-XX:MaxGCPauseMillis=17 -XX:GCPauseIntervalMillis=21 -XX:G1HeapRegionSize=16M -XX:G1ReservePercent=23 -XX:G1HeapWastePercent=5 -XX:G1MixedGCCountTarget=4 -XX:InitiatingHeapOccupancyPercent=15 -XX:G1MixedGCLiveThresholdPercent=90 -XX:G1RSetUpdatingPauseTimePercent=3 -XX:SurvivorRatio=32 -XX:MaxTenuringThreshold=1` "MaxGCPauseMillis" is our pause target (with a 1 frame lag at 60FPS being ~17ms), and GCPauseIntervalMillis has to be higher than that.
 
 - **G1GC on servers**: Longer pauses are not so catastrophic on servers, and do increase throughput:  `-XX:MaxGCPauseMillis=100 -XX:GCPauseIntervalMillis=2 -XX:G1HeapRegionSize=16M -XX:G1ReservePercent=23 -XX:G1HeapWastePercent=5 -XX:G1MixedGCCountTarget=4 -XX:InitiatingHeapOccupancyPercent=15 -XX:G1MixedGCLiveThresholdPercent=90 -XX:G1RSetUpdatingPauseTimePercent=3 -XX:SurvivorRatio=32 -XX:MaxTenuringThreshold=1`  (with 100ms being 2 ticks) 
 
@@ -80,7 +80,7 @@ Client arguments for GraalVM EE 22+ for Java 17+ (or Java 11):
 
 Raise `-XX:MaxGCPauseMillis=17 -Dlibgraal.MaxGCPauseMillis=17` And remove `-Dlibgraal.GCPauseIntervalMillis=20 -XX:GCPauseIntervalMillis=20` on servers.
 
-Many of the `Dgraal` arguments are redundant/default, and there for easy testing.
+Many of the `Dgraal` arguments are redundant/default, and there for easy testing. Again, you must use G1GC when running GraalVM CE or EE. 
 
 
 Mod Compatibility
