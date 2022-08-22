@@ -1,0 +1,47 @@
+[
+    {
+        "Name": "VEV New Args Graal",
+        "PolyInstance": "newgraal",
+        "Iterations": 2,
+        "Average_FPS": [
+            45.43,
+            44.69
+        ],
+        "1%_Frametime_ms": [
+            117.89,
+            103.5
+        ],
+        "5%_Frametime_ms": [
+            71.61,
+            68.54
+        ],
+        "GC_Stop_MS": [
+            24.03
+        ],
+        "GC_Stops": [
+            97
+        ],
+        "Oldgen_GCs": [
+            0
+        ],
+        "Memory_Usage": [
+            3.7,
+            3.9
+        ],
+        "CPU_Usage": [
+            26.0,
+            25.0
+        ],
+        "Net_Average_FPS": 45.06,
+        "Average_FPS_Variance": 0.14,
+        "Average_1%_Frametime_ms": 110.69,
+        "PVariance_1%_Frametime_ms": 51.77,
+        "Average_5%_Frametime_ms": 70.08,
+        "PVariance_5%_Frametime_ms": 2.36,
+        "Average_GC_Stop_MS": 24.03,
+        "PVariance_GC_Stop_MS": "-",
+        "Average_GC_Stops": 97,
+        "Average_Memory_Usage_GB": 3.8,
+        "Average_CPU_Usage": 25.5
+    }
+]

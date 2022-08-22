@@ -150,3 +150,4 @@ Sources
 - Testing from @keyboard.tn in Discord.
 - https://research.spec.org/icpe_proceedings/2014/p111.pdf
 - https://www.diva-portal.org/smash/get/diva2:1466940/FULLTEXT01.pdf
+- https://malloc.se/blog/zgc-jdk17

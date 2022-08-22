@@ -77,7 +77,7 @@ dynamic50 = r''' -server -XX:+UnlockExperimentalVMOptions -XX:+UnlockDiagnosticV
 
 fixedyoung = r''' -server -XX:+UnlockExperimentalVMOptions -XX:+UnlockDiagnosticVMOptions -XX:+UseG1GC -XX:+AlwaysPreTouch -Dlibgraal.AlwaysPreTouch=true -XX:+ParallelRefProcEnabled -Dlibgraal.ParallelRefProcEnabled=true -XX:+ExplicitGCInvokesConcurrent -Dlibgraal.ExplicitGCInvokesConcurrent=true -XX:MaxGCPauseMillis=14 -Dlibgraal.MaxGCPauseMillis=14 -Dlibgraal.GCPauseIntervalMillis=21 -XX:GCPauseIntervalMillis=21 -XX:G1NewSizePercent=30 -XX:G1MaxNewSizePercent=40 -Dlibgraal.MaximumYoungGenerationSizePercent=40 -XX:G1HeapRegionSize=16M -XX:G1ReservePercent=25 -Dlibgraal.G1ReservePercent=25 -XX:G1HeapWastePercent=5 -Dlibgraal.G1HeapWastePercent=5 -XX:G1MixedGCCountTarget=4 -Dlibgraal.G1MixedGCCountTarget=4 -XX:InitiatingHeapOccupancyPercent=15 -Dlibgraal.InitiatingHeapOccupancyPercent=15 -XX:G1MixedGCLiveThresholdPercent=90 -XX:G1RSetUpdatingPauseTimePercent=2 -Dlibgraal.G1RSetUpdatingPauseTimePercent=2 -XX:SurvivorRatio=32 -Dlibgraal.SurvivorRatio=32 -Dsun.rmi.dgc.server.gcInterval=2147483646 -Djdk.nio.maxCachedBufferSize=262144 -XX:+UseNUMA -XX:-DontCompileHugeMethods -XX:+UseVectorCmov -XX:AllocatePrefetchStyle=3  -XX:+PerfDisableSharedMem -XX:MaxTenuringThreshold=1 -XX:+UseStringDeduplication  -XX:+UseFastUnorderedTimeStamps -XX:+UseCriticalCompilerThreadPriority -XX:+UseCriticalJavaThreadPriority -XX:+EnableJVMCIProduct -XX:+EnableJVMCI -XX:+UseJVMCICompiler -XX:+EagerJVMCI -Dgraal.TuneInlinerExploration=1 -Dgraal.CompilerConfiguration=enterprise -Dgraal.UsePriorityInlining=true -Dgraal.Vectorization=true -Dgraal.OptDuplication=true -Dgraal.DetectInvertedLoopsAsCounted=true -Dgraal.LoopInversion=true -Dgraal.VectorizeHashes=true -Dgraal.EnterprisePartialUnroll=true -Dgraal.VectorizeSIMD=true -Dgraal.StripMineNonCountedLoops=true -Dgraal.SpeculativeGuardMovement=true -Dgraal.InfeasiblePathCorrelation=true -Dgraal.LoopRotation=true -XX:+UseLargePages -XX:LargePageSizeInBytes=2m'''
 #-----------------------Benchmark Data--------------------------
-benchname = r"Test New vs Old vs Dynamic G1GC"   #Name for the whole benchmark run
+benchname = r"GC Testing"   #Name for the whole benchmark run
 
 blist = [
 #Note that Forge/Fabric server packs only need "java + arguments" for their launch command, as their jars are automatically found
@@ -86,28 +86,45 @@ blist = [
 #Client: benchmark name, PolyMC instance folder (note: must be the actual folder name, not the name on the polymc instance!),  # of iterations to run this benchmark
   
 
+  {
+    "Name": "VEV ZGC Args OpenJDK", 
+    "PolyInstance": "newjdk",
+    "Iterations": 3
+  },
+  {
+    "Name": "VEV New G1 Args OpenJDK", 
+    "PolyInstance": "newjdkg1",
+    "Iterations": 3
+  },
 
   {
-    "Name": "VEV New Args OpenJDK", 
-    "PolyInstance": "newjdk",
-    "Iterations": 5
-  },
-  {
-    "Name": "VEV Aikar OpenJDK", 
-    "PolyInstance": "stockjdk",
-    "Iterations": 5
-  },
-  {
-    "Name": "VEV New Args GraalVM EE", 
+    "Name": "VEV New G1 Args Graal", 
     "PolyInstance": "newgraal",
-    "Iterations": 5
+    "Iterations": 3
   },
   {
     "Name": "VEV Aikar GraalVM EE", 
     "PolyInstance": "stockgraal", 
-    "Iterations": 5
+    "Iterations": 3
+  },
+  {
+    "Name": "VEV Aikar OpenJDK", 
+    "PolyInstance": "stockjdk",
+    "Iterations": 3
   }
 ]
+
+r"""  {
+    "Name": "VEV Aikar GraalVM EE", 
+    "PolyInstance": "stockgraal", 
+    "Iterations": 5
+  }
+    {
+    "Name": "VEV Aikar OpenJDK", 
+    "PolyInstance": "stockjdk",
+    "Iterations": 5
+  },
+  """
 
 #----------------------Other Options--------------------------
 
@@ -127,9 +144,9 @@ forceload_cmd= r"forceload add -120 -120 120 120" #Command to forceload a rectan
 polypath = r"C:/Games/PolyMC-Windows-Portable-1.4.0/polymc.exe" #Full path to polymc executable file
 polyinstances = r"" #Full path to polymc instance folder. Normally in %appdata%/roaming/polymc on windows, but you can leave this blank if using polyMC portable. 
 presentmonpath = r"presentmon.exe"  #full path to Intel presentmon executable file
-warmup = 45    #Seconds to wait after hitting the "singleplayer" button before starting the benchmark. Give enough time for the world to load!
-benchtime = 100 #Seconds to run the benchmark
-focusclick = True #Click before searching for buttons, only really necessary for fullscreen Minecraft
+warmup = 90    #Seconds to wait after hitting the "singleplayer" button before starting the benchmark. Give enough time for the world to load, and java to "warm up"
+benchtime = 90 #Seconds to run the benchmark
+focusclick = True #Middle click before searching for buttons, only really necessary for fullscreen Minecraft
 
 
 
@@ -142,6 +159,7 @@ loadedstring = r"textures/atlas/mob_effects.png-atlas" #String to look for in a 
 benchlog = os.path.normpath(os.path.join(os.getcwd(), "Benchmarks/", str(datetime.datetime.now())[:-7].replace(" ", "_").replace(":","-") + "_" + benchname.replace(" ", "_") + r".json")) #Benchmark log path
 csvpath = os.path.normpath(os.path.join(os.getcwd(),  "Benchmarks", "presentmon.csv"))
 cvpath = os.path.abspath("CV_Images")
+
 
 def benchmark(i): #"i is the benchmark index"
   iter = 1
@@ -256,6 +274,13 @@ def benchmark(i): #"i is the benchmark index"
         for proc in psutil.process_iter(['name']):   #Check for an existing javaw process
           if "javaw" in str(proc.name):
             raise Exception("Please kill all existing 'javaw' processes")
+        if os.path.exists(plog): #Remove old log
+          os.remove(plog)    
+
+        try: 
+          subprocess.run([presentmonpath, "-terminate_existing"], creationflags = subprocess.CREATE_NEW_CONSOLE, shell=True)
+        except:
+          pass
         try:  
           clientprocess = subprocess.Popen([polypath, "--launch", blist[i]["PolyInstance"]], creationflags=subprocess.HIGH_PRIORITY_CLASS | subprocess.CREATE_NEW_CONSOLE, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, shell=True) #launch the client
         except Exception as e:
@@ -263,7 +288,6 @@ def benchmark(i): #"i is the benchmark index"
           raise e
 
         #Wait for client to start up
-        os.remove(plog)
         time.sleep(15)
         waitforlogline(plog, loadedstring)
         time.sleep(4)
@@ -361,13 +385,13 @@ def benchmark(i): #"i is the benchmark index"
 
         if os.path.isfile(csvpath):
           os.remove(csvpath)
-        pmonprocess = subprocess.Popen([presentmonpath, "-process_name", "javaw.exe", "-output_file", csvpath, "-terminate_on_proc_exit"])
+        pmonprocess = subprocess.Popen([presentmonpath, "-process_name", "javaw.exe", "-output_file", csvpath, "-terminate_on_proc_exit"], creationflags = subprocess.CREATE_NEW_CONSOLE, shell=True)
         time.sleep(benchtime)
 
         #Bench period here
 
         try: 
-          subprocess.run([presentmonpath, "-terminate_existing"])
+          subprocess.run([presentmonpath, "-terminate_existing"], creationflags = subprocess.CREATE_NEW_CONSOLE, shell=True)
         except:
           pass
         pmonprocess.terminate()
@@ -423,6 +447,8 @@ def benchmark(i): #"i is the benchmark index"
         blist[i][r"5%_Frametime_ms"].append(round(statistics.mean(sorted(frametimes)[round(len(frametimes) * 0.95 - 1):]), 2))  #Slowest 5% of frametimes average
         time.sleep(9) #Give the client some time to close, otherwise it may not start up again.
         restore_world()
+        with open(benchlog, "w") as f:
+          json.dump(blist[0:i+1], f, indent=4)  #Write current data to the benchmark log
         #End of iteration loop
       except Exception as e: #Clean up
         try: 
@@ -658,6 +684,8 @@ def benchmark(i): #"i is the benchmark index"
             blist[i]["Chunkgen_Times"].append("TIMEOUT")
           mcserver.kill(signal.SIGTERM)
         if debug: pprint.pprint(blist[i])
+        with open(benchlog, "w") as f:
+          json.dump(blist[0:i+1], f, indent=4)  #Write current data to the benchmark log
       except Exception as e:
         print("Error in iteration!")
         print(traceback.format_exc())
