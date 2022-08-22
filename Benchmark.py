@@ -164,14 +164,14 @@ def benchmark(i): #"i is the benchmark index"
   
   #Function to wait for a given line to appear in a log file. 
   def waitforlogline(lfile, key, ldelay = 1, ltimeout = 1800):
-    t = time.time() + ltimeout
+    lt = float(time.time() + float(ltimeout))
     with open(lfile, "r") as t:
       while True:
         for line in t.readlines():
           if key in line:
             return
         time.sleep(ldelay)
-        if time.time() > t:
+        if time.time() > lt:
           raise Exception("Cannot find " + key + " in log!")
   def safemean(l):  #average lists while ignoring strings in them
     l = [x for x in l if not isinstance(x, str)]
@@ -263,7 +263,8 @@ def benchmark(i): #"i is the benchmark index"
           raise e
 
         #Wait for client to start up
-        time.sleep(10)
+        os.remove(plog)
+        time.sleep(15)
         waitforlogline(plog, loadedstring)
         time.sleep(4)
         print("Starting vachine vision search")
@@ -274,9 +275,10 @@ def benchmark(i): #"i is the benchmark index"
         guibot = GuiBot(ctl,gfinder)
         guibot.add_path(cvpath)
         _timeout = time.time() + 100
-        if focusclick:
+        def middleclick():
           pydirectinput.mouseDown(button='left')
           pydirectinput.mouseUp(button='left')
+
         #Try to find matches PNGs in CV_Images and click on them:
         def ClickPlay():
           while True:
@@ -295,6 +297,8 @@ def benchmark(i): #"i is the benchmark index"
               guibot.click("Play4")
               break
             else:
+              if focusclick:
+                middleclick()
               if time.time() > _timeout:
                 raise Exception("Cannot find 'Play' Button to click! This may be a machine vision issue if the start screen is modded.")
         def ClickVersion():
@@ -321,7 +325,7 @@ def benchmark(i): #"i is the benchmark index"
               if time.time() > _timeout:
                 raise Exception("Cannot find world to click! Please create a world before running the script. This may be a machine vision issue if the start screen is modded.")
         while True:
-          print("Searching for Singplayer button!")
+          print("Searching for Singleplayer button!")
           time.sleep(1)
           if guibot.exists("Singleplayer1"):
             guibot.click("Singleplayer1")
