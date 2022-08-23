@@ -1,0 +1,111 @@
+[
+    {
+        "Name": "VEV New Args OpenJDK",
+        "PolyInstance": "newjdk",
+        "Iterations": 3,
+        "Average_FPS": [
+            40.57,
+            39.97,
+            40.74
+        ],
+        "1%_Frametime_ms": [
+            123.58,
+            125.37,
+            129.84
+        ],
+        "5%_Frametime_ms": [
+            82.46,
+            79.75,
+            80.63
+        ],
+        "GC_Stop_MS": [
+            973.26,
+            949.42,
+            975.81
+        ],
+        "GC_Stops": [
+            74,
+            72,
+            68
+        ],
+        "Oldgen_GCs": [],
+        "Memory_Usage": [
+            4.2,
+            3.9,
+            3.3
+        ],
+        "CPU_Usage": [
+            34.0,
+            34.0,
+            33.0
+        ],
+        "Net_Average_FPS": 40.43,
+        "Average_FPS_Variance": 0.11,
+        "Average_1%_Frametime_ms": 126.26,
+        "PVariance_1%_Frametime_ms": 6.93,
+        "Average_5%_Frametime_ms": 80.95,
+        "PVariance_5%_Frametime_ms": 1.27,
+        "Average_GC_Stop_MS": 966.16,
+        "PVariance_GC_Stop_MS": 141.25,
+        "Average_GC_Stops": 71.33,
+        "Average_Memory_Usage_GB": 3.8,
+        "Average_CPU_Usage": 33.67
+    },
+    {
+        "Name": "VEV New Args GraalVM EE",
+        "PolyInstance": "newgraal",
+        "Iterations": 3,
+        "Average_FPS": [
+            43.5,
+            43.81,
+            41.75
+        ],
+        "1%_Frametime_ms": [
+            145.77,
+            143.44,
+            149.23
+        ],
+        "5%_Frametime_ms": [
+            81.91,
+            79.95,
+            84.2
+        ],
+        "GC_Stop_MS": [
+            23.0,
+            21.97,
+            22.31
+        ],
+        "GC_Stops": [
+            94,
+            96,
+            97
+        ],
+        "Oldgen_GCs": [
+            0,
+            0,
+            0
+        ],
+        "Memory_Usage": [
+            3.6,
+            3.8,
+            3.6
+        ],
+        "CPU_Usage": [
+            40.0,
+            40.0,
+            41.0
+        ],
+        "Net_Average_FPS": 43.02,
+        "Average_FPS_Variance": 0.82,
+        "Average_1%_Frametime_ms": 146.15,
+        "PVariance_1%_Frametime_ms": 5.66,
+        "Average_5%_Frametime_ms": 82.02,
+        "PVariance_5%_Frametime_ms": 3.02,
+        "Average_GC_Stop_MS": 22.43,
+        "PVariance_GC_Stop_MS": 0.18,
+        "Average_GC_Stops": 95.67,
+        "Average_Memory_Usage_GB": 3.67,
+        "Average_CPU_Usage": 40.33,
+        "Average_Oldgen_GCs": 0
+    }
+]

@@ -1,0 +1,85 @@
+[
+    {
+        "Name": "VEV New Args OpenJDK",
+        "PolyInstance": "newjdk",
+        "Iterations": 2,
+        "Average_FPS": [
+            38.31
+        ],
+        "1%_Frametime_ms": [
+            129.99
+        ],
+        "5%_Frametime_ms": [
+            84.9
+        ],
+        "GC_Stop_MS": [],
+        "GC_Stops": [],
+        "Oldgen_GCs": [],
+        "Memory_Usage": [
+            7.7
+        ],
+        "CPU_Usage": [
+            24.0
+        ],
+        "Net_Average_FPS": 38.31,
+        "Average_FPS_Variance": "-",
+        "Average_1%_Frametime_ms": 129.99,
+        "PVariance_1%_Frametime_ms": "-",
+        "Average_5%_Frametime_ms": 84.9,
+        "PVariance_5%_Frametime_ms": "-",
+        "Average_GC_Stop_MS": "-",
+        "PVariance_GC_Stop_MS": "-",
+        "Average_GC_Stops": "-",
+        "Average_Memory_Usage_GB": 7.7,
+        "Average_CPU_Usage": 24.0
+    },
+    {
+        "Name": "VEV New Args GraalVM EE",
+        "PolyInstance": "newgraal",
+        "Iterations": 2,
+        "Average_FPS": [
+            45.06,
+            45.65
+        ],
+        "1%_Frametime_ms": [
+            121.89,
+            116.11
+        ],
+        "5%_Frametime_ms": [
+            72.39,
+            70.19
+        ],
+        "GC_Stop_MS": [
+            31.13,
+            30.2
+        ],
+        "GC_Stops": [
+            70,
+            71
+        ],
+        "Oldgen_GCs": [
+            0,
+            0
+        ],
+        "Memory_Usage": [
+            4.0,
+            3.8
+        ],
+        "CPU_Usage": [
+            25.0,
+            24.0
+        ],
+        "Net_Average_FPS": 45.36,
+        "Average_FPS_Variance": 0.09,
+        "Average_1%_Frametime_ms": 119.0,
+        "PVariance_1%_Frametime_ms": 8.35,
+        "Average_5%_Frametime_ms": 71.29,
+        "PVariance_5%_Frametime_ms": 1.21,
+        "Average_GC_Stop_MS": 30.66,
+        "PVariance_GC_Stop_MS": 0.22,
+        "Average_GC_Stops": 70.5,
+        "Average_Memory_Usage_GB": 3.9,
+        "Average_CPU_Usage": 24.5,
+        "Average_Oldgen_GCs": 0
+    }
+]

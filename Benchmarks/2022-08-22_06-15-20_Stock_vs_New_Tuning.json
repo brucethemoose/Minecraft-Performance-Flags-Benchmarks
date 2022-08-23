@@ -1,0 +1,94 @@
+[
+    {
+        "Name": "VEV New Args OpenJDK",
+        "PolyInstance": "newjdk",
+        "Iterations": 2,
+        "Average_FPS": [
+            36.21,
+            37.35
+        ],
+        "1%_Frametime_ms": [
+            126.98,
+            139.5
+        ],
+        "5%_Frametime_ms": [
+            85.92,
+            88.45
+        ],
+        "GC_Stop_MS": [
+            835.27
+        ],
+        "GC_Stops": [
+            74
+        ],
+        "Oldgen_GCs": [],
+        "Memory_Usage": [
+            5.3,
+            6.3
+        ],
+        "CPU_Usage": [
+            30.0,
+            30.0
+        ],
+        "Net_Average_FPS": 36.78,
+        "Average_FPS_Variance": 0.32,
+        "Average_1%_Frametime_ms": 133.24,
+        "PVariance_1%_Frametime_ms": 39.19,
+        "Average_5%_Frametime_ms": 87.19,
+        "PVariance_5%_Frametime_ms": 1.6,
+        "Average_GC_Stop_MS": 835.27,
+        "PVariance_GC_Stop_MS": "-",
+        "Average_GC_Stops": 74,
+        "Average_Memory_Usage_GB": 5.8,
+        "Average_CPU_Usage": 30.0
+    },
+    {
+        "Name": "VEV New Args GraalVM EE",
+        "PolyInstance": "newgraal",
+        "Iterations": 2,
+        "Average_FPS": [
+            45.35,
+            45.52
+        ],
+        "1%_Frametime_ms": [
+            118.52,
+            117.01
+        ],
+        "5%_Frametime_ms": [
+            70.48,
+            68.41
+        ],
+        "GC_Stop_MS": [
+            30.35,
+            30.32
+        ],
+        "GC_Stops": [
+            72,
+            72
+        ],
+        "Oldgen_GCs": [
+            0,
+            0
+        ],
+        "Memory_Usage": [
+            4.2,
+            4.0
+        ],
+        "CPU_Usage": [
+            25.0,
+            25.0
+        ],
+        "Net_Average_FPS": 45.44,
+        "Average_FPS_Variance": 0.01,
+        "Average_1%_Frametime_ms": 117.77,
+        "PVariance_1%_Frametime_ms": 0.57,
+        "Average_5%_Frametime_ms": 69.44,
+        "PVariance_5%_Frametime_ms": 1.07,
+        "Average_GC_Stop_MS": 30.34,
+        "PVariance_GC_Stop_MS": 0.0,
+        "Average_GC_Stops": 72,
+        "Average_Memory_Usage_GB": 4.1,
+        "Average_CPU_Usage": 25.0,
+        "Average_Oldgen_GCs": 0
+    }
+]

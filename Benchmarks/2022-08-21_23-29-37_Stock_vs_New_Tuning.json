@@ -1,0 +1,75 @@
+[
+    {
+        "Name": "VEV New Args OpenJDK",
+        "PolyInstance": "newjdk",
+        "Iterations": 2,
+        "Average_FPS": [],
+        "1%_Frametime_ms": [],
+        "5%_Frametime_ms": [],
+        "GC_Stop_MS": [],
+        "GC_Stops": [],
+        "Oldgen_GCs": [],
+        "Memory_Usage": [],
+        "CPU_Usage": [],
+        "Net_Average_FPS": "-",
+        "Average_FPS_Variance": "-",
+        "Average_1%_Frametime_ms": "-",
+        "PVariance_1%_Frametime_ms": "-",
+        "Average_5%_Frametime_ms": "-",
+        "PVariance_5%_Frametime_ms": "-",
+        "Average_GC_Stop_MS": "-",
+        "PVariance_GC_Stop_MS": "-",
+        "Average_GC_Stops": "-",
+        "Average_Memory_Usage_GB": "-",
+        "Average_CPU_Usage": "-"
+    },
+    {
+        "Name": "VEV New Args GraalVM EE",
+        "PolyInstance": "newgraal",
+        "Iterations": 2,
+        "Average_FPS": [
+            45.22,
+            45.04
+        ],
+        "1%_Frametime_ms": [
+            127.11,
+            107.21
+        ],
+        "5%_Frametime_ms": [
+            73.24,
+            67.25
+        ],
+        "GC_Stop_MS": [
+            26.99,
+            26.52
+        ],
+        "GC_Stops": [
+            72,
+            73
+        ],
+        "Oldgen_GCs": [
+            0,
+            0
+        ],
+        "Memory_Usage": [
+            5.1,
+            4.9
+        ],
+        "CPU_Usage": [
+            35.0,
+            35.0
+        ],
+        "Net_Average_FPS": 45.13,
+        "Average_FPS_Variance": 0.01,
+        "Average_1%_Frametime_ms": 117.16,
+        "PVariance_1%_Frametime_ms": 99.0,
+        "Average_5%_Frametime_ms": 70.25,
+        "PVariance_5%_Frametime_ms": 8.97,
+        "Average_GC_Stop_MS": 26.75,
+        "PVariance_GC_Stop_MS": 0.06,
+        "Average_GC_Stops": 72.5,
+        "Average_Memory_Usage_GB": 5.0,
+        "Average_CPU_Usage": 35.0,
+        "Average_Oldgen_GCs": 0
+    }
+]
