@@ -1,47 +1,45 @@
 Benchmarks
-------
+======
 
 Flags are tested with Benchmark.py script. See the work-in-progress [Benchmarks.md](https://github.com/brucethemoose/Minecraft-Performance-Flags-Benchmarks/blob/main/Benchmarks.md).
 
 Discord: https://discord.gg/zeFSR9PnUw 
 
 Base Java Flags
-------
+======
 These optimized flags, when added to garbage collection flags, will work with any Java 17+ build. They are applicable to both servers and clients: 
 
 ```-server -XX:+UnlockExperimentalVMOptions -XX:+UnlockDiagnosticVMOptions -XX:+AlwaysPreTouch -XX:+DisableExplicitGC -XX:+UseNUMA -XX:-DontCompileHugeMethods -XX:+UseBiasedLocking -XX:+UseVectorCmov -XX:+PerfDisableSharedMem -XX:+UseStringDeduplication -XX:+UseFastUnorderedTimeStamps -XX:+UseCriticalJavaThreadPriority -XX:+OmitStackTraceInFastThrow -XX:ThreadPriorityPolicy=1```
-
-They are applicable to both servers and clients. 
 
 Barring some *minor* differences in default flags, all OpenJDK distributions like Eclipse Adoptium, Microsoft, Azul, Amazon Correto and so on perform almost identically, with 2 major exceptions I know of: Oracle's GraalVM, and Intel's Clear Linux OpenJDK. 
 
 
 Memory Allocation
-------
+======
 Minimum and maximum (`-xms` and `-xmx`) values should be set to the same value, as explained here: https://dzone.com/articles/benefits-of-setting-initial-and-maximum-memory-siz
 
 Allocating too much memory can make GC pauses much more severe, or overflow out of your physical RAM. Allocating too little can slow the game down. Less than 8GB is usually sufficient, but experiment with your mod loadout, and give Minecraft only as much as it needs.
 
 
 Garbage Collection
-------
+======
 
 Garbage Collection tuning is critical for both Minecraft servers and clients, as the "pauses" to stop and collect garbage manifest as stutters on the client and lag on servers. To minimize them, you have a few options. 
 
 - **Concurrent Collection**: Java automatically threads garbage collection during runtume, but sometimes (especially with ZGC or Shenandoh) its best to manually set the upper limit of cores it can use with `-XX:ConcGCThreads=[Some Number]`. At the moment, I set it to `[number of physical cores - 1]` 
 
-#### ZGC 
+### ZGC 
 
 ZGC is great for high memory/high core count servers. It has no throughput hit I can measure, and absolutely does not stutter like G1GC. However, it requires more RAM and more cores than other garbage collectors.
 
-Unfortunately, it has a singificant client/frametime FPS hit on my 8-core laptop. See the "ZGC" benchmark in the benchmarks folder. 
+Unfortunately, it has a significant client FPS hit on my (8-core) laptop. See the "ZGC" benchmark in the benchmarks folder. 
 
 `-XX:+UseZGC` enables it, but allocate more RAM and more `ConcGCThreads` than you normally would for other GC. Additional flags are still being investigated, but try `-XX:-ZProactive`, as we don't really care about reclaiming memory when idle.
 
 
-#### Shenandoah
+### Shenandoah
 
-Shenandoah, on the other hand, performs well on clients, but kills server throughput in my tests.
+Shenandoah performs well on clients, but kills server throughput in my tests.
 
 Enable it with `-XX:+UseShenandoahGC -XX:ShenandoahGuaranteedGCInterval=1000000 -XX:-ShenandoahUncommit` 
 
@@ -50,9 +48,9 @@ See more tuning options [here](https://wiki.openjdk.org/display/shenandoah/Main)
 If you are a Java 8 user who can't run Graal EE 21 for some reason, Red Hat builds Java 8 with Shenandoah: https://access.redhat.com/products/openjdk
 
 
-#### G1GC
+### G1GC
 
-###### Client:
+##### Client:
 
 G1GC is Java's default collector, and required for [GraalVM users](https://github.com/oracle/graal/issues/2149)). [Aikar's famous Minecraft G1GC arguments](https://aikar.co/2018/07/02/tuning-the-jvm-g1gc-garbage-collector-flags-for-minecraft/) run great on clients, with one caveat: they effectively [clamp](https://www.oracle.com/technical-resources/articles/java/g1gc.html) the `MaxGCPauseMillis` parameter, producing long stutters on some systems.
 
@@ -60,7 +58,7 @@ This results in shorter but more frequent pauses: ` -XX:MaxGCPauseMillis=40 -XX:
 
 `G1NewSizePercent` can be tuned for smaller but frequent stutters. `G1HeapWastePercent=18` and `-XX:G1MixedGCCountTarget=3` makes the mixed garbage collector lazier (at the cost of more memory usage), as we aren't running out of old gen space quickly on the client. 
 
-###### Server:
+##### Server:
 
 More optimal server G1GC flags are still being investigated: 
 
@@ -68,7 +66,7 @@ More optimal server G1GC flags are still being investigated:
 
 
 Large Pages
-------
+======
 
 Enabling large pages improves the performance of Minecraft servers and clients. Chaotica Fractals has a great explanation, and a tutorial for enabling it in Windows: https://www.chaoticafractals.com/manual/getting-started/enabling-large-page-support-windows
 
@@ -80,7 +78,7 @@ On linux, you generally want to use `-XX:+UseTransparentHugePages`. But if you w
 
 
 GraalVM Enterprise Edition
-------
+======
 
 GraalVM is a new high performance Java VM from Oracle that can improve the performance of (modded) Minecraft. While client FPS gains are modest, server-side loads like chunk generation can get a 20% boost!
 
@@ -99,7 +97,7 @@ For servers, you need to replace the "java" command in your server start sh/bat 
 If you don't feel comfortable making an Oracle account, grab the latest [GraalVM CE release](https://github.com/graalvm/graalvm-ce-builds/releases) and use the flags from above ^. But Oracle does not check the information you put into the registration page, and GraalVM CE lacks most of the EE optimizations.
 
 GraalVM EE Java Arguments
-------
+======
 .
 
 Client arguments for GraalVM EE 22+ for Java 17+ (or Java 11):
@@ -111,7 +109,7 @@ Many of the `Dgraal` arguments are redundant/default, but are there for easy tes
 
 
 GraalVM EE Mod Compatibility
-------
+======
 - GraalVM 22.2.0 has issues with Minecraft, particularly with the `UsePriorityInlining` flag enabled. Please use 22.1.0 until 22.3.0 is out. See: https://github.com/oracle/graal/issues/4776
 
 - Some flags, including `VectorizeSIMD`, turn villagers and some passive mobs invisible when running shaders through Iris or Occulus... but only after some time, and only on some setups. If this happens to you, set `VectorizeSIMD=False`. If that doesn't fix it, please create a Github issue and/or ping me in Discord! See: https://github.com/oracle/graal/issues/4775
@@ -121,7 +119,7 @@ GraalVM EE Mod Compatibility
 If you run into any issues, please create a Github issue or post in the Discord!
 
 SpecialK
-------
+======
 SpecialK has 2 major performance benefits to Minecraft on Windows:
 
 - A fancy frame limiter that's even better than RTSS, eliminating the need for Vsync (especially on setups without access to Sodium's adaptive vsync). It even works in conjuction with VRR or Nvidia Reflex. 
@@ -135,7 +133,7 @@ Add your MC launcher, and check the "elevated service" checkbox. Then navigate t
 
 
 Process Priority
-------
+======
 After launching Minecraft, set Java to run at a high process priority in Windows with the task manager:
 
 ![taskmanager](Tutorial_Images/taskmon.PNG)
@@ -144,7 +142,7 @@ Linux users can append the command `sudo nice -n -18` to thier launch arguments.
 
 
 Other Performance Notes
-------
+======
 
 - Minecraft client linux users should check out https://github.com/Admicos/minecraft-wayland
 
@@ -152,9 +150,11 @@ Other Performance Notes
 
 - Close everything in the background, including Discord and your browser! Minecraft is resource intensive, and does not like other apps generating CPU interrupts or eating disk I/O, RAM and so on.  
 
+- IBM's OpenJ9 is *extremely* slow in Minecraft. 
+
 
 Java 8
-------
+======
 Java 8 has not been tested much, though GraalVM 21.X and Red Hat OpenJDK with with Shenandoh do provide a significant uplift.
 
 These flags will work with OpenJDK8, along with Shenandoh GC (for Red Hat OpenJDK on clients) or G1GC (for everything else):
@@ -175,7 +175,7 @@ These flags work with GraalVM EE 21.X:
 
 
 Sources
-------
+======
 - Updated Aikar flags from this repo: https://github.com/etil2jz/etil-minecraft-flags
 - Reddit post from a Forge dev: https://www.reddit.com/r/feedthebeast/comments/5jhuk9/modded_mc_and_memory_usage_a_history_with_a/
 - Red Hat's optimization guide: https://www.redhat.com/en/blog/optimizing-rhel-8-run-java-implementation-minecraft-server
