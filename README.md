@@ -1,24 +1,24 @@
 Benchmarks
 ------
 
-Flags are tested with Benchmark.py script. See [Benchmarks.md](https://github.com/brucethemoose/Minecraft-Performance-Flags-Benchmarks/blob/main/Benchmarks.md).
+Flags are tested with Benchmark.py script. See the work-in-progress [Benchmarks.md](https://github.com/brucethemoose/Minecraft-Performance-Flags-Benchmarks/blob/main/Benchmarks.md).
 
-Discord: https://discord.gg/zeFSR9PnUw
-
-GraalVM EE has a consistent 20% chunkgen speedup over OpenJDK 17, see the `Benchmarks` folder. But testing is in progress, more results are coming soon(TM).
+Discord: https://discord.gg/zeFSR9PnUw 
 
 Base Java Flags
 ------
-These optimized flags, when added to garbage collection flags, will work with any Java 17+ build: 
+These optimized flags, when added to garbage collection flags, will work with any Java 17+ build. They are applicable to both servers and clients: 
 
-```-server -XX:+UnlockExperimentalVMOptions -XX:+UnlockDiagnosticVMOptions -XX:+AlwaysPreTouch -XX:+ParallelRefProcEnabled -XX:+ExplicitGCInvokesConcurrent -Dsun.rmi.dgc.server.gcInterval=2147483646 -Djdk.nio.maxCachedBufferSize=262144 -XX:+UseNUMA -XX:-DontCompileHugeMethods -XX:+UseVectorCmov -XX:+PerfDisableSharedMem -XX:MaxTenuringThreshold=1 -XX:+UseStringDeduplication  -XX:+UseFastUnorderedTimeStamps -XX:+UseCriticalCompilerThreadPriority -XX:+UseCriticalJavaThreadPriority```
+```-server -XX:+UnlockExperimentalVMOptions -XX:+UnlockDiagnosticVMOptions -XX:+AlwaysPreTouch -XX:+DisableExplicitGC -XX:+UseNUMA -XX:-DontCompileHugeMethods -XX:+UseBiasedLocking -XX:+UseVectorCmov -XX:+PerfDisableSharedMem -XX:+UseStringDeduplication -XX:+UseFastUnorderedTimeStamps -XX:+UseCriticalJavaThreadPriority -XX:+OmitStackTraceInFastThrow -XX:ThreadPriorityPolicy=1```
 
-They are applicable to both servers and clients. Barring some *minor* differences in default flags, all Java distributions perform almost identically, with 2 major exceptions I am aware of: Oracle's GraalVM (which has a custom C2 compiler), and Intel's (linux-only, highly optimized binary) Clear Linux OpenJDK, which you can get through [distrobox](https://github.com/89luca89/distrobox).
+They are applicable to both servers and clients. 
+
+Barring some *minor* differences in default flags, all OpenJDK distributions like Eclipse Adoptium, Microsoft, Azul, Amazon Correto and so on perform almost identically, with 2 major exceptions I know of: Oracle's GraalVM, and Intel's Clear Linux OpenJDK. 
 
 
 Memory Allocation
 ------
-Minimum and maximum (`-xms` and `-xmx`) values should generally be set to the same value, as explained here: https://dzone.com/articles/benefits-of-setting-initial-and-maximum-memory-siz
+Minimum and maximum (`-xms` and `-xmx`) values should be set to the same value, as explained here: https://dzone.com/articles/benefits-of-setting-initial-and-maximum-memory-siz
 
 Allocating too much memory can make GC pauses much more severe, or overflow out of your physical RAM. Allocating too little can slow the game down. Less than 8GB is usually sufficient, but experiment with your mod loadout, and give Minecraft only as much as it needs.
 
@@ -28,15 +28,44 @@ Garbage Collection
 
 Garbage Collection tuning is critical for both Minecraft servers and clients, as the "pauses" to stop and collect garbage manifest as stutters on the client and lag on servers. To minimize them, you have a few options. 
 
-- **Multicore Collection**: More parallel collection can be done on all garbage collectors with `-XX:ConcGCThreads=[Some Number]`. I set it to `[number of physical cores - 1]`, but this may or may not work on your system. 
+- **Concurrent Collection**: Java automatically threads garbage collection during runtume, but sometimes (especially with ZGC or Shenandoh) its best to manually set the upper limit of cores it can use with `-XX:ConcGCThreads=[Some Number]`. At the moment, I set it to `[number of physical cores - 1]` 
 
-- **ZGC**: If you have RAM and cores to spare, and regular OpenJDK, use ZGC. On an 8-core test laptop, it has *no* throughput hit over G1GC, and absolutely no pausing/stutters on the server or client. `-XX:+UseZGC -XX:ZAllocationSpikeTolerance=4` enables it, and doubles the "spike tolerance" to handle more rapid in-game changes. Allocate more `Xmx` and more `ConcGCThreads` than you normally would, but set your `-Xms` value lower than `-Xmx`, as otherwise Java sometimes spits out warnings. 
+#### ZGC 
 
-- **G1GC on clients**: G1GC is fine for GraalVM users (Who have [no other option](https://github.com/oracle/graal/issues/2149)), and regular OpenJDK users on resource constrained computers. [Aikar's famous arguments](https://aikar.co/2018/07/02/tuning-the-jvm-g1gc-garbage-collector-flags-for-minecraft/) work well, but have a major issue: they effectively [disable](https://www.oracle.com/technical-resources/articles/java/g1gc.html) the `MaxGCPauseMillis` parameter. Without the "newsize" parameters, we end up with: `-XX:MaxGCPauseMillis=17 -XX:GCPauseIntervalMillis=21 -XX:G1HeapRegionSize=16M -XX:G1ReservePercent=23 -XX:G1HeapWastePercent=5 -XX:G1MixedGCCountTarget=4 -XX:InitiatingHeapOccupancyPercent=15 -XX:G1MixedGCLiveThresholdPercent=90 -XX:G1RSetUpdatingPauseTimePercent=3 -XX:SurvivorRatio=32 -XX:MaxTenuringThreshold=1` "MaxGCPauseMillis" is our pause target (with a 1 frame lag at 60FPS being ~17ms), and GCPauseIntervalMillis has to be higher than that.
+ZGC is great for high memory/high core count servers. It has no throughput hit I can measure, and absolutely does not stutter like G1GC. However, it requires more RAM and more cores than other garbage collectors.
 
-- **G1GC on servers**: Longer pauses are not so catastrophic on servers, and do increase throughput:  `-XX:MaxGCPauseMillis=100 -XX:GCPauseIntervalMillis=2 -XX:G1HeapRegionSize=16M -XX:G1ReservePercent=23 -XX:G1HeapWastePercent=5 -XX:G1MixedGCCountTarget=4 -XX:InitiatingHeapOccupancyPercent=15 -XX:G1MixedGCLiveThresholdPercent=90 -XX:G1RSetUpdatingPauseTimePercent=3 -XX:SurvivorRatio=32 -XX:MaxTenuringThreshold=1`  (with 100ms being 2 ticks) 
+Unfortunately, it has a singificant client/frametime FPS hit on my 8-core laptop. See the "ZGC" benchmark in the benchmarks folder. 
 
-- **Shenandoh**: All combinations of Shenandoh tested so far have a significant performance penalty. However, if you are a Java 8 user who can't run Graal EE 21 for some reason, Red Hat builds Java 8 with Shenandoah: https://access.redhat.com/products/openjdk
+`-XX:+UseZGC` enables it, but allocate more RAM and more `ConcGCThreads` than you normally would for other GC. Additional flags are still being investigated, but try `-XX:-ZProactive`, as we don't really care about reclaiming memory when idle.
+
+
+#### Shenandoah
+
+Shenandoah, on the other hand, performs well on clients, but kills server throughput in my tests.
+
+Enable it with `-XX:+UseShenandoahGC -XX:ShenandoahGuaranteedGCInterval=1000000 -XX:-ShenandoahUncommit` 
+
+See more tuning options [here](https://wiki.openjdk.org/display/shenandoah/Main). The "herustic" and "mode" options (other than "compact", which you should not use) don't seem to make much of a difference. 
+
+If you are a Java 8 user who can't run Graal EE 21 for some reason, Red Hat builds Java 8 with Shenandoah: https://access.redhat.com/products/openjdk
+
+
+#### G1GC
+
+###### Client:
+
+G1GC is Java's default collector, and required for [GraalVM users](https://github.com/oracle/graal/issues/2149)). [Aikar's famous Minecraft G1GC arguments](https://aikar.co/2018/07/02/tuning-the-jvm-g1gc-garbage-collector-flags-for-minecraft/) run great on clients, with one caveat: they effectively [clamp](https://www.oracle.com/technical-resources/articles/java/g1gc.html) the `MaxGCPauseMillis` parameter, producing long stutters on some systems.
+
+This results in shorter but more frequent pauses: ` -XX:MaxGCPauseMillis=40 -XX:+PerfDisableSharedMem -XX:G1HeapRegionSize=16M -XX:G1NewSizePercent=24 -XX:G1ReservePercent=20 -XX:SurvivorRatio=32 -XX:G1MixedGCCountTarget=3 -XX:G1HeapWastePercent=18 -XX:InitiatingHeapOccupancyPercent=10 -XX:G1RSetUpdatingPauseTimePercent=0 -XX:MaxTenuringThreshold=1 -XX:G1SATBBufferEnqueueingThresholdPercent=30 -XX:G1ConcMarkStepDurationMillis=5 -XX:G1ConcRSHotCardLimit=16 -XX:G1ConcRefinementServiceIntervalMillis=150 -XX:GCTimeRatio=99`
+
+`G1NewSizePercent` can be tuned for smaller but frequent stutters. `G1HeapWastePercent=18` and `-XX:G1MixedGCCountTarget=3` makes the mixed garbage collector lazier (at the cost of more memory usage), as we aren't running out of old gen space quickly on the client. 
+
+###### Server:
+
+More optimal server G1GC flags are still being investigated: 
+
+`-XX:MaxGCPauseMillis=150 -XX:+UnlockExperimentalVMOptions -XX:+DisableExplicitGC -XX:+AlwaysPreTouch -XX:G1NewSizePercent=30 -XX:G1MaxNewSizePercent=60 -XX:G1HeapRegionSize=8M -XX:G1ReservePercent=20 -XX:G1MixedGCCountTarget=4 -XX:InitiatingHeapOccupancyPercent=10 -XX:G1MixedGCLiveThresholdPercent=90 -XX:G1RSetUpdatingPauseTimePercent=0 -XX:SurvivorRatio=32 -XX:MaxTenuringThreshold=1 -XX:G1SATBBufferEnqueueingThresholdPercent=30 -XX:G1ConcMarkStepDurationMillis=5 -XX:G1ConcRSHotCardLimit=16 -XX:G1ConcRefinementServiceIntervalMillis=150`
+
 
 Large Pages
 ------
@@ -53,7 +82,7 @@ On linux, you generally want to use `-XX:+UseTransparentHugePages`. But if you w
 GraalVM Enterprise Edition
 ------
 
-GraalVM is a new high performance Java VM from Oracle that can improve the performance of (modded) Minecraft.
+GraalVM is a new high performance Java VM from Oracle that can improve the performance of (modded) Minecraft. While client FPS gains are modest, server-side loads like chunk generation can get a 20% boost!
 
 Unfortunately, only GraalVM Enterprise Edition comes with the full set of optimizations, and downloading it requires making a free Oracle account.
 
@@ -69,73 +98,80 @@ For servers, you need to replace the "java" command in your server start sh/bat 
 
 If you don't feel comfortable making an Oracle account, grab the latest [GraalVM CE release](https://github.com/graalvm/graalvm-ce-builds/releases) and use the flags from above ^. But Oracle does not check the information you put into the registration page, and GraalVM CE lacks most of the EE optimizations.
 
-GraalVM Java Arguments
+GraalVM EE Java Arguments
 ------
-
-These work for servers and clients, on any operating system and ARM/x86 hardware. They do not include the `xms` or `xmx` memory flags.
+.
 
 Client arguments for GraalVM EE 22+ for Java 17+ (or Java 11):
 
-``` -server -XX:+UnlockExperimentalVMOptions -XX:+UnlockDiagnosticVMOptions -XX:+UseG1GC -XX:+AlwaysPreTouch -Dlibgraal.AlwaysPreTouch=true -XX:+ParallelRefProcEnabled -Dlibgraal.ParallelRefProcEnabled=true -XX:+ExplicitGCInvokesConcurrent -Dlibgraal.ExplicitGCInvokesConcurrent=true -XX:MaxGCPauseMillis=17 -Dlibgraal.MaxGCPauseMillis=17 -Dlibgraal.GCPauseIntervalMillis=20 -XX:GCPauseIntervalMillis=20 -XX:G1HeapRegionSize=16M -XX:G1ReservePercent=25 -Dlibgraal.G1ReservePercent=25 -XX:G1HeapWastePercent=5 -Dlibgraal.G1HeapWastePercent=5 -XX:G1MixedGCCountTarget=4 -Dlibgraal.G1MixedGCCountTarget=4 -XX:InitiatingHeapOccupancyPercent=15 -Dlibgraal.InitiatingHeapOccupancyPercent=15 -XX:G1MixedGCLiveThresholdPercent=90 -XX:G1RSetUpdatingPauseTimePercent=2 -Dlibgraal.G1RSetUpdatingPauseTimePercent=2 -XX:SurvivorRatio=32 -Dlibgraal.SurvivorRatio=32 -Dsun.rmi.dgc.server.gcInterval=2147483646 -Djdk.nio.maxCachedBufferSize=262144 -XX:+UseNUMA -XX:-DontCompileHugeMethods -XX:+UseVectorCmov -XX:AllocatePrefetchStyle=3  -XX:+PerfDisableSharedMem -XX:MaxTenuringThreshold=1 -XX:+UseStringDeduplication  -XX:+UseFastUnorderedTimeStamps -XX:+UseCriticalCompilerThreadPriority -XX:+UseCriticalJavaThreadPriority -XX:+EnableJVMCIProduct -XX:+EnableJVMCI -XX:+UseJVMCICompiler -XX:+EagerJVMCI -Dgraal.TuneInlinerExploration=1 -Dgraal.CompilerConfiguration=enterprise -Dgraal.UsePriorityInlining=true -Dgraal.Vectorization=true -Dgraal.OptDuplication=true -Dgraal.DetectInvertedLoopsAsCounted=true -Dgraal.LoopInversion=true -Dgraal.VectorizeHashes=true -Dgraal.EnterprisePartialUnroll=true -Dgraal.VectorizeSIMD=true -Dgraal.StripMineNonCountedLoops=true -Dgraal.SpeculativeGuardMovement=true -Dgraal.InfeasiblePathCorrelation=true -Dgraal.LoopRotation=true```
-
-Raise `-XX:MaxGCPauseMillis=17 -Dlibgraal.MaxGCPauseMillis=17` And remove `-Dlibgraal.GCPauseIntervalMillis=20 -XX:GCPauseIntervalMillis=20` on servers.
-
-Many of the `Dgraal` arguments are redundant/default, and there for easy testing. Again, you must use G1GC when running GraalVM CE or EE. 
+```-server -XX:+UnlockExperimentalVMOptions -XX:+UnlockDiagnosticVMOptions -XX:+AlwaysPreTouch -XX:+DisableExplicitGC -XX:+UseNUMA -XX:-DontCompileHugeMethods -XX:+UseBiasedLocking -XX:+UseVectorCmov -XX:+PerfDisableSharedMem -XX:+UseStringDeduplication -XX:+UseFastUnorderedTimeStamps -XX:+UseCriticalJavaThreadPriority -XX:+OmitStackTraceInFastThrow -XX:AllocatePrefetchStyle=3 -XX:+EnableJVMCIProduct -XX:+UseJVMCICompiler -XX:+EagerJVMCI -Dgraal.TuneInlinerExploration=1 -Dgraal.CompilerConfiguration=enterprise -Dgraal.UsePriorityInlining=true -Dgraal.Vectorization=true -Dgraal.OptDuplication=true -Dgraal.DetectInvertedLoopsAsCounted=true -Dgraal.LoopInversion=true -Dgraal.VectorizeHashes=true -Dgraal.EnterprisePartialUnroll=true -Dgraal.VectorizeSIMD=true -Dgraal.StripMineNonCountedLoops=true -Dgraal.SpeculativeGuardMovement=true -Dgraal.InfeasiblePathCorrelation=true -Dgraal.LoopRotation=true```
 
 
-Mod Compatibility
+Many of the `Dgraal` arguments are redundant/default, but are there for easy testing. Again, you must use G1GC as your garbage collector when running GraalVM CE or EE. 
+
+
+GraalVM EE Mod Compatibility
 ------
-- GraalVM 22.2.0 has issues with Minecraft, particularly with the `UsePriorityInlining` flag enabled. Please use 22.1.0 until 22.3.0 is out see: https://github.com/oracle/graal/issues/4776
+- GraalVM 22.2.0 has issues with Minecraft, particularly with the `UsePriorityInlining` flag enabled. Please use 22.1.0 until 22.3.0 is out. See: https://github.com/oracle/graal/issues/4776
 
-- Some flags, including `VectorizeSIMD`, turn villagers and some passive mobs invisible when running shaders through Iris or Occulus... but only after some time. If this happens to you, disable `VectorizeSIMD`. If that doesn't work, please try disabling other flags and create or add to a Github issue! See: https://github.com/oracle/graal/issues/4775
+- Some flags, including `VectorizeSIMD`, turn villagers and some passive mobs invisible when running shaders through Iris or Occulus... but only after some time, and only on some setups. If this happens to you, set `VectorizeSIMD=False`. If that doesn't fix it, please create a Github issue and/or ping me in Discord! See: https://github.com/oracle/graal/issues/4775
 
 - GraalVM CE and EE both break constellation rendering in Astral Sorcery, unless JVCMI is disabled. See: https://github.com/HellFirePvP/AstralSorcery/issues/1963
 
 If you run into any issues, please create a Github issue or post in the Discord!
 
+SpecialK
+------
+SpecialK has 2 major performance benefits to Minecraft on Windows:
+
+- A fancy frame limiter that's even better than RTSS, eliminating the need for Vsync (especially on setups without access to Sodium's adaptive vsync). It even works in conjuction with VRR or Nvidia Reflex. 
+
+- A OpenGL-to-DirectX11 wrapper called OpenGL-IK that eliminates Minecraft's windowed moded overhead, and enables other features (like HDR).
+
+Download it here: https://wiki.special-k.info/en/SpecialK/Tools
+
+Add your MC launcher, and check the "elevated service" checkbox. Then navigate to your java bin folder where your javaw.exe is, and create an empty file called `SpecialK.OpenGL32`. When its opens, the launcher will then "inject" SpecialK into Minecraft.
+[SpecialK](Tutorial_Images/specialk.PNG)
+
+
+Process Priority
+------
+After launching Minecraft, set Java to run at a high process priority in Windows with the task manager:
+
+![taskmanager](Tutorial_Images/taskmon.PNG)
+
+Linux users can append the command `sudo nice -n -18` to thier launch arguments.
+
+
+Other Performance Notes
+------
+
+- Minecraft client linux users should check out https://github.com/Admicos/minecraft-wayland
+
+- I highly recommend hosting Minecraft servers (and clients!) on Clear Linux over any other Linux distro. In spite of the name, it works great on Intel and AMD CPUs/GPUs... just *not* Nvidia GPUs: https://clearlinux.org/downloads
+
+- Close everything in the background, including Discord and your browser! Minecraft is resource intensive, and does not like other apps generating CPU interrupts or eating disk I/O, RAM and so on.  
+
 
 Java 8
 ------
-Java 8 is not being tested thoroughly. But these flags + g1gc flags should work in OpenJDK 8 builds:
+Java 8 has not been tested much, though GraalVM 21.X and Red Hat OpenJDK with with Shenandoh do provide a significant uplift.
 
-```-server -XX:+UnlockExperimentalVMOptions -XX:+UnlockDiagnosticVMOptions -XX:+ParallelRefProcEnabled -XX:+AlwaysPreTouch -Dsun.rmi.dgc.server.gcInterval=2147483646 -XX:+PerfDisableSharedMem -XX:MaxTenuringThreshold=1 -XX:+UseStringDeduplication -XX:+UseFastUnorderedTimeStamps -XX:+UseAES -XX:+UseAESIntrinsics -XX:AllocatePrefetchStyle=1 -XX:+UseLoopPredicate -XX:+RangeCheckElimination -XX:+EliminateLocks -XX:+DoEscapeAnalysis -XX:+UseCodeCacheFlushing -XX:+UseFastJNIAccessors -XX:+OptimizeStringConcat -XX:+UseCompressedOops -XX:+UseThreadPriorities -XX:+OmitStackTraceInFastThrow -XX:ThreadPriorityPolicy=1 -XX:+UseInlineCaches -XX:+RewriteBytecodes -XX:+RewriteFrequentPairs -XX:+UseNUMA -XX:-DontCompileHugeMethods -XX:+UseFPUForSpilling -Djdk.nio.maxCachedBufferSize=262144 -Dgraal.CompilerConfiguration=community -Dgraal.SpeculativeGuardMovement=true```
+These flags will work with OpenJDK8, along with Shenandoh GC (for Red Hat OpenJDK on clients) or G1GC (for everything else):
+
+```-server -XX:+UnlockExperimentalVMOptions -XX:+UnlockDiagnosticVMOptions -XX:+ParallelRefProcEnabled -XX:+AlwaysPreTouch -Dsun.rmi.dgc.server.gcInterval=2147483646 -XX:+PerfDisableSharedMem -XX:MaxTenuringThreshold=1 -XX:+UseStringDeduplication -XX:+UseFastUnorderedTimeStamps -XX:+UseAES -XX:+UseAESIntrinsics -XX:AllocatePrefetchStyle=1 -XX:+UseLoopPredicate -XX:+RangeCheckElimination -XX:+EliminateLocks -XX:+DoEscapeAnalysis -XX:+UseCodeCacheFlushing -XX:+UseFastJNIAccessors -XX:+OptimizeStringConcat -XX:+UseCompressedOops -XX:+UseThreadPriorities -XX:+OmitStackTraceInFastThrow -XX:ThreadPriorityPolicy=1 -XX:+UseInlineCaches -XX:+RewriteBytecodes -XX:+RewriteFrequentPairs -XX:+UseNUMA -XX:-DontCompileHugeMethods -XX:+UseFPUForSpilling -Dgraal.CompilerConfiguration=community -Dgraal.SpeculativeGuardMovement=true```
 
 x86 Java 8 users (aka most Java 8 users) can add these additional arguments:
 
 ```-XX:+UseNewLongLShift -XX:+UseXMMForArrayCopy -XX:+UseXmmI2D -XX:+UseXmmI2F -XX:+UseXmmLoadAndClearUpper -XX:+UseXmmRegToRegMoveAll -XX:+UseNewLongLShift```
 
-While these flags work with GraalVM EE 21.X:
+These flags work with GraalVM EE 21.X:
 
-```-server -XX:+UnlockExperimentalVMOptions -XX:+UnlockDiagnosticVMOptions -XX:+ParallelRefProcEnabled -XX:+AlwaysPreTouch  -XX:+EnableJVMCI -XX:+UseJVMCICompiler -XX:+EagerJVMCI -XX:+UseStringDeduplication -XX:+UseFastUnorderedTimeStamps -XX:AllocatePrefetchStyle=1 -XX:+UseLoopPredicate -XX:+RangeCheckElimination -XX:+EliminateLocks -XX:+DoEscapeAnalysis -XX:+UseCodeCacheFlushing -XX:+UseFastJNIAccessors -XX:+OptimizeStringConcat -XX:+UseCompressedOops -XX:+UseThreadPriorities -XX:+OmitStackTraceInFastThrow -XX:ThreadPriorityPolicy=1 -XX:+UseInlineCaches -XX:+RewriteBytecodes -XX:+RewriteFrequentPairs -XX:+UseNUMA -XX:-DontCompileHugeMethods -XX:+UseFPUForSpilling -Djdk.nio.maxCachedBufferSize=262144 -Dgraal.TuneInlinerExploration=1 -Dgraal.CompilerConfiguration=enterprise -Dgraal.UsePriorityInlining=true -Dgraal.Vectorization=true -Dgraal.OptDuplication=true -Dgraal.DetectInvertedLoopsAsCounted=true -Dgraal.LoopInversion=true -Dgraal.VectorizeHashes=true -Dgraal.EnterprisePartialUnroll=true -Dgraal.VectorizeSIMD=true -Dgraal.StripMineNonCountedLoops=true -Dgraal.SpeculativeGuardMovement=true -Dgraal.InfeasiblePathCorrelation=true```
+```-server -XX:+UnlockExperimentalVMOptions -XX:+UnlockDiagnosticVMOptions -XX:+ParallelRefProcEnabled -XX:+AlwaysPreTouch  -XX:+EnableJVMCI -XX:+UseJVMCICompiler -XX:+EagerJVMCI -XX:+UseStringDeduplication -XX:+UseFastUnorderedTimeStamps -XX:AllocatePrefetchStyle=1 -XX:+UseLoopPredicate -XX:+RangeCheckElimination -XX:+EliminateLocks -XX:+DoEscapeAnalysis -XX:+UseCodeCacheFlushing -XX:+UseFastJNIAccessors -XX:+OptimizeStringConcat -XX:+UseCompressedOops -XX:+UseThreadPriorities -XX:+OmitStackTraceInFastThrow -XX:ThreadPriorityPolicy=1 -XX:+UseInlineCaches -XX:+RewriteBytecodes -XX:+RewriteFrequentPairs -XX:+UseNUMA -XX:-DontCompileHugeMethods -XX:+UseFPUForSpilling -Dgraal.TuneInlinerExploration=1 -Dgraal.CompilerConfiguration=enterprise -Dgraal.UsePriorityInlining=true -Dgraal.Vectorization=true -Dgraal.OptDuplication=true -Dgraal.DetectInvertedLoopsAsCounted=true -Dgraal.LoopInversion=true -Dgraal.VectorizeHashes=true -Dgraal.EnterprisePartialUnroll=true -Dgraal.VectorizeSIMD=true -Dgraal.StripMineNonCountedLoops=true -Dgraal.SpeculativeGuardMovement=true -Dgraal.InfeasiblePathCorrelation=true```
 
-Mod Compatibility
-------
-- GraalVM 22.2.0 has issues with Minecraft, particularly with the `UsePriorityInlining` flag enabled. Please use 22.1.0 for now, see: https://github.com/oracle/graal/issues/4776
 
-- Some flags, including `VectorizeSIMD`, turn villagers and some passive mobs invisible when running shaders through Iris or Occulus... but only under certain unknown conditions. Disable this, otherwise you may have to roll back to OpenJDK, see https://github.com/oracle/graal/issues/4775
 
-- GraalVM CE and EE both break constellation rendering in Astral Sorcery, unless JVCMI is disabled. See: https://github.com/HellFirePvP/AstralSorcery/issues/1963
 
-If you run into any issues, please create a Github issue!
-
-SpecialK
-------
-A Windows program called SpecialK has 2 major performance benefits to Minecraft:
-
-- A frame limiter that's even better than RTSS, eliminating the need for Vsync (especially on setups without access to Sodium's adaptive vsync.
-
-- A OpenGL-to-DirectX wrapper called OpenGL-IK that eliminates Minecraft's windowed moded overhead, and enables other features (like SpecialK's HDR injection).
-
-Download it here: https://wiki.special-k.info/en/SpecialK/Tools
-
-Enable the service. Then navigate to your java bin folder, and create an emtpy file called `SpecialK.OpenGL32` 
-
-Other Performance Notes
-------
-
-- Some users report improved performance from running Minecraft at a high priority, via the task manager on Windows or `sudo nice -n -18 java...` on linux. The `Benchmark.py` script does this automatically.
-
-- Minecraft linux users should check out https://github.com/Admicos/minecraft-wayland
 
 
 Sources
