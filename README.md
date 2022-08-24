@@ -126,7 +126,7 @@ SpecialK has 2 major performance benefits to Minecraft on Windows:
 
 Download it here: https://wiki.special-k.info/en/SpecialK/Tools
 
-Add your MC launcher, and check the "elevated service" checkbox. Then navigate to your java bin folder where your javaw.exe is, and create an empty file called `SpecialK.OpenGL32`. When its opens, the launcher will then "inject" SpecialK into Minecraft.
+Add your MC launcher, and check the "elevated service" checkbox. Then navigate to your java bin folder where your javaw.exe is, and create an empty file called `SpecialK.OpenGL32`. Launch your Minecraft launcher with the SpecialK launcher, and the launcher will then "inject" SpecialK into Minecraft.
 ![SpecialK](Tutorial_Images/specialk.PNG)
 
 Be sure to turn off VSync and the frame limiter, and (maybe) Sodium's adaptive vsync.
