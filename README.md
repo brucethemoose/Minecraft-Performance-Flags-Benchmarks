@@ -39,7 +39,7 @@ Unfortunately, it has a significant client FPS hit on my (8-core) laptop. See th
 
 ### Shenandoah
 
-Shenandoah performs well on clients, but kills server throughput in my tests. Enable it with `-XX:+UseShenandoahGC -XX:ShenandoahGuaranteedGCInterval=1000000 -XX:-ShenandoahUncommit` 
+Shenandoah performs well on clients, but kills server throughput in my tests. Enable it with `-XX:+UseShenandoahGC -XX:ShenandoahGCMode=iu -XX:ShenandoahGuaranteedGCInterval=1000000 -XX:-ShenandoahUncommit` 
 
 See more tuning options [here](https://wiki.openjdk.org/display/shenandoah/Main). The "herustic" and "mode" options (other than "compact", which you should not use) don't seem to make much of a difference. 
 
