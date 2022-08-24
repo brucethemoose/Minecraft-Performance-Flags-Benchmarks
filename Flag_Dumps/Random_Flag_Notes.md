@@ -1,5 +1,0 @@
-- Many Java 8 flags are redundant, and largely inherited from Java 17 testing. 
-- `AllocatePrefetchStyle=3` seems to crash ZGC
-- The effect of `JVMCIThreads=X` and `Dgraal.LSRAOptimization=true` seems sporadic and needs more testing.
-- `-Dlibgraal.WriteableCodeCache=true -Dgraal.VectorPolynomialIntrinsics=true -Dgraal.SIMDVectorizationSingletons=true -Dgraal.SIMDVectorizationDirectLoadStore=true -Dgraal.OptWriteMotion=true` seem to be unstable.
-- These flags can supposedly coax G1GC into more parallel collection: `XX:G1RSetUpdatingPauseTimePercent=12 -XX:G1ConcRSHotCardLimit=8 -XX:G1ConcRefinementServiceIntervalMillis=150`. Source: https://www.diva-portal.org/smash/get/diva2:1466940/FULLTEXT01.pdf
