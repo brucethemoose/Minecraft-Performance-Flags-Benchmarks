@@ -83,11 +83,11 @@ Client benchmarking is tricky and finicky. You have been warned!
 - Now open Benchmark.py. Client benchmarks are also stored as a list of Python dicts, formatted like this: 
 
 ```
-  {
-    "Name": "Client Benchmark Name", 
-    "PolyInstance": "Name (not full path) of your polymc instance folder",
-    "Iterations": # of iterations to run and average together
-  },
+    {
+        "Name": "Client Benchmark Name", 
+        "PolyInstance": "Name (not full path) of your polymc instance folder",
+        "Iterations": # of iterations to run and average together
+    },
 ```
 - "Name" is a descriptive nickname for the benchmark, "PolyInstance" is the PolyMC instance folder you just looked up, and "Iterations" is the number of iterations to run the bench. 
 
