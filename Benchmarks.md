@@ -35,7 +35,7 @@ Currently, client benchmarking only works on Windows. Server benching is tested 
 
 - The "Name" is just a descriptive nickname for that particular benchmark that will show up in the log. The "Command" is the *full* java command to launch the Minecraft server. However, forge/fabic jars will be automatically detected and added to the script command, so all that's really required for forge/fabric tests is your java command/path + your launch arguments. "Path" is the full path your the server folder. "Iterations" is the number of iterations to run the benchmark.
 
-- If you want to assemble common paths, arguments and such with python strings, there is scratch space at the top of the Python file with filled-in examples of how that might be done. Remember that python does not like "\" in paths! 
+- If you want to assemble common paths, arguments and such with python strings, there is scratch space at the top of the Python file with filled-in examples of how that might be done. Remember that python does not like `\` in paths! 
 
 - Be sure to look at the `#Server benchmarking options` section, as it contains important parameters you probably need to tweak (such as timeouts for really slow modpacks, or forceload/carpet commands to tweak how much you load the server) 
 
