@@ -24,12 +24,13 @@ Currently, client benchmarking only works on Windows. Server benching is tested 
 
 - Benchmarks are configured as a list of Python dicts with this format:
 
-```{
-    "Name": "Server benchmark name", 
-    "Command": Full java command to launch the server, except for forge/fabric arguments,
-    "Path": full path to the server, 
-    "Iterations": # of iterations to run and average together
-},
+```
+    {
+        "Name": "Server benchmark name", 
+        "Command": Full java command to launch the server, except for forge/fabric arguments,
+        "Path": full path to the server, 
+        "Iterations": # of iterations to run and average together
+    },
 ```
 
 - The "Name" is just a descriptive nickname for that particular benchmark that will show up in the log. The "Command" is the *full* java command to launch the Minecraft server. However, forge/fabic jars will be automatically detected and added to the script command, so all that's really required for forge/fabric tests is your java command/path + your launch arguments. "Path" is the full path your the server folder. "Iterations" is the number of iterations to run the benchmark.
