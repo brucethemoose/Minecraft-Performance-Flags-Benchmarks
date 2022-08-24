@@ -120,7 +120,7 @@ SpecialK
 ======
 SpecialK has 2 major performance benefits to Minecraft on Windows:
 
-- A fancy frame limiter that reduces stutter, eliminates tearing, and saves power. It even works in conjuction with VRR or Nvidia Reflex. 
+- A fancy frame limiter that reduces stutter, eliminates tearing, saves power, and saves CPU TDP to boost when needed. It even works in conjuction with VRR or Nvidia Reflex. 
 
 - A OpenGL-to-DirectX11 wrapper called OpenGL-IK that eliminates Minecraft's windowed moded overhead, and enables other features (like HDR).
 
