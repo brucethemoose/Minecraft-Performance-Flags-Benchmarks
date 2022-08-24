@@ -178,7 +178,7 @@ These flags work with GraalVM EE 21.X:
 Flag Explanations
 ======
 - Aikar flags are explained here: https://aikar.co/2018/07/02/tuning-the-jvm-g1gc-garbage-collector-flags-for-minecraft/
-- `-XX:+UnlockExperimentalVMOptions -XX:+UnlockDiagnosticVMOptions` simply unlock more flags to be used. These can be listed with the `-XX:+PrintFlagsFinal` and `-XX:+JVMCIPrintProperties` flags.
+- `-XX:+UnlockExperimentalVMOptions -XX:+UnlockDiagnosticVMOptions` simply unlock more flags to be used. These can be listed with the `-XX:+PrintFlagsFinal` and `-XX:+JVMCIPrintProperties` flags, see [Flag Dumps](Flag_Dumps)
 - `-server` tells Java to start as a throughput-optimized server, not a startup-time-optimized client. It *should* do this by default.
 - `-XX:+UseNUMA` enables optimizations for multisocket systems, if applicable. Not sure if this applies to MCM CPUs like Ryzen or Epyc. 
 - `-XX:-DontCompileHugeMethods` allows huge methods to be compiled. Modded Minecraft has lots of these, and we don't care about more CPU or code cache, we just want the Minecraft threads to run faster. 
