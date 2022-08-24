@@ -201,8 +201,7 @@ Flags Under Consideration:
 - Increased code cache, but only if profiling with `-XX:+PrintCodeCache` suggests modded Minecraft fills up the code cache: https://docs.oracle.com/javase/8/embedded/develop-apps-platforms/codecache.htm
 - More aggressive inlining, via `-Dgraal.BaseTargetSpending=160` (default 120) in Graal and some other flags in OpenJDK.
 - Lower C2/C1 compilation thresholds and more aggresive deoptimization to compensate. Again, we don't really care about Java using more CPU for compiling since that's done in backgrounds threads. 
-- Some experimental flags in Graal, like 
-- These OpenJDK flags with are disabled by default for unknown reasons: `-XX:+AlignVector -XX:+RelaxAccessControlCheck -XX:+OptoScheduling -XX:+OptoBundling -XX:+OptimizeFill -XX:+AlwaysCompileLoopMethods -XX:+AlwaysActAsServerClassMachine -XX:+EnableVectorAggressiveReboxing -XX:+EnableVectorSupport -XX:+OptoScheduling -XX:+UseCharacterCompareIntrinsics -XX:+UseCopySignIntrinsic -XX:+UseVectorStubs`
+- OpenJDK flags which are disabled by default for unknown reasons: `-XX:+AlignVector -XX:+RelaxAccessControlCheck -XX:+OptoScheduling -XX:+OptoBundling -XX:+OptimizeFill -XX:+AlwaysCompileLoopMethods -XX:+AlwaysActAsServerClassMachine -XX:+EnableVectorAggressiveReboxing -XX:+EnableVectorSupport -XX:+OptoScheduling -XX:+UseCharacterCompareIntrinsics -XX:+UseCopySignIntrinsic -XX:+UseVectorStubs`
 - `-Dgraal.LSRAOptimization=true` (whichs seems stable so far)
 - `-Dgraal.OptWriteMotion=true` and `graal.WriteableCodeCache=true`, which *do not* seem stable, but may be more stable in GraalVM 22.3.0 
 - Extreme `G1HeapWastePercent` values.
