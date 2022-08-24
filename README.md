@@ -186,7 +186,7 @@ Flag Explanations
 - `-XX:+UseFastUnorderedTimeStamps` Avoid system calls for getting the time. The impact of this will vary per system, but we aren't really concerned with logging timestamp accuracy. 
 - `-XX:+UseCriticalJavaThreadPriority` *Nothing* should preempt the Minecraft threads. GC and Compiler threads can wait. 
 - `-XX:+OmitStackTraceInFastThrow` Minecraft throws a ton of "safe" errors we don't want to spend CPU tracing. 
-- `-XX:ThreadPriorityPolicy=1` Hook into the OS's threading policy. Some JDKs enable this by default, but some don't.
+- `-XX:ThreadPriorityPolicy=1` Use a wider range of thread priorities. Requires sudo on linux to work. Some JDKs (like Graal) enable this by default, but some don't.
 - `-XX:G1SATBBufferEnqueueingThresholdPercent=30 -XX:G1ConcMarkStepDurationMillis=5 -XX:G1ConcRSHotCardLimit=16 -XX:G1ConcRefinementServiceIntervalMillis=150`: Optimizes G1GC's concurrent collection: https://research.spec.org/icpe_proceedings/2014/p111.pdf
 - `-XX:G1RSetUpdatingPauseTimePercent=0`: We want *all* this work to be done in the G1GC concurrent threads, not the pauses. 
 - `-XX:G1HeapWastePercent=18` Don't bother collecting from old gen until its above this percent. This avoids triggering slower "mixed" young generation GCs, which is fine since Minecraft (with sufficient memory) doesn't fill the old gen that fast. Idea from: https://www.reddit.com/r/Minecraft/comments/k9zb7m/tuning_jvm_gc_for_singleplayer/
@@ -201,7 +201,7 @@ Flags Under Consideration:
 - Increased code cache, but only if profiling with `-XX:+PrintCodeCache` suggests modded Minecraft fills up the code cache: https://docs.oracle.com/javase/8/embedded/develop-apps-platforms/codecache.htm
 - More aggressive inlining, via `-Dgraal.BaseTargetSpending=160` (default 120) in Graal and some other flags in OpenJDK.
 - Lower C2/C1 compilation thresholds and more aggresive deoptimization to compensate. Again, we don't really care about Java using more CPU for compiling since that's done in backgrounds threads. 
-- OpenJDK flags which are disabled by default for unknown reasons: `-XX:+AlignVector -XX:+RelaxAccessControlCheck -XX:+OptoScheduling -XX:+OptoBundling -XX:+OptimizeFill -XX:+AlwaysCompileLoopMethods -XX:+AlwaysActAsServerClassMachine -XX:+EnableVectorAggressiveReboxing -XX:+EnableVectorSupport -XX:+OptoScheduling -XX:+UseCharacterCompareIntrinsics -XX:+UseCopySignIntrinsic -XX:+UseVectorStubs`
+- OpenJDK flags which are disabled by default: `-XX:+AlignVector -XX:+OptoBundling -XX:+OptimizeFill -XX:+AlwaysCompileLoopMethods -XX:+EnableVectorAggressiveReboxing -XX:+EnableVectorSupport -XX:+OptoScheduling -XX:+UseCharacterCompareIntrinsics -XX:+UseCopySignIntrinsic -XX:+UseVectorStubs`
 - `-Dgraal.LSRAOptimization=true` (whichs seems stable so far)
 - `-Dgraal.OptWriteMotion=true` and `graal.WriteableCodeCache=true`, which *do not* seem stable, but may be more stable in GraalVM 22.3.0 
 - Extreme `G1HeapWastePercent` values.
