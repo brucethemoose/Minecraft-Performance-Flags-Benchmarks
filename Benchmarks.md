@@ -1,54 +1,114 @@
 
 
-`Benchmarks.py` is a script that will automatically benchmark Minecraft server and client instances! It can benchmark multiple configurations consecutively, and average runs together for more consistent data.
+`Benchmarks.py` is a script that will automatically benchmark Minecraft server and client instances. It can benchmark multiple configurations consecutively, and average runs together for more consistent data, and do all that unattended*. 
 
 # Setup
 
-Install a recent version of Python (preferably Python 3.10), and run `python -m pip install -r requirements.txt` in this folder. 
+Clone or download this repo with the "download as zip" button on GitHub. 
 
-Server benchmarking works on both Windows and Linux. But you should configure java to run as an administrator on Windows, if possible. 
+Install a recent version of Python (preferably Python 3.10), and run this command in this folder: `python -m pip install -r requirements.txt`
 
-Client benchmarks require PolyMC and Intel Presentmon:
+Client benchmarks require PolyMC (preferrably PolyMC Portable) and Intel Presentmon. 
 - https://github.com/GameTechDev/PresentMon/releases
 - https://github.com/PolyMC/PolyMC
 
-# Server Benchmarking
+Currently, client benchmarking only works on Windows. Server benching is tested on Windows and Linux, but it should work on other platforms like OSX. 
 
-First, make sure your server instance has generated its initial chunks. Disable `sync-chunk-writes` in your server.properties file, and test on an SSD if you have one. 
+# Server Benchmarking Setup
 
-Arguments for launching your server benchmark (such as java args, paths and such) can be assembled at the top of the Benchmarks.py file. Forge/Fabric installations will automatically be detected, but vanilla servers and servers with other modding APIs will need to have their `.jar` file manually specified. 
+- Create or clone server instances you want to test. Make sure it starts up and generates chunks without any issues.
 
-Benchmark parameters are stored as a Python dict. Benchmark.py has an example of how it should be formatted. Be sure to look at the `#Server benchmarking options` section, as it contains important parameters you probably need to tweak (such as timeouts for really slow modpacks, or forceload/carpet commands to tweak how much you load the server) 
+- Disable `sync-chunk-writes` in your server.properties file. 
 
-You can start the script via command line, or with the included .bat file. Note that scripts should be run as an administrator on Windows or sudo on linux, otherwise some features (like large pages on Windows or raising the process priority on linux) may not work. In theory it should still run without elevated privledges. 
+- Open the Benchmark.py file in a text editor, ideally one that will check Python syntax like VSCode. 
 
-The script itself times server startup, and then chunkloads a large area to generate a sustained load. If you have the Fabric "Carpet" mod installed, it will also populate the server with fake players and send them running out of spawn.
+- Benchmarks are configured as a list of Python dicts with this format:
 
-If you have other suggestions for stressing the server, particularly Forge or Vanilla servers, please let me know!
+```{
+    "Name": "Server benchmark name", 
+    "Command": Full java command to launch the server, except for forge/fabric arguments,
+    "Path": full path to the server, 
+    "Iterations": # of iterations to run and average together
+},
+```
 
-If Forge or Fabric are installed, the script then pregenerates chunks on the loaded server with the specified pregeneration command, and times how long it takes. At the end, if the "Spark" mod is installed, garbage collection and resource usage metrics are also collected.
+- The "Name" is just a descriptive nickname for that particular benchmark that will show up in the log. The "Command" is the *full* java command to launch the Minecraft server. However, forge/fabic jars will be automatically detected and added to the script command, so all that's really required for forge/fabric tests is your java command/path + your launch arguments. "Path" is the full path your the server folder. "Iterations" is the number of iterations to run the benchmark.
 
-The benchmark saves your current world at the start of each iteration, and restores it to its original state at end. If the benchmark crashes, your world backup will be in the "_world_backup" folder, and will automatically be restored if you run "Benchmark.py" again. Hence the benchmark will accept, and benefits from, heavily played-in worlds, but you may need to adjust your chunk pregeneration and forceloading parameters. 
+- If you want to assemble common paths, arguments and such with python strings, there is scratch space at the top of the Python file with filled-in examples of how that might be done. Remember that python does not like "\" in paths! 
 
-# Client Benchmarking
+- Be sure to look at the `#Server benchmarking options` section, as it contains important parameters you probably need to tweak (such as timeouts for really slow modpacks, or forceload/carpet commands to tweak how much you load the server) 
 
-Client benchmarking relies on PolyMC as your Minecraft instance launcher. Create instances and position your character where you want them to start for the benchmark, and clone instances if you want to test for differences between, say, java parameters or mod loadouts. You should only have 1 "world" in each instance you want to test.
+- You can start Bechmark.py via command line, or with the included .bat file. Note that scripts should be run as an administrator on Windows or sudo on linux, otherwise some features (like large pages on Windows or raising the process priority on linux) may not work.
 
-Its important to configure the instance before you run it! Stand and look some somewhere they can run in a straight line, look down at a slight angle, and disable graphics settings like vsync or fps caps. 
+# Server Benchmark Progression and Results. 
 
-The "PolyInstance" parameter in your benchmark script should point to the name of your instance folder, *not* the full path or the name in the PolyMC window. 
+- After starting Benchmark.py, the script will back up the server's world so it can be restored later. If the script errored out on a previous run and detects an already backed up world, it will restore the backup first.
 
-Like the server benchmark, your world will be backed up and restored after each iteration, and everything should be run as an admin on Windows if possible. 
+- The script with then start the first iteration of the first benchmark, timing how long it takes to start.
 
-The script will start up PolyMC automatically, click and load the first singleplayer world it finds, and wait for the world to "warm up." Then it will move your character forward, while jumping and attacking, for the specified amount of time, and finally collect even more performance data with Spark. 
+- If the "Carpet" fabric mod is installed (which I recommend), it will spawn the specified number of "Fake" players to generate a more realistic load on the server. 
 
-# Benchmark Data
+- A specific area will be chunkloaded via the vanilla `forceload` command. If you are testing a world with a big base or some other laggy area, try to center the forceload command on it!
 
-Raw data from the benchmarks is progressively written to .json files in the `Benchmarks` folder.
+- Chunks will then be generated with the specified command, and timed. This chunkgen time is the primary performance metric of the benchmark at the moment. 
 
-On the server, you should primarily be looking at chunk generation times and garbage collection info. On the client, the 1% and 5% metrics represent the slowest 1% and 5% of your frametimes, which represents "spikes" and how sluggish the game feels during its worst stutters. 
+- If the "spark" mod is installed (which I *highly* recommend), Garbage collection and resource usage statistics will be recorded. 
 
-In server benchmarks, "CRASH", "STOPPED", or "TIMEOUT" will show up in your chunkgen/startup times if something went wrong with your server. If that's the case, you should make sure the server-start command in that partiular entry looks right, and try starting the server with that command manually. 
+- The server is then killed, and the world backup is restored. 
+
+- At the end of each benchmark iteration, data will be written to a json file in the "Benchmarks" folder.
+
+- Then the script moves onto the next iteration, the next benchmark, and so on until it's done. 
+
+- At the end of each benchmark, iteration results will be averaged together and written to the json file.  
+
+- "CRASH", "STOPPED", or "TIMEOUT" will show up in your chunkgen/startup times if something went wrong with your server. If that's the case, you should make sure the server-start command in that partiular entry looks right, and try starting the server with that command manually. 
+
+# Client Benchmarking Setup
+
+Client benchmarking is tricky and finicky. You have been warned!
+
+- First, open the PolyMC options and disable it from automatically opening log windows when instances start.
+
+- Set up your PolyMC instance(s) you want to benchmark. Set the appropriate Java flags, install the mods you want, and so on. 
+
+- Now launch that PolyMC instance, and create or load exactly one world you want to test. Delete all other worlds. 
+
+- The actual "benchmark" consists of the player character running forward in a straight line, jumping and holding the attack button down, so position your player accordingly. Place them near a populated base if one exists, and make sure they have room to run in a straight line for some time. Consider enabling creative mode so the test character can break blocks in their way more easily. Start them off looking slightly "down" so they can break blocks blocking their path, and try to align them with a cardinal direction so their movement is more deterministic. 
+
+- Once your instance is configured, close it. If you want to run similar instances with, say, different mods or different Java parameters, clone that instance so that all tested instances have the exact same world. 
+
+- Look up the **folder name** of your instance in Windows explorer (not the instance name in the PolyMC UI). 
+
+- Now open Benchmark.py. Client benchmarks are also stored as a list of Python dicts, formatted like this: 
+
+```
+  {
+    "Name": "Client Benchmark Name", 
+    "PolyInstance": "Name (not full path) of your polymc instance folder",
+    "Iterations": # of iterations to run and average together
+  },
+```
+- "Name" is a descriptive nickname for the benchmark, "PolyInstance" is the PolyMC instance folder you just looked up, and "Iterations" is the number of iterations to run the bench. 
+
+- You also need to configure the path to your PolyMC .exe file, and the path to your instances folder if your PolyMC installation isn't portable. 
+
+- Now close (not minimize) *all* other active windows, except the explorer window to start the script. Open apps can interfere with the machine vision used to automate the benchmark. 
+
+# Client Benchmark Progression and Results
+
+- Like the server benchmark, your world will be backed up and restored after each iteration. 
+
+- The script then starts your PolyMC instance, and clicks through and loads the first singleplayer world it finds. This step is *very* finicky and delicate. For instance, while it has some tolerance for modded startscreens, sometimes the script can't find the "Singleplayer" button to click. Sometimes background windows will "occlude" fullscreen Minecraft, even if they have been minimized. And sometimes the auto clicking just doesn't work for unknown reasons, but restarting your PC seems to fix it.
+
+- After loading your world, the player character idles for some time to let Java "warm up." 
+
+- Then, the player will start constantly moving forward, jumping, and attacking. At this very moment, Intel Presentation Monitor starts recording frametime data. Do not move your mouse during this phase. 
+
+- Spark info is collected at the end (if that mod is present), the client is killed, and the process continues for other iterations/benchmarks. 
+
+- Average FPS and the average of the top 1% and 5% slowest frames (which is arguably more important than average FPS, since this data represents stutters and laggy areas) is written to a json file. 
+ 
 
 # Benchmarking Tips.
 
@@ -56,24 +116,24 @@ In server benchmarks, "CRASH", "STOPPED", or "TIMEOUT" will show up in your chun
 
 - Disable power-saving features like auto screen off or sleeping. 
 
-- The client benchmark runs better with Creative worlds.
+- The client benchmark works better with starts near existing bases. Be sure to clone instances you actually play with, just in case!
 
-- It also works better with starts near existing bases. But be sure to clone your instances you actually play with, just in case!
+- Run many iterations of each benchmark, especially if there's a lot of variation between runs on your setup.
 
-- Run several iterations of each benchmark, especially if theres a lot of variation between runs.
+- Test your servers/instances before benching them! The benchmark hides output in the command line.
 
-- Test your servers/instances before benching them! The Benchmark hides output in the command line.
 
-Some work-in-progress features:
+
+#### Work-in-Progress Features:
 
 - Better Client benchmark error handling 
 
 - Print hardware and system info.
 
-- More options to stress the server/client.
+- More options to stress the server/client. I am open to suggestions!
 
-- Better server OSX support. I just need a tester. 
+- OSX support?
 
-- Client linux support (via mangohud), if requested. 
+- Client linux support? 
 
-- Replace `pexpect` module with log reading.
+- Replace the `pexpect` module with log scanning.

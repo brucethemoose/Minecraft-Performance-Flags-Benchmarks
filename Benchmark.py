@@ -62,7 +62,7 @@ blist = [
     "Name": "Test Client Benchmark", 
     "PolyInstance": "1.18.2",
     "Iterations": 3
-  }
+  },
   {
     "Name": "Test Server Bencmark", 
     "Command": graalpath + graalflags + memory + lpages,
