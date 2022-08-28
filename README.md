@@ -68,7 +68,7 @@ Longer pauses are more acceptable on servers. These flags are very close to the 
 
 `-XX:ConcGCThreads=[Some Number]` controls the *maximum* number of background threads the garbage collector is allowed to use, and defaults to `hyperthreaded cores / 4`.
 
-In some cases (especially with ZGC or Shenandoh) you want to increase this number. I generally recommend [number of real cores - 1]. 
+In some cases (especially with ZGC or Shenandoh) you want to increase this number. I generally recommend `number of real cores - 1`. 
 
 Large Pages
 ======
@@ -121,13 +121,13 @@ GraalVM EE Mod Compatibility
 
 - GraalVM CE and EE both break constellation rendering in Astral Sorcery. See: https://github.com/HellFirePvP/AstralSorcery/issues/1963
 
-If you run into any other mod issues you can trace back to GraalVM, please create a Github issue or post in the Discord!
+If you run into any other mod issues you can trace back to GraalVM, please create a Github issue or post in the Discord! They can probably be worked around by finding the right function with `Dgraal.PrintCompilation=true`, and working around it with `-Dgraal.GraalCompileOnly=~...`.
 
 SpecialK
 ======
-SpecialK has 2 major performance benefits to Minecraft on Windows:
+SpecialK has 2 major Windows performance benefits:
 
-- A fancy frame limiter that reduces stutter, eliminates tearing, saves power, and saves CPU TDP to boost when needed. It even works in conjuction with VRR or Nvidia Reflex. 
+- A frame limiter that reduces stutter, eliminates tearing, saves power, and saves CPU TDP to boost when needed. It even works in conjuction with VRR or Nvidia Reflex. 
 
 - A OpenGL-to-DirectX11 wrapper called OpenGL-IK that eliminates Minecraft's windowed moded overhead, and enables other features (like HDR).
 
