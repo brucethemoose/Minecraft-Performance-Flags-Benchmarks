@@ -7,26 +7,26 @@ Discord: https://discord.gg/zeFSR9PnUw
 
 Base Java Flags
 ======
-These optimized flags, when added to garbage collection flags, will work with any Java 17+ build. They are applicable to both servers and clients: 
+These optimized flags will work with any Java 17+ build: 
 
 ```-server -XX:+UnlockExperimentalVMOptions -XX:+UnlockDiagnosticVMOptions -XX:+AlwaysPreTouch -XX:+DisableExplicitGC -XX:+UseNUMA -XX:-DontCompileHugeMethods -XX:+UseVectorCmov -XX:+PerfDisableSharedMem -XX:+UseFastUnorderedTimeStamps -XX:+UseCriticalJavaThreadPriority -XX:+OmitStackTraceInFastThrow -XX:ThreadPriorityPolicy=1```
 
-Barring some *minor* differences in default flags, all OpenJDK distributions like Eclipse Adoptium, Microsoft, Azul, Amazon Correto and so on perform almost identically, with 2 major exceptions I know of: Oracle's GraalVM, and Intel's Clear Linux OpenJDK. 
+They work on both servers and clients, but you need to add some garbage collection flags from below!
+
+All OpenJDK distributions like Eclipse Adoptium, Microsoft, Azul, Amazon Correto and so on perform almost identically, with 2 major exceptions I know of: Oracle's GraalVM, and Intel's Clear Linux OpenJDK. 
 
 
 Memory Allocation
 ======
 Minimum and maximum (`-xms` and `-xmx`) values should be set to the same value, as explained here: https://dzone.com/articles/benefits-of-setting-initial-and-maximum-memory-siz
 
-Allocating too much memory can force your operating system to page, or (without adjusting `G1NewSizePercent` to compensate) make garbage collection pauses more severe. Allocating too little can slow the game down. Less than 8GB is usually sufficient, but experiment with your mod loadout, and give Minecraft only as much as it needs.
+Allocating too much memory can force your operating system to page, make garbage collection pauses more severe, or slow the game down. Allocating too little can also slow the game down. Less than 8GB is usually sufficient, but experiment with your setup.
 
 
 Garbage Collection
 ======
 
-Garbage Collection tuning is critical for both Minecraft servers and clients, as the "pauses" to stop and collect garbage manifest as stutters on the client and lag on servers. To minimize them, you have a few options. 
-
-Java automatically threads garbage collection during runtume, but sometimes (especially with ZGC or Shenandoh) its best to manually set the upper limit of cores it can use with `-XX:ConcGCThreads=[Some Number]`. At the moment, I set it to ~`[number of physical cores - 1]` 
+Garbage Collection tuning is critical for both Minecraft servers and clients, as the "pauses" to stop and collect garbage manifest as stutters on the client and lag on servers. Pick one from below:
 
 ### ZGC 
 
@@ -44,7 +44,6 @@ Shenandoah performs well on clients, but kills server throughput in my tests. En
 See more tuning options [here](https://wiki.openjdk.org/display/shenandoah/Main). The "herustic" and "mode" options (other than "compact", which you should not use) don't seem to make much of a difference. 
 
 If you are a Java 8 user who can't run Graal EE 21 for some reason, Red Hat builds Java 8 with Shenandoah: https://access.redhat.com/products/openjdk
-
 
 ## G1GC
 
@@ -65,6 +64,11 @@ Longer pauses are more acceptable on servers. These flags are very close to the 
 
 `-XX:MaxGCPauseMillis=150 -XX:+UnlockExperimentalVMOptions -XX:+DisableExplicitGC -XX:+AlwaysPreTouch -XX:G1NewSizePercent=30 -XX:G1HeapRegionSize=16M -XX:G1ReservePercent=20 -XX:G1MixedGCCountTarget=4 -XX:InitiatingHeapOccupancyPercent=10 -XX:G1MixedGCLiveThresholdPercent=90 -XX:G1RSetUpdatingPauseTimePercent=0 -XX:SurvivorRatio=32 -XX:MaxTenuringThreshold=1 -XX:G1SATBBufferEnqueueingThresholdPercent=30 -XX:G1ConcMarkStepDurationMillis=5 -XX:G1ConcRSHotCardLimit=16 -XX:G1ConcRefinementServiceIntervalMillis=150 -XX:AllocatePrefetchStyle=3`
 
+### Multicore Garbage collection.
+
+`-XX:ConcGCThreads=[Some Number]` controls the *maximum* number of background threads the garbage collector is allowed to use, and defaults to `hyperthreaded cores / 4`.
+
+In some cases (especially with ZGC or Shenandoh) you want to increase this number. I generally recommend [number of real cores - 1]. 
 
 Large Pages
 ======
@@ -113,9 +117,9 @@ GraalVM EE Mod Compatibility
 ======
 - GraalVM 22.2.0 has issues with Minecraft, particularly with the `UsePriorityInlining` flag enabled. Please use 22.1.0 until 22.3.0 is out. See: https://github.com/oracle/graal/issues/4776
 
-- Some flags, including `VectorizeSIMD`, turn villagers and some passive mobs invisible when running shaders through Iris or Occulus... but only after some time, and only on some setups. If this happens to you, set `VectorizeSIMD=False`. If that doesn't fix it, please let me know! See: https://github.com/oracle/graal/issues/4775
+- The `VectorizeSIMD` turns villagers and some passive mobs invisible when running shaders through Iris or Occulus... but only after some time, and only on some setups. This is a tricky bug I am still tracking down, but for now I am working around it with this flag: `-Dgraal.GraalCompileOnly=~net.minecraft.class_4604.method_23092`
 
-- GraalVM CE and EE both break constellation rendering in Astral Sorcery, unless JVCMI is disabled. See: https://github.com/HellFirePvP/AstralSorcery/issues/1963
+- GraalVM CE and EE both break constellation rendering in Astral Sorcery. See: https://github.com/HellFirePvP/AstralSorcery/issues/1963
 
 If you run into any other mod issues you can trace back to GraalVM, please create a Github issue or post in the Discord!
 
@@ -147,13 +151,17 @@ Linux users can append the command `sudo nice -n -18` to thier launch arguments.
 Other Performance Notes
 ======
 
+- Make sure Minecraft is using your discrete GPU! Check the F3 tab, and force Minecraft to use it in the "**Windows Graphics Settings**", *not* the AMD/Nvidia control panel (as they don't seem to work anymore). 
+
 - Minecraft client linux users should check out https://github.com/Admicos/minecraft-wayland
 
-- I highly recommend hosting Minecraft servers (and clients!) on Clear Linux over any other Linux distro. In spite of the name, it works great on Intel and AMD CPUs/GPUs... just *not* Nvidia GPUs: https://clearlinux.org/downloads
+- Host Minecraft servers (and clients!) on Clear Linux over any other Linux distro. In spite of the name, it works great on Intel and AMD CPUs/GPUs... just *not* Nvidia GPUs: https://clearlinux.org/downloads
 
 - Close everything in the background, including Discord and your browser! Minecraft is resource intensive, and does not like other apps generating CPU interrupts or eating disk I/O, RAM and so on.  
 
-- IBM's OpenJ9 is *extremely* slow in Minecraft. 
+- IBM's OpenJ9 is *extremely* slow. 
+
+
 
 
 Java 8
@@ -200,9 +208,8 @@ Flags Under Consideration:
 ======
 - Increased code cache, but only if profiling with `-XX:+PrintCodeCache` suggests modded Minecraft fills up the code cache: https://docs.oracle.com/javase/8/embedded/develop-apps-platforms/codecache.htm
 - More aggressive inlining, via `-Dgraal.BaseTargetSpending=160` (default 120) in Graal and some other flags in OpenJDK.
-- Lower C2/C1 compilation thresholds and more aggresive deoptimization to compensate. Again, we don't really care about Java using more CPU for compiling since that's done in backgrounds threads. 
 - OpenJDK flags which are disabled by default: `-XX:+AlignVector -XX:+OptoBundling -XX:+OptimizeFill -XX:+AlwaysCompileLoopMethods -XX:+EnableVectorAggressiveReboxing -XX:+EnableVectorSupport -XX:+OptoScheduling -XX:+UseCharacterCompareIntrinsics -XX:+UseCopySignIntrinsic -XX:+UseVectorStubs`
-- `-Dgraal.LSRAOptimization=true` (whichs seems stable so far)
+- ~~`-Dgraal.LSRAOptimization=true`~~ seems to hurt performance 
 - `-Dgraal.OptWriteMotion=true` and `graal.WriteableCodeCache=true`, which *do not* seem stable, but may be more stable in GraalVM 22.3.0 
 - Extreme `G1HeapWastePercent` values.
  
