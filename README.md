@@ -167,9 +167,7 @@ Other Performance Notes
 
 - Close everything in the background, including Discord and your browser! Minecraft is resource intensive, and does not like other apps generating CPU interrupts or eating disk I/O, RAM and so on.  
 
-- IBM's OpenJ9 is over 30% slower at server chunkgen in my tests. If there are any flags that make it competitive with OpenJDK, please let me know.
-
-
+- IBM's OpenJ9 is over 30% slower at server chunkgen in my tests. If there are any flags that make it competitive with OpenJDK, please let me know: https://github.com/brucethemoose/Minecraft-Performance-Flags-Benchmarks/issues/9
 
 
 Java 8
