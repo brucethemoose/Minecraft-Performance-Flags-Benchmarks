@@ -117,7 +117,7 @@ GraalVM EE Mod Compatibility
 ======
 - GraalVM 22.2.0 has issues with Minecraft, particularly with the `UsePriorityInlining` flag enabled. Please use 22.1.0 until 22.3.0 is out. See: https://github.com/oracle/graal/issues/4776
 
-- The `VectorizeSIMD` turns villagers and some passive mobs invisible when running shaders through Iris or Occulus... but only after some time, and only on some setups. This is a tricky bug I am still tracking down, but for now you can work around it by disabling `VectorizeSIMD`.
+- The `VectorizeSIMD` turns villagers and some passive mobs invisible when running shaders through Iris or Occulus... but only after some time, and only on some setups. This is a tricky bug I am still tracking down, but for now you can work around it by disabling `VectorizeSIMD`. See: https://github.com/oracle/graal/issues/4849
 
 - GraalVM CE and EE both break constellation rendering in Astral Sorcery. See: https://github.com/HellFirePvP/AstralSorcery/issues/1963
 
@@ -148,6 +148,12 @@ After launching Minecraft, set Java to run at a high process priority in Windows
 Linux users can append the command `sudo nice -n -18` to thier launch arguments.
 
 
+Performance Mods
+======
+
+This is a fantastic performance mod tracking repo: https://github.com/oracle/graal/issues/4849
+
+
 Other Performance Notes
 ======
 
@@ -159,7 +165,7 @@ Other Performance Notes
 
 - Close everything in the background, including Discord and your browser! Minecraft is resource intensive, and does not like other apps generating CPU interrupts or eating disk I/O, RAM and so on.  
 
-- IBM's OpenJ9 is *extremely* slow. 
+- IBM's OpenJ9 is over 30% slower at server chunkgen in my tests. If there are any flags that make it competitive with OpenJDK, please let me know.
 
 
 
