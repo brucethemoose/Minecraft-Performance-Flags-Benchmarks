@@ -7,7 +7,7 @@ Discord: https://discord.gg/zeFSR9PnUw
 
 Base Java Flags
 ======
-These optimized flags will work with any Java 17+ build: 
+These optimized flags will work with any Java 11+ build, though the newest version of Java you can get is recommended: 
 
 ```-XX:+UnlockExperimentalVMOptions -XX:+UnlockDiagnosticVMOptions -XX:+AlwaysPreTouch -XX:+DisableExplicitGC -XX:+UseNUMA -XX:-DontCompileHugeMethods -XX:+UseVectorCmov -XX:+PerfDisableSharedMem -XX:+UseFastUnorderedTimeStamps -XX:+UseCriticalJavaThreadPriority -XX:+OmitStackTraceInFastThrow -XX:ThreadPriorityPolicy=1```
 
@@ -92,7 +92,7 @@ Unfortunately, only GraalVM Enterprise Edition comes with the full set of optimi
 
 Register and download it here: https://www.oracle.com/downloads/graalvm-downloads.html
 
-Grab the newest "Oracle GraalVM Enterprise Edition Core" release available for Java 17+ from the "Archives" section. Unzip it, and put the unzipped folder somewhere safe.
+Grab the newest "Oracle GraalVM Enterprise Edition Core" release available for Java 17+ (or Java 11 if you need it) from the "Archives" section. Unzip it, and put the unzipped folder somewhere safe.
 
 Again, you *must* use 22.1.0, not 22.2.0.
 
@@ -136,7 +136,9 @@ Download it here: https://wiki.special-k.info/en/SpecialK/Tools
 Add your MC launcher, and check the "elevated service" checkbox. Then navigate to your java bin folder where your javaw.exe is, and create an empty file called `SpecialK.OpenGL32`. Launch your Minecraft launcher with the SpecialK launcher, and the launcher will then "inject" SpecialK into Minecraft.
 ![SpecialK](Tutorial_Images/specialk.PNG)
 
-Be sure to turn off VSync and the frame limiter, and (maybe) Sodium's adaptive vsync.
+You can create a desktop shortcut to your Minecraft launcher through the SpecialK UI for even more convenience. 
+
+Be sure to turn off VSync and the in-game Minecraft frame limiter.
 
 
 Process Priority
@@ -151,7 +153,7 @@ Linux users can append the command `sudo nice -n -18` to thier launch arguments.
 Performance Mods
 ======
 
-This is a fantastic performance mod tracking repo: https://github.com/oracle/graal/issues/4849
+This is a fantastic repo for finding performance mods: https://github.com/NordicGamerFE/usefulmods
 
 
 Other Performance Notes
@@ -173,10 +175,7 @@ Other Performance Notes
 Java 8
 ======
 
-
-Java 8 has not been tested as much as 17, though GraalVM 21.X alone does provide a significant uplift.
-
-These flags will work with OpenJDK8, along with Shenandoh GC (for Red Hat OpenJDK on clients) or G1GC (for everything else):
+Java 8 has not been tested as much as the 17 flags. But these flags will work with OpenJDK8, along with Shenandoh GC (for Red Hat OpenJDK on clients) or G1GC (for everything else):
 
 ```-server -XX:+UnlockExperimentalVMOptions -XX:+UnlockDiagnosticVMOptions -XX:+ParallelRefProcEnabled -XX:+AlwaysPreTouch -Dsun.rmi.dgc.server.gcInterval=2147483646 -XX:+PerfDisableSharedMem -XX:MaxTenuringThreshold=1 -XX:+UseFastUnorderedTimeStamps -XX:+UseAES -XX:+UseAESIntrinsics -XX:AllocatePrefetchStyle=1 -XX:+UseLoopPredicate -XX:+RangeCheckElimination -XX:+EliminateLocks -XX:+DoEscapeAnalysis -XX:+UseCodeCacheFlushing -XX:+UseFastJNIAccessors -XX:+OptimizeStringConcat -XX:+UseCompressedOops -XX:+UseThreadPriorities -XX:+OmitStackTraceInFastThrow -XX:ThreadPriorityPolicy=1 -XX:+UseInlineCaches -XX:+RewriteBytecodes -XX:+RewriteFrequentPairs -XX:+UseNUMA -XX:-DontCompileHugeMethods -XX:+UseFPUForSpilling -Dgraal.CompilerConfiguration=community -Dgraal.SpeculativeGuardMovement=true```
 
@@ -184,7 +183,7 @@ x86 Java 8 users (aka most Java 8 users) can add these additional arguments:
 
 ```-XX:+UseNewLongLShift -XX:+UseXMMForArrayCopy -XX:+UseXmmI2D -XX:+UseXmmI2F -XX:+UseXmmLoadAndClearUpper -XX:+UseXmmRegToRegMoveAll -XX:+UseNewLongLShift```
 
-These flags work with GraalVM EE 21.X:
+You can get Java 8 versions of GraalVM EE from the 21.X release section on the Oracle site, and use these arguments:
 
 ```-XX:+UnlockExperimentalVMOptions -XX:+UnlockDiagnosticVMOptions -XX:+ParallelRefProcEnabled -XX:+AlwaysPreTouch  -XX:+EnableJVMCI -XX:+UseJVMCICompiler -XX:+EagerJVMCI -XX:+UseFastUnorderedTimeStamps -XX:AllocatePrefetchStyle=1 -XX:+UseLoopPredicate -XX:+RangeCheckElimination -XX:+EliminateLocks -XX:+DoEscapeAnalysis -XX:+UseCodeCacheFlushing -XX:+UseFastJNIAccessors -XX:+OptimizeStringConcat -XX:+UseCompressedOops -XX:+UseThreadPriorities -XX:+OmitStackTraceInFastThrow -XX:ThreadPriorityPolicy=1 -XX:+UseInlineCaches -XX:+RewriteBytecodes -XX:+RewriteFrequentPairs -XX:+UseNUMA -XX:-DontCompileHugeMethods -XX:+UseFPUForSpilling -Dgraal.TuneInlinerExploration=1 -Dgraal.CompilerConfiguration=enterprise -Dgraal.UsePriorityInlining=true -Dgraal.Vectorization=true -Dgraal.OptDuplication=true -Dgraal.DetectInvertedLoopsAsCounted=true -Dgraal.LoopInversion=true -Dgraal.VectorizeHashes=true -Dgraal.EnterprisePartialUnroll=true -Dgraal.VectorizeSIMD=true -Dgraal.StripMineNonCountedLoops=true -Dgraal.SpeculativeGuardMovement=true -Dgraal.InfeasiblePathCorrelation=true```
 
