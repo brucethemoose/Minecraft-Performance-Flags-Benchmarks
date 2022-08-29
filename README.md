@@ -117,11 +117,11 @@ GraalVM EE Mod Compatibility
 ======
 - GraalVM 22.2.0 has issues with Minecraft, particularly with the `UsePriorityInlining` flag enabled. Please use 22.1.0 until 22.3.0 is out. See: https://github.com/oracle/graal/issues/4776
 
-- The `VectorizeSIMD` turns villagers and some passive mobs invisible when running shaders through Iris or Occulus... but only after some time, and only on some setups. This is a tricky bug I am still tracking down, but for now you can work around it by disabling `VectorizeSIMD`. See: https://github.com/oracle/graal/issues/4849
+- `VectorizeSIMD` turns entities invisible with Iris or Occulus... but only under certain conditions. This is a tricky bug I am still tracking down, but for now you can work around it by disabling `VectorizeSIMD`. See: https://github.com/oracle/graal/issues/4849
 
 - GraalVM CE and EE both break constellation rendering in Astral Sorcery. See: https://github.com/HellFirePvP/AstralSorcery/issues/1963
 
-If you run into any other mod issues you can trace back to GraalVM, please create a Github issue or post in the Discord! They can probably be worked around by finding the right function with `Dgraal.PrintCompilation=true`, and working around it with `-Dgraal.GraalCompileOnly=~...`.
+If you run into any other mod issues you can trace back to GraalVM, please create a Github issue or post in the Discord! They can probably be worked around by finding the right function with `Dgraal.PrintCompilation=true`, and working around it with `-Dgraal.GraalCompileOnly=~...` once you find the miscompiled function.
 
 SpecialK
 ======
