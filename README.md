@@ -68,7 +68,7 @@ Longer pauses are more acceptable on servers. These flags are very close to the 
 
 `-XX:ConcGCThreads=[Some Number]` controls the *maximum* number of background threads the garbage collector is allowed to use, and defaults to `hyperthreaded cores / 4`.
 
-In some cases (especially with ZGC or Shenandoh) you want to increase this number. I generally recommend `number of real cores - 1`. 
+In some cases (especially with ZGC or Shenandoh) you want to increase this number. I recommend ~`number of real cores - 1`.
 
 Large Pages
 ======
@@ -86,7 +86,7 @@ On linux, you generally want to use `-XX:+UseTransparentHugePages`. But if you w
 GraalVM Enterprise Edition
 ======
 
-GraalVM is a new high performance Java VM from Oracle that can improve the performance of (modded) Minecraft. While client FPS gains are modest, server-side loads like chunk generation can get a 20%+ boost!
+GraalVM is a new high performance Java VM from Oracle that can improve the performance of (modded) Minecraft. While client FPS gains are modest, server-side workloads like chunk generation can get a 20%+ boost!
 
 Unfortunately, only GraalVM Enterprise Edition comes with the full set of optimizations, and downloading it requires making a free Oracle account.
 
