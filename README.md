@@ -7,26 +7,26 @@ Discord: https://discord.gg/zeFSR9PnUw
 
 Base Java Flags
 ======
-These optimized flags will work with any Java 11+ build, though the newest version of Java you can get is recommended: 
+These optimized flags will work with any Java 11+ build, but [up-to-date Java 17](https://adoptium.net/) is recommended: 
 
 ```-XX:+UnlockExperimentalVMOptions -XX:+UnlockDiagnosticVMOptions -XX:+AlwaysPreTouch -XX:+DisableExplicitGC -XX:+UseNUMA -XX:NmethodSweepActivity=1 -XX:ReservedCodeCacheSize=400M -XX:NonNMethodCodeHeapSize=12M -XX:ProfiledCodeHeapSize=194M -XX:NonProfiledCodeHeapSize=194M -XX:-DontCompileHugeMethods -XX:MaxNodeLimit=240000 -XX:NodeLimitFudgeFactor=8000 -XX:+UseVectorCmov -XX:+PerfDisableSharedMem -XX:+UseFastUnorderedTimeStamps -XX:+UseCriticalJavaThreadPriority -XX:ThreadPriorityPolicy=1 -XX:AllocatePrefetchStyle=3```
 
 They work on both servers and clients, but you need to add some garbage collection flags from below!
 
-All OpenJDK distributions like Eclipse Adoptium, Microsoft, Azul, Amazon Correto and so on perform almost identically, with 2 major exceptions I know of: Oracle's GraalVM, and Intel's Clear Linux OpenJDK. 
-
+All OpenJDK distributions like Eclipse Adoptium, Microsoft, Azul, Amazon Correto and so on perform almost identically, with 2 notable exceptions: Oracle's GraalVM, and Intel's Clear Linux OpenJDK. You can get Intel's OpenJDK through distrobox on any linux distribution.
 
 Memory Allocation
 ======
 Minimum and maximum (`-xms` and `-xmx`) values should be set to the same value, as explained here: https://dzone.com/articles/benefits-of-setting-initial-and-maximum-memory-siz
 
-Allocating too much memory can force your operating system to page, make garbage collection pauses more severe, or slow the game down. Allocating too little can also slow the game down. Less than 8GB is usually sufficient, but experiment with your setup.
-
+Allocating too much memory can force your operating system to page, make garbage collection pauses more severe, and/or slow the game down. Allocating too little can also slow the game down. Keep an eye on the Windows Task manager (or your DE's system monitor) as Minecraft is running.
 
 Garbage Collection
 ======
 
-Garbage collection flags must be added to Minecraft servers and clients, as the default "pauses" to stop and collect garbage manifest as stutters on the client and lag on servers. Pick one set from below:
+Garbage collection flags must be added to Minecraft servers and clients, as the default "pauses" to stop and collect garbage manifest as stutters on the client and lag on servers. Use the`sparkc gcmonitor` command in the [Spark](https://www.curseforge.com/minecraft/mc-mods/spark) mod to observe pauses. *Any* old generation pauses are bad, and young generation G1GC collections should be infrequent, but short enough to be imperceptible.  
+
+Pick one set of flags:
 
 ### ZGC 
 
@@ -34,7 +34,7 @@ ZGC is great for high memory/high core count servers. It has no throughput hit I
 
 Unfortunately, it has a significant client FPS hit on my (8-core) laptop. See the "ZGC" benchmark in the benchmarks folder. 
 
-`-XX:+UseZGC -XX:AllocatePrefetchStyle=1 -XX:-ZProactive` enables it, but allocate more RAM and more `ConcGCThreads` than you normally would for other GC. Note that ZGC does not seem to like AllocatePrefetchStyle=3, hence setting it to 1 overrides the previous entry.
+`-XX:+UseZGC -XX:AllocatePrefetchStyle=1 -XX:-ZProactive` enables it, but allocate more RAM and more `ConcGCThreads` than you normally would for other GC. Note that ZGC does not like AllocatePrefetchStyle=3, hence setting it to 1 overrides the previous entry.
 
 
 ### Shenandoah
@@ -43,19 +43,17 @@ Shenandoah performs well on clients, but kills server throughput in my tests. En
 
 See more tuning options [here](https://wiki.openjdk.org/display/shenandoah/Main). The "herustic" and "mode" options don't change much for me (except for "compact," which you should not use).
 
-If you are a Java 8 user, Red Hat builds Java 8 with Shenandoah: https://access.redhat.com/products/openjdk
+If you are a Java 8 user, Red Hat builds Java 8 with Shenandoah. Like Graal, it's gated behind and email signup: https://access.redhat.com/products/openjdk
 
 ## G1GC
 
 ### Client:
 
-G1GC is the default garbage collector, and is the only available garbage collector for [GraalVM users](https://github.com/oracle/graal/issues/2149). [Aikar's famous Minecraft G1GC arguments](https://aikar.co/2018/07/02/tuning-the-jvm-g1gc-garbage-collector-flags-for-minecraft/) run great on clients, with one caveat: they effectively [clamp](https://www.oracle.com/technical-resources/articles/java/g1gc.html) the `MaxGCPauseMillis` parameter, producing long stutters on some systems.
+G1GC is the default garbage collector, and is the only available garbage collector for [GraalVM users](https://github.com/oracle/graal/issues/2149). [Aikar's famous Minecraft G1GC arguments](https://aikar.co/2018/07/02/tuning-the-jvm-g1gc-garbage-collector-flags-for-minecraft/) run great on clients, with one caveat: they effectively [clamp](https://www.oracle.com/technical-resources/articles/java/g1gc.html) the `MaxGCPauseMillis` parameter, producing long stutters on some clients.
 
-These are similar to the aikar flags, but with shorter, more frequent pauses and less aggressive G1 mixed collection and some tweaks to background collection: ` -XX:MaxGCPauseMillis=37 -XX:+PerfDisableSharedMem -XX:G1HeapRegionSize=16M -XX:G1NewSizePercent=23 -XX:G1ReservePercent=20 -XX:SurvivorRatio=32 -XX:G1MixedGCCountTarget=3 -XX:G1HeapWastePercent=20 -XX:InitiatingHeapOccupancyPercent=10 -XX:G1RSetUpdatingPauseTimePercent=0 -XX:MaxTenuringThreshold=1 -XX:G1SATBBufferEnqueueingThresholdPercent=30 -XX:G1ConcMarkStepDurationMillis=5.0 -XX:G1ConcRSHotCardLimit=16 -XX:G1ConcRefinementServiceIntervalMillis=150 -XX:GCTimeRatio=99`
+These are similar to the aikar flags, but with shorter, more frequent pauses, less aggressive G1 mixed collection and some tweaks to background collection: ` -XX:MaxGCPauseMillis=37 -XX:+PerfDisableSharedMem -XX:G1HeapRegionSize=16M -XX:G1NewSizePercent=23 -XX:G1ReservePercent=20 -XX:SurvivorRatio=32 -XX:G1MixedGCCountTarget=3 -XX:G1HeapWastePercent=20 -XX:InitiatingHeapOccupancyPercent=10 -XX:G1RSetUpdatingPauseTimePercent=0 -XX:MaxTenuringThreshold=1 -XX:G1SATBBufferEnqueueingThresholdPercent=30 -XX:G1ConcMarkStepDurationMillis=5.0 -XX:G1ConcRSHotCardLimit=16 -XX:G1ConcRefinementServiceIntervalMillis=150 -XX:GCTimeRatio=99`  
 
-Use the`sparkc gcmonitor` command in the [Spark](https://www.curseforge.com/minecraft/mc-mods/spark) mod to observe G1GC pauses. *Any* old generation pauses are bad, and young generation collections should be infrequent, but short enough to be imperceptible.   
-
-`G1NewSizePercent` and `MaxGCPauseMillis` can be used to tune the frequency of young generation collections. `G1HeapWastePercent=18` should be removed if you are getting any old generation pauses on your setup. Alternatively, you can raise it and set `G1MixedGCCountTarget` to 2 or 1 to make mixed garbage collection even lazier. 
+`G1NewSizePercent` and `MaxGCPauseMillis` can be used to tune the frequency/dureation of your young generation collections. `G1HeapWastePercent=18` should be removed if you are getting any old generation pauses on your setup. Alternatively, you can raise it and set `G1MixedGCCountTarget` to 2 or 1 to make mixed garbage collection even lazier. 
 
 
 ##### Server:
@@ -68,7 +66,7 @@ Longer pauses are more acceptable on servers. These flags are very close to the 
 
 `-XX:ConcGCThreads=[Some Number]` controls the *maximum* number of background threads the garbage collector is allowed to use, and defaults to `hyperthreaded cores / 4`.
 
-In some cases (especially with ZGC or Shenandoh) you want to increase this number. I recommend about `number of real cores - 2`, but 2C/4C CPUs need a bit more. 
+In some cases (especially with ZGC or Shenandoh) you want to increase this number. I recommend about `number of real cores - 2`, but 2C/4C CPUs may need a bit more. 
 
 Large Pages
 ======
