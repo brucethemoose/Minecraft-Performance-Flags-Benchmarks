@@ -41,9 +41,9 @@ Unfortunately, it has a significant client FPS hit on my (8-core) laptop. See th
 
 Shenandoah performs well on clients, but kills server throughput in my tests. Enable it with `-XX:+UseShenandoahGC -XX:ShenandoahGCMode=iu -XX:ShenandoahGuaranteedGCInterval=1000000 -XX:-ShenandoahUncommit -XX:AllocatePrefetchStyle=1` 
 
-See more tuning options [here](https://wiki.openjdk.org/display/shenandoah/Main). The "herustic" and "mode" options don't change much for me (except for "compact," which you should not use). Like ZGC, Shenandoah does not like AllocatePrefetchStyle=3.
+Note that its missing from Oracle Java builds! See more tuning options [here](https://wiki.openjdk.org/display/shenandoah/Main). The "herustic" and "mode" options don't change much for me (except for "compact," which you should not use). Like ZGC, Shenandoah does not like AllocatePrefetchStyle=3.
 
-If you are a Java 8 user, Red Hat builds Java 8 with Shenandoah. Like Graal, it's gated behind and email signup: https://access.redhat.com/products/openjdk
+If you are a Java 8 user, Red Hat builds Java 8 with Shenandoah. Its gated behind a free email signup: https://access.redhat.com/products/openjdk
 
 ## G1GC
 
