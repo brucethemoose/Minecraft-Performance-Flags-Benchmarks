@@ -39,9 +39,9 @@ Unfortunately, it has a significant client FPS hit on my (8-core) laptop. See th
 
 ### Shenandoah
 
-Shenandoah performs well on clients, but kills server throughput in my tests. Enable it with `-XX:+UseShenandoahGC -XX:ShenandoahGCMode=iu -XX:ShenandoahGuaranteedGCInterval=1000000 -XX:-ShenandoahUncommit` 
+Shenandoah performs well on clients, but kills server throughput in my tests. Enable it with `-XX:+UseShenandoahGC -XX:ShenandoahGCMode=iu -XX:ShenandoahGuaranteedGCInterval=1000000 -XX:-ShenandoahUncommit -XX:AllocatePrefetchStyle=1` 
 
-See more tuning options [here](https://wiki.openjdk.org/display/shenandoah/Main). The "herustic" and "mode" options don't change much for me (except for "compact," which you should not use).
+See more tuning options [here](https://wiki.openjdk.org/display/shenandoah/Main). The "herustic" and "mode" options don't change much for me (except for "compact," which you should not use). Like ZGC, Shenandoah does not like AllocatePrefetchStyle=3.
 
 If you are a Java 8 user, Red Hat builds Java 8 with Shenandoah. Like Graal, it's gated behind and email signup: https://access.redhat.com/products/openjdk
 
@@ -51,7 +51,7 @@ If you are a Java 8 user, Red Hat builds Java 8 with Shenandoah. Like Graal, it'
 
 G1GC is the default garbage collector, and is the only available garbage collector for [GraalVM users](https://github.com/oracle/graal/issues/2149). [Aikar's famous Minecraft G1GC arguments](https://aikar.co/2018/07/02/tuning-the-jvm-g1gc-garbage-collector-flags-for-minecraft/) run great on clients, with one caveat: they effectively [clamp](https://www.oracle.com/technical-resources/articles/java/g1gc.html) the `MaxGCPauseMillis` parameter, producing long stutters on some clients.
 
-These are similar to the aikar flags, but with shorter, more frequent pauses, less aggressive G1 mixed collection and some tweaks to background collection: ` -XX:MaxGCPauseMillis=37 -XX:+PerfDisableSharedMem -XX:G1HeapRegionSize=16M -XX:G1NewSizePercent=23 -XX:G1ReservePercent=20 -XX:SurvivorRatio=32 -XX:G1MixedGCCountTarget=3 -XX:G1HeapWastePercent=20 -XX:InitiatingHeapOccupancyPercent=10 -XX:G1RSetUpdatingPauseTimePercent=0 -XX:MaxTenuringThreshold=1 -XX:G1SATBBufferEnqueueingThresholdPercent=30 -XX:G1ConcMarkStepDurationMillis=5.0 -XX:G1ConcRSHotCardLimit=16 -XX:G1ConcRefinementServiceIntervalMillis=150 -XX:GCTimeRatio=99`  
+These are similar to the aikar flags, but with shorter, more frequent pauses, less aggressive G1 mixed collection and some tweaks to background collection: `-XX:MaxGCPauseMillis=37 -XX:+PerfDisableSharedMem -XX:G1HeapRegionSize=16M -XX:G1NewSizePercent=23 -XX:G1ReservePercent=20 -XX:SurvivorRatio=32 -XX:G1MixedGCCountTarget=3 -XX:G1HeapWastePercent=20 -XX:InitiatingHeapOccupancyPercent=10 -XX:G1RSetUpdatingPauseTimePercent=0 -XX:MaxTenuringThreshold=1 -XX:G1SATBBufferEnqueueingThresholdPercent=30 -XX:G1ConcMarkStepDurationMillis=5.0 -XX:G1ConcRSHotCardLimit=16 -XX:G1ConcRefinementServiceIntervalMillis=150 -XX:GCTimeRatio=99`  
 
 `G1NewSizePercent` and `MaxGCPauseMillis` can be used to tune the frequency/dureation of your young generation collections. `G1HeapWastePercent=18` should be removed if you are getting any old generation pauses on your setup. Alternatively, you can raise it and set `G1MixedGCCountTarget` to 2 or 1 to make mixed garbage collection even lazier. 
 
