@@ -1,0 +1,132 @@
+[
+    {
+        "Name": "Vanilla",
+        "Command": "F:/JDKs//OpenJDK17U-jre_x64_windows_hotspot_17.0.4_8/jdk-17.0.4+8-jre/bin/java.exe -XX:MaxGCPauseMillis=130 -XX:+UnlockExperimentalVMOptions -XX:+DisableExplicitGC -XX:+AlwaysPreTouch -XX:G1NewSizePercent=28 -XX:G1HeapRegionSize=16M -XX:G1ReservePercent=20 -XX:G1MixedGCCountTarget=3 -XX:InitiatingHeapOccupancyPercent=10 -XX:G1MixedGCLiveThresholdPercent=90 -XX:G1RSetUpdatingPauseTimePercent=0 -XX:SurvivorRatio=32 -XX:MaxTenuringThreshold=1 -XX:G1SATBBufferEnqueueingThresholdPercent=30 -XX:G1ConcMarkStepDurationMillis=5 -XX:G1ConcRSHotCardLimit=16 -XX:G1ConcRefinementServiceIntervalMillis=150 -XX:AllocatePrefetchStyle=3 -Xms7G -Xmx7G",
+        "Path": "C:/Games/mcservers/vevserver",
+        "Iterations": 3,
+        "Startup_Times": [
+            104.28,
+            104.05,
+            104.5
+        ],
+        "Chunkgen_Times": [
+            208.36,
+            210.63,
+            205.49
+        ],
+        "Average_TPS_Values": [
+            18.88,
+            18.87,
+            19.0
+        ],
+        "GC_Stop_MS": [
+            42.12,
+            42.76,
+            43.47
+        ],
+        "GC_Stops": [
+            51,
+            51,
+            51
+        ],
+        "Oldgen_GCs": [
+            0,
+            0,
+            0
+        ],
+        "Memory_Usage": [
+            2.9,
+            3.0,
+            4.1
+        ],
+        "CPU_Usage": [
+            21.0,
+            22.0,
+            22.0
+        ],
+        "Player_Spawn_Times": [
+            6.41,
+            5.786,
+            5.768
+        ],
+        "Average_Chunkgen_Time": 208.16,
+        "Average_Startup_Time": 104.28,
+        "PVariance_Chunkgen_Time": 4.42,
+        "Pvariance_Startup_Time": 0.03,
+        "Average_TPS": 18.92,
+        "PVariance_TPS": 0.0,
+        "Average_GC_Stop_MS": 42.78,
+        "PVariance_GC_Stop_MS": 0.3,
+        "Average_GC_Stops": 51,
+        "Average_Memory_Usage_GB": 3.33,
+        "Average_CPU_Usage": 21.67,
+        "Average_Oldgen_GCs": 0,
+        "Average_Spawn_Time": 5.99,
+        "Player_Spawn_Variance": 0.09
+    },
+    {
+        "Name": "More Code Cache",
+        "Command": "F:/JDKs//OpenJDK17U-jre_x64_windows_hotspot_17.0.4_8/jdk-17.0.4+8-jre/bin/java.exe -XX:MaxGCPauseMillis=130 -XX:+UnlockExperimentalVMOptions -XX:+DisableExplicitGC -XX:+AlwaysPreTouch -XX:G1NewSizePercent=28 -XX:G1HeapRegionSize=16M -XX:G1ReservePercent=20 -XX:G1MixedGCCountTarget=3 -XX:InitiatingHeapOccupancyPercent=10 -XX:G1MixedGCLiveThresholdPercent=90 -XX:G1RSetUpdatingPauseTimePercent=0 -XX:SurvivorRatio=32 -XX:MaxTenuringThreshold=1 -XX:G1SATBBufferEnqueueingThresholdPercent=30 -XX:G1ConcMarkStepDurationMillis=5 -XX:G1ConcRSHotCardLimit=16 -XX:G1ConcRefinementServiceIntervalMillis=150 -XX:AllocatePrefetchStyle=3 -Xms7G -Xmx7G -XX:NmethodSweepActivity=1 -XX:ReservedCodeCacheSize=400M -XX:NonNMethodCodeHeapSize=12M -XX:ProfiledCodeHeapSize=194M -XX:NonProfiledCodeHeapSize=194M -XX:-DontCompileHugeMethods -XX:MaxNodeLimit=240000 -XX:LiveNodeCountInliningCutoff=40000 -XX:NodeLimitFudgeFactor=8000",
+        "Path": "C:/Games/mcservers/vevserver",
+        "Iterations": 3,
+        "Startup_Times": [
+            104.93,
+            104.26,
+            104.64
+        ],
+        "Chunkgen_Times": [
+            204.38,
+            200.49,
+            208.75
+        ],
+        "Average_TPS_Values": [
+            18.97,
+            19.07,
+            18.87
+        ],
+        "GC_Stop_MS": [
+            44.78,
+            43.14,
+            43.64
+        ],
+        "GC_Stops": [
+            49,
+            50,
+            50
+        ],
+        "Oldgen_GCs": [
+            0,
+            0,
+            0
+        ],
+        "Memory_Usage": [
+            5.0,
+            3.8,
+            4.7
+        ],
+        "CPU_Usage": [
+            22.0,
+            22.0,
+            22.0
+        ],
+        "Player_Spawn_Times": [
+            5.641,
+            5.677,
+            5.846
+        ],
+        "Average_Chunkgen_Time": 204.54,
+        "Average_Startup_Time": 104.61,
+        "PVariance_Chunkgen_Time": 11.38,
+        "Pvariance_Startup_Time": 0.08,
+        "Average_TPS": 18.97,
+        "PVariance_TPS": 0.01,
+        "Average_GC_Stop_MS": 43.85,
+        "PVariance_GC_Stop_MS": 0.47,
+        "Average_GC_Stops": 49.67,
+        "Average_Memory_Usage_GB": 4.5,
+        "Average_CPU_Usage": 22.0,
+        "Average_Oldgen_GCs": 0,
+        "Average_Spawn_Time": 5.72,
+        "Player_Spawn_Variance": 0.01
+    }
+]
