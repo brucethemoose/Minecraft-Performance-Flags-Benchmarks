@@ -43,7 +43,7 @@ Shenandoah performs well on clients, but kills server throughput in my tests. En
 
 Note that its missing from Oracle Java builds! See more tuning options [here](https://wiki.openjdk.org/display/shenandoah/Main). The "herustic" and "mode" options don't change much for me (except for "compact," which you should not use). Like ZGC, Shenandoah does not like AllocatePrefetchStyle=3.
 
-If you are a Java 8 user, Red Hat builds Java 8 with Shenandoah. Its gated behind a free email signup: https://access.redhat.com/products/openjdk
+If you are a Java 8 user, Red Hat builds Java 8 with Shenandoah. Its gated behind a free email signup: https://developers.redhat.com/products/openjdk/download
 
 ## G1GC
 
@@ -181,7 +181,9 @@ x86 Java 8 users (aka most Java 8 users) can add these additional arguments:
 
 ```-XX:+UseXMMForArrayCopy```
 
-You can also get Java 8 versions of GraalVM EE from the 21.X section on the Oracle site, and use these arguments:
+Again, I recommend Red Hat OpenJDK 8 with Shenandoh: https://developers.redhat.com/products/openjdk/download
+
+You can also get Java 8 versions of GraalVM EE from the [21.X section on the Oracle site](https://www.oracle.com/downloads/graalvm-downloads.html), and use these arguments:
 
 ```-XX:+UnlockExperimentalVMOptions -XX:+UnlockDiagnosticVMOptions -XX:+ParallelRefProcEnabled -XX:+DisableExplicitGC -XX:+AlwaysPreTouch -XX:+AggressiveOpts -XX:+UseFastAccessorMethods -XX:AllocatePrefetchStyle=1 -XX:ThreadPriorityPolicy=1 -XX:+UseNUMA -XX:+UseDynamicNumberOfGCThreads -XX:NmethodSweepActivity=1 -XX:ReservedCodeCacheSize=350M -XX:-DontCompileHugeMethods -XX:MaxNodeLimit=240000 -XX:NodeLimitFudgeFactor=8000 -XX:+UseFPUForSpilling -XX:+EnableJVMCI -XX:+UseJVMCICompiler -XX:+EagerJVMCI -Dgraal.TuneInlinerExploration=1 -Dgraal.CompilerConfiguration=enterprise -Dgraal.UsePriorityInlining=true -Dgraal.Vectorization=true -Dgraal.OptDuplication=true -Dgraal.DetectInvertedLoopsAsCounted=true -Dgraal.LoopInversion=true -Dgraal.VectorizeHashes=true -Dgraal.EnterprisePartialUnroll=true -Dgraal.VectorizeSIMD=true -Dgraal.StripMineNonCountedLoops=true -Dgraal.SpeculativeGuardMovement=true -Dgraal.InfeasiblePathCorrelation=true```
 
