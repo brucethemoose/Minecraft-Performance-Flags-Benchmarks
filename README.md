@@ -71,14 +71,14 @@ In some cases (especially with ZGC or Shenandoh) you want to increase this numbe
 Large Pages
 ======
 
-Enabling large pages improves the performance of Minecraft servers and clients. Here are some great tutorial for enabling it on Windows: 
+Enabling large pages improves the performance of Minecraft servers and clients. Here are some great tutorials for enabling it on Windows: 
 
 https://www.chaoticafractals.com/manual/getting-started/enabling-large-page-support-windows
 https://kstefanj.github.io/2021/05/19/large-pages-and-java.html
 
 On Windows, you **must** run java, and your launcher, as an administrator. That means checking the ["run as administrator" compatibility checkbox](https://support.sega.com/hc/en-us/articles/201556551-Compatibility-Mode-and-Running-as-Administrator-for-PC-Games) for `javaw.exe`, `java.exe` and `your launcher.exe`, otherwise Large Pages will silently fail. Add `-XX:+UseLargePages -XX:LargePageSizeInBytes=2m` to your arguments.  
 
-On linux, you generally want to use `-XX:+UseTransparentHugePages`. But if you want to manually allocate some server memory for Minecraft for even better performance, Red Hat has a good tutorial for RHEL-like linux distros, like Fedora, CentOS, or Oracle Linux: https://www.redhat.com/en/blog/optimizing-rhel-8-run-java-implementation-minecraft-server 
+On linux, you generally want to use `-XX:+UseTransparentHugePages`. To manually allocate memory instead, Red Hat has a good tutorial for RHEL-like linux distros, like Fedora, CentOS, or Oracle Linux: https://www.redhat.com/en/blog/optimizing-rhel-8-run-java-implementation-minecraft-server 
 
 
 GraalVM Enterprise Edition
@@ -181,7 +181,7 @@ x86 Java 8 users (aka most Java 8 users) can add these additional arguments:
 
 ```-XX:+UseXMMForArrayCopy```
 
-You can also get Java 8 versions of GraalVM EE from the 21.X release section on the Oracle site, and use these arguments:
+You can also get Java 8 versions of GraalVM EE from the 21.X section on the Oracle site, and use these arguments:
 
 ```-XX:+UnlockExperimentalVMOptions -XX:+UnlockDiagnosticVMOptions -XX:+ParallelRefProcEnabled -XX:+DisableExplicitGC -XX:+AlwaysPreTouch -XX:+AggressiveOpts -XX:+UseFastAccessorMethods -XX:AllocatePrefetchStyle=1 -XX:ThreadPriorityPolicy=1 -XX:+UseNUMA -XX:+UseDynamicNumberOfGCThreads -XX:NmethodSweepActivity=1 -XX:ReservedCodeCacheSize=350M -XX:-DontCompileHugeMethods -XX:MaxNodeLimit=240000 -XX:NodeLimitFudgeFactor=8000 -XX:+UseFPUForSpilling -XX:+EnableJVMCI -XX:+UseJVMCICompiler -XX:+EagerJVMCI -Dgraal.TuneInlinerExploration=1 -Dgraal.CompilerConfiguration=enterprise -Dgraal.UsePriorityInlining=true -Dgraal.Vectorization=true -Dgraal.OptDuplication=true -Dgraal.DetectInvertedLoopsAsCounted=true -Dgraal.LoopInversion=true -Dgraal.VectorizeHashes=true -Dgraal.EnterprisePartialUnroll=true -Dgraal.VectorizeSIMD=true -Dgraal.StripMineNonCountedLoops=true -Dgraal.SpeculativeGuardMovement=true -Dgraal.InfeasiblePathCorrelation=true```
 
