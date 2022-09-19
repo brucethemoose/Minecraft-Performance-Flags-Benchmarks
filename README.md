@@ -9,13 +9,13 @@ Flags are tested with Benchmark.py script. See the work-in-progress [Benchmarks.
 Picking a Java Runtume
 ======
 
-For Minecraft 1.16.5 and up, use Java 17. Some launchers like PolyMC or Curseforge warn you to use Java 8 on 1.16.X specifically, but Minecraft and *most* mods are compatible with Java 17.
+For Minecraft 1.16.5 and up, use Java 17. Some launchers like PolyMC or Curseforge ask you to use Java 8 on 1.16.X specifically, but Minecraft and *most* mods are compatible with Java 17.
 
 1.12.2 and below generally requires Java 8. Sometimes Java 11+ will work. 
 
 Most Java runtimes from Azul, Microsoft, Adoptium, Amazon and so on are basically identical. Some notable exceptions:
 
-- **Oracle GraalVM Enterprise Edition** features a highly optimized Java compiler. This is what I personally run Minecraft with, see the GraalVM section below.
+- **Oracle GraalVM Enterprise Edition** features a more aggressive Java compiler. This is what I personally run Minecraft with, see the GraalVM section below.
 
 - **Intel's Clear Linux OpenJDK** uses the same code as any other OpenJDK (making it highly compatible with mods), but the build process itself is optimized for newer CPUs. Grab it from Clear Linux's repos, or from here: https://hub.docker.com/r/clearlinux/openjdk
 
@@ -117,6 +117,8 @@ Enabling large pages improves the performance of Minecraft servers and clients. 
 On Windows, you **must** run java, and your launcher, as an administrator. That means checking the ["run as administrator" compatibility checkbox](https://support.sega.com/hc/en-us/articles/201556551-Compatibility-Mode-and-Running-as-Administrator-for-PC-Games) for `javaw.exe`, `java.exe` and `your launcher.exe`, otherwise Large Pages will silently fail. Add `-XX:+UseLargePages -XX:LargePageSizeInBytes=2m` to your arguments.  
 
 On linux, you generally want to use `-XX:+UseTransparentHugePages`. To manually allocate memory instead (for a bigger performance boost), Red Hat has a good tutorial for RHEL-like linux distros, like Fedora, CentOS, or Oracle Linux: https://www.redhat.com/en/blog/optimizing-rhel-8-run-java-implementation-minecraft-server 
+
+Check and see if large pages is working with the `-Xlog:gc+init` java argument. 
 
 
 GraalVM Enterprise Edition
