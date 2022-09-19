@@ -1,6 +1,3 @@
-Tuning Java for Minecraft performance has historically relied on heresay and unsubstantiated claims. I intend to take a more scientific approach: adding only what is non default, sane, current, and *proven* to work through repeatable tests. 
-
-
 Discord for questions and such: https://discord.gg/zeFSR9PnUw 
 
 Benchmarks
@@ -12,31 +9,33 @@ Flags are tested with Benchmark.py script. See the work-in-progress [Benchmarks.
 Picking a Java Runtume
 ======
 
-For Minecraft 1.16.5 and up, use Java 17. Some launchers like PolyMC or Curseforge warn you to use Java 8 on 1.16.5 specifically, but Minecraft and *most* mods are compatible with Java 17.
+For Minecraft 1.16.5 and up, use Java 17. Some launchers like PolyMC or Curseforge warn you to use Java 8 on 1.16.X specifically, but Minecraft and *most* mods are compatible with Java 17.
 
-Modded 1.12.2 and below generally requires Java 8. Sometimes Java 11+ will work. 
+1.12.2 and below generally requires Java 8. Sometimes Java 11+ will work. 
 
 Most Java runtimes from Azul, Microsoft, Adoptium, Amazon and so on are basically identical. Some notable exceptions:
 
-- Oracle GraalVM Enterprise Edition features a highly optimized Java compiler. This is what I personally run Minecraft with, see the GraalVM section below.
+- **Oracle GraalVM Enterprise Edition** features a highly optimized Java compiler. This is what I personally run Minecraft with, see the GraalVM section below.
 
-- Intel's Clear Linux OpenJDK uses the same code as any other OpenJDK (making it highly compatible with mods), but the build process itself is optimized for newer CPUs. Grab it from Clear Linux's repos, or from here: https://hub.docker.com/r/clearlinux/openjdk
+- **Intel's Clear Linux OpenJDK** uses the same code as any other OpenJDK (making it highly compatible with mods), but the build process itself is optimized for newer CPUs. Grab it from Clear Linux's repos, or from here: https://hub.docker.com/r/clearlinux/openjdk
 
-- Azul's Prime OpenJDK is *very* fast since it hooks into llvm, but its currently incompatible with most mods and is linux-only. Get it from here: https://docs.azul.com/prime/prime-quick-start-tar
+- **Azul's Prime OpenJDK** is *very* fast since it hooks into llvm, but its currently incompatible with most mods and is linux-only. Get it from here: https://docs.azul.com/prime/prime-quick-start-tar
 
-- Unlike most Java 8 builds, Red Hat Java 8 has the Shenandoah garbage collector. Its gated behind a free email signup: https://developers.redhat.com/products/openjdk/download
+- Unlike most Java 8 builds, **Red Hat Java 8** has the Shenandoah garbage collector. Its gated behind a free email signup: https://developers.redhat.com/products/openjdk/download
 
-- IBM's OpenJ9 is... *much* slower in Minecraft, and uses totally different flags than any other Java build. See FAQ.
+- **IBM's OpenJ9** is... *much* slower in Minecraft, and uses totally different flags than any other Java build. See [FAQ](#FAQ).
 
 If you dont know what to pick on Windows or OSX, I recommend Graal EE (see below) or the latest Adoptium JRE: https://adoptium.net/
 
 Base Java Flags
 ======
 These optimized flags will work with any Java 11+ build. They work on both servers and clients:
-:
+
+
 ```-XX:+UnlockExperimentalVMOptions -XX:+UnlockDiagnosticVMOptions -XX:+AlwaysPreTouch -XX:+DisableExplicitGC -XX:+UseNUMA -XX:NmethodSweepActivity=1 -XX:ReservedCodeCacheSize=400M -XX:NonNMethodCodeHeapSize=12M -XX:ProfiledCodeHeapSize=194M -XX:NonProfiledCodeHeapSize=194M -XX:-DontCompileHugeMethods -XX:MaxNodeLimit=240000 -XX:NodeLimitFudgeFactor=8000 -XX:+UseVectorCmov -XX:+PerfDisableSharedMem -XX:+UseFastUnorderedTimeStamps -XX:+UseCriticalJavaThreadPriority -XX:ThreadPriorityPolicy=1 -XX:AllocatePrefetchStyle=3```
 
-Note: you *must* add garbage collection and (depending on your launcher) memory flags to your java arguments. A full set of Curseforge flags, for instance, may look like this: 
+
+**You *must* add garbage collection flags to these java arguments.** A full set of Curseforge flags, for instance, may look like this: 
 
 <details>
     <summary>Curseforge Flags</summary>
@@ -111,10 +110,10 @@ Large Pages
 
 Enabling large pages improves the performance of Minecraft servers and clients. Here are some great tutorials for enabling it:
 
-Windows 10 Pro: https://www.chaoticafractals.com/manual/getting-started/enabling-large-page-support-windows
-Windows 10 Home: https://awesomeprojectsxyz.blogspot.com/2017/11/windows-10-home-how-to-enable-lock.html?m=1
-Tool mirrors for the W10 Home tutorial: https://gist.github.com/eyecatchup/0107bab3d92473cb8a3d3547848fc442
-Linux: https://kstefanj.github.io/2021/05/19/large-pages-and-java.html
+- Windows 10 Pro: https://www.chaoticafractals.com/manual/getting-started/enabling-large-page-support-windows
+- Windows 10 Home: https://awesomeprojectsxyz.blogspot.com/2017/11/windows-10-home-how-to-enable-lock.html?m=1
+- Tool mirrors for the W10 Home tutorial: https://gist.github.com/eyecatchup/0107bab3d92473cb8a3d3547848fc442
+- Linux: https://kstefanj.github.io/2021/05/19/large-pages-and-java.html
 
 
 On Windows, you **must** run java, and your launcher, as an administrator. That means checking the ["run as administrator" compatibility checkbox](https://support.sega.com/hc/en-us/articles/201556551-Compatibility-Mode-and-Running-as-Administrator-for-PC-Games) for `javaw.exe`, `java.exe` and `your launcher.exe`, otherwise Large Pages will silently fail. Add `-XX:+UseLargePages -XX:LargePageSizeInBytes=2m` to your arguments.  
@@ -149,7 +148,7 @@ Arguments for GraalVM EE 22+ Java 17 (or Java 11):
 ```-XX:+UnlockExperimentalVMOptions -XX:+UnlockDiagnosticVMOptions -XX:+AlwaysPreTouch -XX:+DisableExplicitGC -XX:+UseNUMA -XX:AllocatePrefetchStyle=3 -XX:NmethodSweepActivity=1 -XX:ReservedCodeCacheSize=400M -XX:NonNMethodCodeHeapSize=12M -XX:ProfiledCodeHeapSize=194M -XX:NonProfiledCodeHeapSize=194M -XX:-DontCompileHugeMethods -XX:MaxNodeLimit=240000 -XX:NodeLimitFudgeFactor=8000 -XX:+UseVectorCmov -XX:+PerfDisableSharedMem -XX:+UseFastUnorderedTimeStamps -XX:+UseCriticalJavaThreadPriority -XX:+EnableJVMCIProduct -XX:+UseJVMCICompiler -XX:+EagerJVMCI -Dgraal.TuneInlinerExploration=1 -Dgraal.CompilerConfiguration=enterprise -Dgraal.UsePriorityInlining=true -Dgraal.Vectorization=true -Dgraal.OptDuplication=true -Dgraal.DetectInvertedLoopsAsCounted=true -Dgraal.LoopInversion=true -Dgraal.VectorizeHashes=true -Dgraal.EnterprisePartialUnroll=true -Dgraal.VectorizeSIMD=true -Dgraal.StripMineNonCountedLoops=true -Dgraal.SpeculativeGuardMovement=true -Dgraal.InfeasiblePathCorrelation=true -Dgraal.LoopRotation=true```
 
 
-Many of the `Dgraal` arguments are redundant/default, but are there for easy testing. Again, you must use G1GC as your garbage collector when running GraalVM CE or EE. 
+**Again, you must add G1GC arguments to GraalVM CE or EE.** 
 
 
 GraalVM EE Mod Compatibility
@@ -158,9 +157,9 @@ So far, I have documented a few rendering bugs related to GraalVM EE:
 
 - GraalVM 22.2.0 has issues with Minecraft, particularly with the `UsePriorityInlining` flag enabled. Please use 22.1.0 until 22.3.0 is out. See: https://github.com/oracle/graal/issues/4776
 
-- `VectorizeSIMD` turns entities invisible with Iris or Occulus... but only under certain conditions. This is a *tricky* bug I am still tracking down, but for now you can work around it by disabling `VectorizeSIMD`. See: https://github.com/oracle/graal/issues/4849
+- `VectorizeSIMD` turns entities invisible with Iris or Occulus... but only under certain conditions. This will be fixed in 22.3.0. See: https://github.com/oracle/graal/issues/4849
 
-- GraalVM CE and EE both break constellation rendering in Astral Sorcery. See: https://github.com/HellFirePvP/AstralSorcery/issues/1963
+- GraalVM CE and EE both break constellation rendering in 1.16.5 Astral Sorcery. See: https://github.com/HellFirePvP/AstralSorcery/issues/1963
 
 If you run into any other mod issues you can trace back to GraalVM, please create a Github issue or post in the Discord! Generally, you can work around them by disabling the `dgraal` flags one at a time, or by finding the right function with `Dgraal.PrintCompilation=true`, and working around it with `-Dgraal.GraalCompileOnly=~...` once you find the miscompiled function.
 
