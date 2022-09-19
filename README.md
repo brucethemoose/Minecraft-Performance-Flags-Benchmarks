@@ -21,7 +21,7 @@ Most Java runtimes from Azul, Microsoft, Adoptium, Amazon and so on are basicall
 
 - **Azul's Prime OpenJDK** is *very* fast since it hooks into llvm, but its currently incompatible with most mods and is linux-only. Get it from here: https://docs.azul.com/prime/prime-quick-start-tar
 
-- Unlike most Java 8 builds, **Red Hat Java 8** has the Shenandoah garbage collector. Its gated behind a free email signup: https://developers.redhat.com/products/openjdk/download
+- **Red Hat Java 8** has the Shenandoah garbage collector. Its gated behind a free email signup: https://developers.redhat.com/products/openjdk/download
 
 - **IBM's OpenJ9** is... *much* slower in Minecraft, and uses totally different flags than any other Java build. See [FAQ](#FAQ).
 
@@ -35,10 +35,10 @@ These optimized flags will work with any Java 11+ build. They work on both serve
 ```-XX:+UnlockExperimentalVMOptions -XX:+UnlockDiagnosticVMOptions -XX:+AlwaysPreTouch -XX:+DisableExplicitGC -XX:+UseNUMA -XX:NmethodSweepActivity=1 -XX:ReservedCodeCacheSize=400M -XX:NonNMethodCodeHeapSize=12M -XX:ProfiledCodeHeapSize=194M -XX:NonProfiledCodeHeapSize=194M -XX:-DontCompileHugeMethods -XX:MaxNodeLimit=240000 -XX:NodeLimitFudgeFactor=8000 -XX:+UseVectorCmov -XX:+PerfDisableSharedMem -XX:+UseFastUnorderedTimeStamps -XX:+UseCriticalJavaThreadPriority -XX:ThreadPriorityPolicy=1 -XX:AllocatePrefetchStyle=3```
 
 
-**You *must* add garbage collection flags to these java arguments.** A full set of Curseforge flags, for instance, may look like this: 
+**You *must* add garbage collection flags to these java arguments.**  
 
 <details>
-    <summary>Curseforge Flags</summary>
+    <summary>A full set of lags may look like this</summary>
 
     ```
     -xms8G -XX:+UnlockExperimentalVMOptions -XX:+UnlockDiagnosticVMOptions -XX:+AlwaysPreTouch -XX:+DisableExplicitGC -XX:+UseNUMA -XX:NmethodSweepActivity=1 -XX:ReservedCodeCacheSize=400M -XX:NonNMethodCodeHeapSize=12M -XX:ProfiledCodeHeapSize=194M -XX:NonProfiledCodeHeapSize=194M -XX:-DontCompileHugeMethods -XX:MaxNodeLimit=240000 -XX:NodeLimitFudgeFactor=8000 -XX:+UseVectorCmov -XX:+PerfDisableSharedMem -XX:+UseFastUnorderedTimeStamps -XX:+UseCriticalJavaThreadPriority -XX:ThreadPriorityPolicy=1 -XX:AllocatePrefetchStyle=3  -XX:+UseG1GC -XX:MaxGCPauseMillis=37 -XX:+PerfDisableSharedMem -XX:G1HeapRegionSize=16M -XX:G1NewSizePercent=23 -XX:G1ReservePercent=20 -XX:SurvivorRatio=32 -XX:G1MixedGCCountTarget=3 -XX:G1HeapWastePercent=20 -XX:InitiatingHeapOccupancyPercent=10 -XX:G1RSetUpdatingPauseTimePercent=0 -XX:MaxTenuringThreshold=1 -XX:G1SATBBufferEnqueueingThresholdPercent=30 -XX:G1ConcMarkStepDurationMillis=5.0 -XX:G1ConcRSHotCardLimit=16 -XX:G1ConcRefinementServiceIntervalMillis=150 -XX:GCTimeRatio=99 -XX:+UseLargePages -XX:LargePageSizeInBytes=2m
@@ -54,14 +54,14 @@ Minimum and maximum (`-xms` and `-xmx`) memory should be set to the same value, 
 
 Sizes are set in megabytes (`-Xms4096M`) or gigabytes (`-Xmx8G`)
 
-Allocating too much memory can force your operating system to page, make garbage collection pauses more severe, and/or slow the game down. Allocating too little can also slow the game down. Keep a close eye on the Windows Task manager (or your DE's system monitor) as Minecraft is running, and allocate only as much as it needs (which is usually less than 8G)
+Allocating too much memory can force your operating system to page, make garbage collection pauses more severe, and/or slow the game down. Allocating too little can also slow the game down. Keep a close eye on the Windows Task manager (or your DE's system monitor) as Minecraft is running, and allocate only as much as it needs (which is usually less than 8G).
 
 Garbage Collection
 ======
 
-Garbage collection flags must be added to Minecraft servers and clients, as the default "pauses" to stop and collect garbage manifest as stutters on the client and lag on servers. Use the`sparkc gcmonitor` command in the [Spark](https://www.curseforge.com/minecraft/mc-mods/spark) mod to observe pauses. *Any* old generation pauses are bad, and young generation G1GC collections should be infrequent, but short enough to be imperceptible.  
+**Garbage collection flags must be added to Minecraft servers and clients**, as the default "pauses" to stop and collect garbage manifest as stutters on the client and lag on servers. Use the`sparkc gcmonitor` command in the [Spark](https://www.curseforge.com/minecraft/mc-mods/spark) mod to observe pauses. *Any* old generation pauses are bad, and young generation G1GC collections should be infrequent, but short enough to be imperceptible.  
 
-Pick one set of flags. I recommend Shenandoah on clients, ZGC on powerful Java 17 servers, and G1GC on Graal or on servers/clients with less RAM and fewer cores:
+Pick one set of flags. I recommend **Shenandoah on clients**, **ZGC on powerful Java 17 servers**, and **G1GC on Graal** or on servers/clients with less RAM and fewer cores:
 
 
 ### ZGC 
@@ -77,9 +77,9 @@ Unfortunately, it has a significant client FPS hit on my (8-core/16 thread) lapt
 
 Shenandoah performs well on clients, but kills server throughput in my tests. Enable it with `-XX:+UseShenandoahGC -XX:ShenandoahGCMode=iu -XX:ShenandoahGuaranteedGCInterval=1000000 -XX:AllocatePrefetchStyle=1` 
 
-Note that Shenandoah is not in Oracle Java builds! See more tuning options [here](https://wiki.openjdk.org/display/shenandoah/Main). The "herustic" and "mode" options don't change much for me (except for "compact," which you should not use). Like ZGC, Shenandoah does not like AllocatePrefetchStyle=3.
+See more tuning options [here](https://wiki.openjdk.org/display/shenandoah/Main). The "herustic" and "mode" options don't change much for me (except for "compact," which you should not use). Like ZGC, Shenandoah does not like AllocatePrefetchStyle=3.
 
-If you are a Java 8 user, you must use Red Hat OpenJDK to use Shenandoah: https://developers.redhat.com/products/openjdk/download
+Note that Shenandoah is not in Java 8, or in any Oracle Java builds! If you are a Java 8 user, you must use Red Hat OpenJDK to use Shenandoah: https://developers.redhat.com/products/openjdk/download
 
 ## G1GC
 
