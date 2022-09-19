@@ -80,9 +80,8 @@ See more tuning options [here](https://wiki.openjdk.org/display/shenandoah/Main)
 
 Note that Shenandoah is not in Java 8, or in any Oracle Java builds! If you are a Java 8 user, you must use Red Hat OpenJDK to use Shenandoah: https://developers.redhat.com/products/openjdk/download
 
-## G1GC
 
-### Client:
+### Client G1GC
 
 G1GC is the default garbage collector, and is the only available garbage collector for [GraalVM users](https://github.com/oracle/graal/issues/2149). Aikar's [famous Minecraft G1GC arguments](https://aikar.co/2018/07/02/tuning-the-jvm-g1gc-garbage-collector-flags-for-minecraft/) run great on clients, with one caveat: they effectively [clamp](https://www.oracle.com/technical-resources/articles/java/g1gc.html) the `MaxGCPauseMillis` parameter by setting `G1NewSizePercent` so high, producing long stutters on some clients.
 
@@ -91,13 +90,13 @@ These are similar to the aikar flags, but with shorter, more frequent pauses, le
 `G1NewSizePercent` and `MaxGCPauseMillis` can be used to tune the frequency/dureation of your young generation collections. `G1HeapWastePercent=18` should be removed if you are getting any old generation pauses on your setup. Alternatively, you can raise it and set `G1MixedGCCountTarget` to 2 or 1 to make mixed garbage collection even lazier. 
 
 
-##### Server:
+### Server G1GC
 
 Longer pauses are more acceptable on servers. These flags are very close to the aikar defaults:
 
 `-XX:MaxGCPauseMillis=130 -XX:+UnlockExperimentalVMOptions -XX:+DisableExplicitGC -XX:+AlwaysPreTouch -XX:G1NewSizePercent=28 -XX:G1HeapRegionSize=16M -XX:G1ReservePercent=20 -XX:G1MixedGCCountTarget=3 -XX:InitiatingHeapOccupancyPercent=10 -XX:G1MixedGCLiveThresholdPercent=90 -XX:G1RSetUpdatingPauseTimePercent=0 -XX:SurvivorRatio=32 -XX:MaxTenuringThreshold=1 -XX:G1SATBBufferEnqueueingThresholdPercent=30 -XX:G1ConcMarkStepDurationMillis=5 -XX:G1ConcRSHotCardLimit=16 -XX:G1ConcRefinementServiceIntervalMillis=150`
 
-### A Note On Garbage Collection Threading:
+### Garbage Collection Threading
 
 `-XX:ConcGCThreads=[Some Number]` controls the [*maximum* number](https://github.com/openjdk/jdk/blob/dd34a4c28da73c798e021c7473ac57ead56c9903/src/hotspot/share/gc/z/zHeuristics.cpp#L96-L104) of background threads the garbage collector is allowed to use, and defaults to `logical (hyperthreaded) cores / 4`. Recent versions of Java will [reduce the number of gc threads, if needed](https://wiki.openjdk.org/display/zgc/Main#Main-SettingConcurrentGCThreads).
 
@@ -152,13 +151,15 @@ Arguments for GraalVM EE 22+ Java 17 (or Java 11):
 
 GraalVM EE Mod Compatibility
 ======
-I have documented a few rendering bugs related to GraalVM EE:
+There are a few client-side rendering bugs specific to GraalVM:
 
-- GraalVM 22.2.0 has issues with Minecraft, particularly with the `UsePriorityInlining` flag enabled. Please use 22.1.0 until 22.3.0 is out. See: https://github.com/oracle/graal/issues/4776
+- GraalVM EE 22.2.0 has issues with Minecraft, particularly with the `UsePriorityInlining` flag enabled. Please use 22.1.0 until 22.3.0 is out. See: https://github.com/oracle/graal/issues/4776
 
-- `VectorizeSIMD` turns entities invisible with Iris or Occulus... but only under certain conditions. This will be fixed in 22.3.0. See: https://github.com/oracle/graal/issues/4849
+- `VectorizeSIMD` turns entities invisible with Iris or Occulus... but only under certain conditions. This will be fixed in GraalVM EE 22.3.0. See: https://github.com/oracle/graal/issues/4849
 
 - GraalVM CE and EE both break constellation rendering in 1.16.5 Astral Sorcery. See: https://github.com/HellFirePvP/AstralSorcery/issues/1963
+
+I have not observed any server-side bugs yet. 
 
 If you run into any other mod issues you can trace back to GraalVM, please create a Github issue or post in the Discord! Generally, you can work around them by disabling the `dgraal` flags one at a time, or by finding the right function with `Dgraal.PrintCompilation=true`, and working around it with `-Dgraal.GraalCompileOnly=~...` once you find the miscompiled function.
 
@@ -206,8 +207,6 @@ x86 Java 8 users (aka most Java 8 users) can add these additional arguments:
 
 ```-XX:+UseXMMForArrayCopy```
 
-Again, I recommend Red Hat OpenJDK 8 with Shenandoh:
-
 You can also get Java 8 versions of GraalVM EE from the [21.X section on the Oracle site](https://www.oracle.com/downloads/graalvm-downloads.html), and use these arguments:
 
 ```-XX:+UnlockExperimentalVMOptions -XX:+UnlockDiagnosticVMOptions -XX:+ParallelRefProcEnabled -XX:+DisableExplicitGC -XX:+AlwaysPreTouch -XX:+AggressiveOpts -XX:+UseFastAccessorMethods -XX:AllocatePrefetchStyle=1 -XX:ThreadPriorityPolicy=1 -XX:+UseNUMA -XX:+UseDynamicNumberOfGCThreads -XX:NmethodSweepActivity=1 -XX:ReservedCodeCacheSize=350M -XX:-DontCompileHugeMethods -XX:MaxNodeLimit=240000 -XX:NodeLimitFudgeFactor=8000 -XX:+UseFPUForSpilling -XX:+EnableJVMCI -XX:+UseJVMCICompiler -XX:+EagerJVMCI -Dgraal.TuneInlinerExploration=1 -Dgraal.CompilerConfiguration=enterprise -Dgraal.UsePriorityInlining=true -Dgraal.Vectorization=true -Dgraal.OptDuplication=true -Dgraal.DetectInvertedLoopsAsCounted=true -Dgraal.LoopInversion=true -Dgraal.VectorizeHashes=true -Dgraal.EnterprisePartialUnroll=true -Dgraal.VectorizeSIMD=true -Dgraal.StripMineNonCountedLoops=true -Dgraal.SpeculativeGuardMovement=true -Dgraal.InfeasiblePathCorrelation=true```
@@ -230,7 +229,7 @@ FAQ
 
 - Java 18 is has some incompatibilities. At this time, I recommend using 17 over 18. 
 
-- IBM's OpenJ9 is over 30% slower at server chunkgen in my tests. Tweaking it is a low priority on my todo list. If there are any flags that make it competitive with OpenJDK, please let me know on Discord or here: https://github.com/brucethemoose/Minecraft-Performance-Flags-Benchmarks/issues/9
+- IBM's OpenJ9 is over 30% slower at server chunkgen in my tests. If there are any flags that make it competitive with OpenJDK, please let me know on Discord or here: https://github.com/brucethemoose/Minecraft-Performance-Flags-Benchmarks/issues/9
 
 
 Flag Explanations
