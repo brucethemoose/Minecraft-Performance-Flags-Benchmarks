@@ -64,7 +64,7 @@ blist = [
     "Iterations": 3
   },
   {
-    "Name": "Test Server Bencmark", 
+    "Name": "Test Server Benchmark", 
     "Command": graalpath + graalflags + memory + lpages,
     "Path": vevserver, 
     "Iterations": 5
@@ -452,9 +452,10 @@ def benchmark(i): #"i is the benchmark index"
     #---end of client branch---
 
   elif "Command" in blist[i] and "Path" in blist[i]:
+    #---Server branch---
+    
     blist[i]["Startup_Times"] = []
     blist[i]["Chunkgen_Times"] = []
-    #---Server branch---
     os.chdir(blist[i]["Path"])
     #return world to pre-benchmark state
     def restore_world():
@@ -477,7 +478,7 @@ def benchmark(i): #"i is the benchmark index"
     #Try to find Fabric
     d = glob.glob("*.jar")
     for f in d:
-      if "fabric-" in os.path.basename(f):
+      if "fabric-server" in os.path.basename(f):
         if debug: print("Found Fabric: " + f)
         chunkgen_command = fabric_chunkgen_command
         chunkgen_expect = fabric_chunkgen_expect
