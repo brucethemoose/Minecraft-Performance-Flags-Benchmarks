@@ -23,9 +23,9 @@ Most Java runtimes from Azul, Microsoft, Adoptium, Amazon and so on are basicall
 
 - **Red Hat Java 8** has the Shenandoah garbage collector. Its gated behind a free email signup: https://developers.redhat.com/products/openjdk/download
 
-- **IBM's OpenJ9** is... *much* slower in Minecraft, and uses totally different flags than any other Java build. See [FAQ](#FAQ).
+- **IBM's OpenJ9** is... *much* slower in Minecraft, and uses totally different flags than any other Java build, but it does consume less memory than OpenJDK-based runtimes. See [FAQ](#FAQ).
 
-If you dont know what to pick on Windows or OSX, I recommend Graal EE (see below) or the latest Adoptium JRE: https://adoptium.net/
+If you dont know what to pick, I recommend Graal EE (see below) or the latest Adoptium JRE: https://adoptium.net/
 
 Base Java Flags
 ======
@@ -65,9 +65,9 @@ Pick one set of flags. I recommend **Shenandoah on clients**, **ZGC on powerful 
 
 ### ZGC 
 
-ZGC is great for high memory/high core count servers. It has no throughput hit I can measure, and absolutely does not stutter. However, it requires more RAM and more cores than other garbage collectors.
+ZGC is great for high memory/high core count servers. It has no server throughput hit I can measure, and absolutely does not stutter. However, it requires more RAM and more cores than other garbage collectors.
 
-Unfortunately, it has a significant client FPS hit on my (8-core/16 thread) laptop. See the "ZGC" benchmark in the benchmarks folder. 
+Unfortunately, it has a significant client FPS hit on my (8-core/16 thread) laptop. See the "ZGC" benchmark in the benchmarks folder. Its not available in Java 8, and much less performant in Java 11 than in Java 17.
 
 `-XX:+UseZGC -XX:AllocatePrefetchStyle=1 -XX:-ZProactive` enables it, but allocate more RAM and more `ConcGCThreads` than you normally would for other GC. Note that ZGC does not like AllocatePrefetchStyle=3, hence setting it to 1 overrides the previous entry.
 
@@ -78,16 +78,16 @@ Shenandoah performs well on clients, but kills server throughput in my tests. En
 
 See more tuning options [here](https://wiki.openjdk.org/display/shenandoah/Main). The "herustic" and "mode" options don't change much for me (except for "compact," which you should not use). Like ZGC, Shenandoah does not like AllocatePrefetchStyle=3.
 
-Note that Shenandoah is not in Java 8, or in any Oracle Java builds! If you are a Java 8 user, you must use Red Hat OpenJDK to use Shenandoah: https://developers.redhat.com/products/openjdk/download
+Note that Shenandoah is not in Java 8. Its also not in any Oracle Java builds! If you are a Java 8 user, you must use Red Hat OpenJDK to use Shenandoah: https://developers.redhat.com/products/openjdk/download
 
 
 ### Client G1GC
 
 G1GC is the default garbage collector, and is the only available garbage collector for [GraalVM users](https://github.com/oracle/graal/issues/2149). Aikar's [famous Minecraft G1GC arguments](https://aikar.co/2018/07/02/tuning-the-jvm-g1gc-garbage-collector-flags-for-minecraft/) run great on clients, with one caveat: they effectively [clamp](https://www.oracle.com/technical-resources/articles/java/g1gc.html) the `MaxGCPauseMillis` parameter by setting `G1NewSizePercent` so high, producing long stutters on some clients.
 
-These are similar to the aikar flags, but with shorter, more frequent pauses, less aggressive G1 mixed collection and some tweaks to background collection: `-XX:+UseG1GC -XX:MaxGCPauseMillis=37 -XX:+PerfDisableSharedMem -XX:G1HeapRegionSize=16M -XX:G1NewSizePercent=23 -XX:G1ReservePercent=20 -XX:SurvivorRatio=32 -XX:G1MixedGCCountTarget=3 -XX:G1HeapWastePercent=20 -XX:InitiatingHeapOccupancyPercent=10 -XX:G1RSetUpdatingPauseTimePercent=0 -XX:MaxTenuringThreshold=1 -XX:G1SATBBufferEnqueueingThresholdPercent=30 -XX:G1ConcMarkStepDurationMillis=5.0 -XX:G1ConcRSHotCardLimit=16 -XX:G1ConcRefinementServiceIntervalMillis=150 -XX:GCTimeRatio=99`  
+These are similar to the aikar flags, but with shorter, more frequent pauses, less aggressive G1 mixed collection and more aggressive background collection: `-XX:+UseG1GC -XX:MaxGCPauseMillis=37 -XX:+PerfDisableSharedMem -XX:G1HeapRegionSize=16M -XX:G1NewSizePercent=23 -XX:G1ReservePercent=20 -XX:SurvivorRatio=32 -XX:G1MixedGCCountTarget=3 -XX:G1HeapWastePercent=20 -XX:InitiatingHeapOccupancyPercent=10 -XX:G1RSetUpdatingPauseTimePercent=0 -XX:MaxTenuringThreshold=1 -XX:G1SATBBufferEnqueueingThresholdPercent=30 -XX:G1ConcMarkStepDurationMillis=5.0 -XX:G1ConcRSHotCardLimit=16 -XX:G1ConcRefinementServiceIntervalMillis=150 -XX:GCTimeRatio=99`  
 
-`G1NewSizePercent` and `MaxGCPauseMillis` can be used to tune the frequency/dureation of your young generation collections. `G1HeapWastePercent=18` should be removed if you are getting any old generation pauses on your setup. Alternatively, you can raise it and set `G1MixedGCCountTarget` to 2 or 1 to make mixed garbage collection even lazier. 
+`G1NewSizePercent` and `MaxGCPauseMillis` can be used to tune the frequency/dureation of your young generation collections. `G1HeapWastePercent=18` should be removed if you are getting any old generation pauses on your setup. Alternatively, you can raise it and set `G1MixedGCCountTarget` to 2 or 1 to make mixed garbage collection even lazier (at the cost of higher memory usage). 
 
 
 ### Server G1GC
@@ -102,6 +102,7 @@ Longer pauses are more acceptable on servers. These flags are very close to the 
 
 In some cases (especially with ZGC or Shenandoh) you want to increase this thread cap past the default. I recommend "2" on CPUs with 4 threads, and `[number of real cores - 2]` on most other CPUs, but you may need to play with this parameter. If its too low, garbage collection can't keep up with Minecraft, and the game will stutter and/or start eating gobs of RAM and crash. If its too high, you might waste CPU on GC, especially if you are running Java 8. 
 
+No other "threading" flags like `ParallelRefProcEnabled` or `JVMCIThreads` are necessary, as they are enabled by default with good automatic settings in newer java builds. 
 
 Large Pages
 ======
@@ -198,6 +199,8 @@ Performance Mods
 
 This is a **fantastic** repo for finding performance mods: https://github.com/NordicGamerFE/usefulmods
 
+Instead of Optifine, I would recommend more compatible alternatives like Sodium or Rubidium.
+
 
 Java 8
 ======
@@ -221,6 +224,8 @@ Other Performance Tips
 
 - Run your Minecraft servers on Clear Linux! It's by far the most optimized linux distribution out-of-the-box, and it has some other nice features (like a stateless config system). It also runs clients on AMD/Intel GPUs quite well: https://docs.01.org/clearlinux/latest/tutorials/multi-boot/dual-boot-win.html
 
+- Oracle Linux is also a good choice for servers, since its reasonably well optimized out-of-the-box and has Graalvm EE available via the package manager. For clients, Arch-based distros like CachyOS or EndeavorOS are excellent. 
+
 - Make sure the Minecraft client is using your discrete GPU! Check the F3 tab, and force Minecraft to use it in the "**Windows Graphics Settings**", *not* the AMD/Nvidia control panel (as they don't seem to work anymore).
 
 - Minecraft client linux users should check out https://github.com/Admicos/minecraft-wayland 
@@ -230,9 +235,13 @@ Other Performance Tips
 FAQ
 ======
 
-- Java 18 is has some incompatibilities. At this time, I recommend using 17 over 18. 
+- Java 18/19 is has some incompatibilities. At this time, I recommend using 17. 
 
-- IBM's OpenJ9 is over 30% slower at server chunkgen in my tests. If there are any flags that make it competitive with OpenJDK, please let me know on Discord or here: https://github.com/brucethemoose/Minecraft-Performance-Flags-Benchmarks/issues/9
+- Java tweaks improve server performance and client stuttering, but they don't boost average client FPS much. For that, running correct/up-to-date graphics drivers and performance mods is far more important: https://github.com/NordicGamerFE/usefulmods
+
+- This guide assumes you have a little spare RAM when running Minecraft. If your setup is RAM constrained, try removing the following arguments:  `-XX:NmethodSweepActivity=1 -XX:ReservedCodeCacheSize=400M -XX:NonNMethodCodeHeapSize=12M -XX:ProfiledCodeHeapSize=194M -XX:NonProfiledCodeHeapSize=194M`
+
+- IBM's OpenJ9 does indeed save RAM, as its reputation would suggest, but is over 30% slower at server chunkgen in my tests. If there are any flags that make it competitive with OpenJDK, please let me know on Discord or here: https://github.com/brucethemoose/Minecraft-Performance-Flags-Benchmarks/issues/9
 
 
 Flag Explanations
