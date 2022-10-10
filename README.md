@@ -1,19 +1,25 @@
+This is a written guide to optimize Java for Minecraft. Every flag and tweak is individually benchmarked to test for regressions, and checked against Java defaults to avoid redundancy.
+
+While these tweaks notably reduce server and client stutters, expect only modest TPS gains + minimal FPS gains at best, and somewhat increased RAM usage.
+
 Discord for questions and such: https://discord.gg/zeFSR9PnUw 
 
 Benchmarks
 ======
 
-Flags are tested with Benchmark.py script. See the work-in-progress [Benchmarks.md](https://github.com/brucethemoose/Minecraft-Performance-Flags-Benchmarks/blob/main/Benchmarks.md).
+All flags are tested with Benchmark.py script. See the work-in-progress [Benchmarks.md](https://github.com/brucethemoose/Minecraft-Performance-Flags-Benchmarks/blob/main/Benchmarks.md).
 
 
 Picking a Java Runtume
 ======
 
-For Minecraft 1.16.5 and up, use Java 17. Some launchers like PolyMC or Curseforge ask you to use Java 8 on 1.16.X specifically, but Minecraft and *most* mods are compatible with Java 17.
+For Minecraft 1.16.5 and up, use Java 17. Some launchers like PolyMC or Curseforge ask you to use Java 8 on 1.16.X specifically, but Minecraft, all 1.18+ mods, and *most* 1.16.5 mods are compatible with Java 17.
 
-1.12.2 and below generally requires Java 8. Sometimes Java 11+ will work. 
+Sometimes Java 11 will work where Java 17 doesn't.
 
-Most Java runtimes from Azul, Microsoft, Adoptium, Amazon and so on are basically identical. Some notable exceptions:
+1.12.2 and below generally requires Java 8. 
+
+Java runtimes from Azul, Microsoft, Adoptium, Amazon and so on are basically identical. Some notable exceptions:
 
 - **Oracle GraalVM Enterprise Edition** features a more aggressive Java compiler. This is what I personally run Minecraft with, see the GraalVM section below.
 
@@ -23,9 +29,9 @@ Most Java runtimes from Azul, Microsoft, Adoptium, Amazon and so on are basicall
 
 - **Red Hat Java 8** has the Shenandoah garbage collector. Its gated behind a free email signup: https://developers.redhat.com/products/openjdk/download
 
-- **IBM's OpenJ9** is... *much* slower in Minecraft, and uses totally different flags than any other Java build, but it does consume less memory than OpenJDK-based runtimes. See [FAQ](#FAQ).
+- **IBM's OpenJ9** is... *much* slower in Minecraft, and uses totally different flags than any other Java build, but it does consume less memory than OpenJDK-based runtimes. See [FAQ](#FAQ) and the [Benchmarks folder](Benchmarks).
 
-If you dont know what to pick, I recommend Graal EE (see below) or the latest Adoptium JRE: https://adoptium.net/
+If you dont know what to pick, I recommend GraalVM EE (see below) or the latest Adoptium Java 17 JRE: https://adoptium.net/
 
 Base Java Flags
 ======
@@ -169,11 +175,11 @@ If you run into any other mod issues you can trace back to GraalVM, please creat
 
 SpecialK
 ======
-SpecialK has 2 major Windows performance benefits:
+A "universal" Windows mod akin to ReShade, SpecialK has 2 major performance benefits:
 
 - A "smart" frame limiter that reduces stutter, eliminates tearing, saves power, and saves CPU TDP to boost when needed. It even works in conjuction with VRR or Nvidia Reflex. 
 
-- A OpenGL-to-DirectX11 wrapper called OpenGL-IK that eliminates Minecraft's windowed mode overhead, and enables other features (like auto-HDR).
+- A OpenGL-to-DirectX11 wrapper called OpenGL-IK that eliminates Minecraft's windowed mode overhead, and enables other features (like auto-HDR or a resizable borderless window).
 
 Download it here: https://wiki.special-k.info/en/SpecialK/Tools
 
@@ -184,14 +190,16 @@ You can create a desktop shortcut to your Minecraft launcher through the Special
 
 Be sure to turn off VSync and the in-game Minecraft frame limiter.
 
+One user has reported reduced FPS when running SpecialK. If this happens to you, please let me know through Discord or Github!
+
 
 Process Priority
 ======
-After launching Minecraft, set Java to run at a high process priority in Windows with the task manager:
+After launching Minecraft, set Java to run at a high process priority in Windows with the task manager, so that nothing "interrupts" it:
 
 ![taskmanager](Tutorial_Images/taskmon.PNG)
 
-Linux users can append the command `sudo nice -n -15` to thier launch arguments.
+Linux users can append the command `sudo nice -n -15` to thier launch arguments, or use `renice` after launching.
 
 
 Performance Mods
@@ -199,7 +207,7 @@ Performance Mods
 
 This is a **fantastic** repo for finding performance mods: https://github.com/NordicGamerFE/usefulmods
 
-Instead of Optifine, I would recommend more compatible alternatives like Sodium or Rubidium.
+Instead of Optifine, I would recommend more compatible alternatives like Sodium + Iris or Rubidium + Oculus.
 
 
 Java 8
@@ -237,7 +245,7 @@ FAQ
 
 - Java 18/19 is has some incompatibilities. At this time, I recommend using 17. 
 
-- Java tweaks improve server performance and client stuttering, but they don't boost average client FPS much. For that, running correct/up-to-date graphics drivers and performance mods is far more important: https://github.com/NordicGamerFE/usefulmods
+- Java tweaks improve server performance and client stuttering, but they don't boost average client FPS much (if at all). For that, running correct/up-to-date graphics drivers and performance mods is far more important: https://github.com/NordicGamerFE/usefulmods
 
 - This guide assumes you have a little spare RAM when running Minecraft. If your setup is RAM constrained, try removing the following arguments:  `-XX:NmethodSweepActivity=1 -XX:ReservedCodeCacheSize=400M -XX:NonNMethodCodeHeapSize=12M -XX:ProfiledCodeHeapSize=194M -XX:NonProfiledCodeHeapSize=194M`
 
@@ -251,7 +259,7 @@ Flag Explanations
 - `-XX:+UseNUMA` enables optimizations for multisocket systems, if applicable. Not sure if this applies to MCM CPUs like Ryzen or Epyc. 
 - `-XX:-DontCompileHugeMethods` *Allows* huge methods to be compiled. Modded Minecraft has some of these, and we don't care about higher background compiler CPU usage.
 - `-XX:MaxNodeLimit=240000 -XX:NodeLimitFudgeFactor=8000` Enable optimization of larger methods. See: https://bugs.java.com/bugdatabase/view_bug.do?bug_id=8058148
-- `-XX:ReservedCodeCacheSize=400M -XX:NonNMethodCodeHeapSize=12M -XX:ProfiledCodeHeapSize=194M -XX:NonProfiledCodeHeapSize=194M` reserves more space for compiled code. I observed modded Minecraft run over the default 250 megabyte limit with `XX:+PrintCodeCache`, but even if its not filled, the larger size makes eviction of compiled code less aggressive. 
+- `-XX:ReservedCodeCacheSize=400M -XX:NonNMethodCodeHeapSize=12M -XX:ProfiledCodeHeapSize=194M -XX:NonProfiledCodeHeapSize=194M` reserves more space for compiled code. All sections must "add up" to `ReservedCodeCacheSize`. I have observed modded Minecraft run into the default 250 megabyte limit with `XX:+PrintCodeCache`, but even if its not filled, the larger size makes eviction of compiled code less aggressive. 
 - `-XX:NmethodSweepActivity=1` (default 10) keeps "cold" code in the cache for a longer time.  
 - ~~`-XX:+UseStringDeduplication`~~ This is a popular option, but not used here, as it's benching slower. Maybe its useful on low memory systems?  
 - `-XX:+UseFastUnorderedTimeStamps` Avoid system calls for getting the time. The impact of this will vary per system, but we aren't really concerned with logging timestamp accuracy. 
