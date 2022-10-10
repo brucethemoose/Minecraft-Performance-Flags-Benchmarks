@@ -1,0 +1,119 @@
+[
+    {
+        "Name": "OpenJ9",
+        "Command": "F:/JDKs/ibmopenj9/bin/java.exe -XX:+IdleTuningGcOnIdle -XX:+UseAggressiveHeapShrink -XX:-OmitStackTraceInFastThrow -XX:+UseFastAccessorMethods -XX:+OptimizeStringConcat -Xshareclasses:allowClasspaths -Xshareclasses:cacheDir=./cache -Xaot -XX:+UseCompressedOops -XX:ObjectAlignmentInBytes=256 -Xshareclasses -XX:SharedCacheHardLimit=800M -Xscmx800M -Xtune:virtualized -XX:+TieredCompilation -XX:InitialTenuringThreshold=5 -Dlog4j2.formatMsgNoLookups=true -XX:-DisableExplicitGC -XX:InitiatingHeapOccupancyPercent=35 -XX:+UnlockExperimentalVMOptions -XX:MaxGCPauseMillis=6 -Djava.net.preferIPv4Stack=true -XX:-ParallelRefProcEnabled -XX:+UseTLAB -XX:ReservedCodeCacheSize=70M -XX:G1NewSizePercent=20 -XX:G1ReservePercent=20 -XX:ParallelGCThreads=16 -XX:ConcGCThreads=5 -Xms500M -Xmx8G",
+        "Path": "C:/Games/mcservers/minfabric",
+        "Iterations": 3,
+        "Startup_Times": [
+            62.48,
+            60.22,
+            62.08
+        ],
+        "Chunkgen_Times": [
+            236.41,
+            247.66,
+            239.92
+        ],
+        "Average_TPS_Values": [
+            17.56,
+            17.96,
+            18.08
+        ],
+        "GC_Stop_MS": [],
+        "GC_Stops": [],
+        "Oldgen_GCs": [],
+        "Memory_Usage": [
+            1.1,
+            1.2,
+            1.1
+        ],
+        "CPU_Usage": [
+            25.0,
+            29.0,
+            28.0
+        ],
+        "Player_Spawn_Times": [
+            34.181,
+            3.986,
+            3.603
+        ],
+        "Average_Chunkgen_Time": 241.33,
+        "Average_Startup_Time": 61.59,
+        "PVariance_Chunkgen_Time": 22.09,
+        "Pvariance_Startup_Time": 0.97,
+        "Average_TPS": 17.87,
+        "PVariance_TPS": 0.05,
+        "Average_GC_Stop_MS": "-",
+        "PVariance_GC_Stop_MS": "-",
+        "Average_GC_Stops": "-",
+        "Average_Memory_Usage_GB": 1.13,
+        "Average_CPU_Usage": 27.33,
+        "Average_Spawn_Time": 13.92,
+        "Player_Spawn_Variance": 205.21
+    },
+    {
+        "Name": "OpenJDK",
+        "Command": "F:/JDKs//OpenJDK17U-jre_x64_windows_hotspot_17.0.4_8/jdk-17.0.4+8-jre/bin/java.exe -XX:+UnlockExperimentalVMOptions -XX:+UnlockDiagnosticVMOptions -XX:+AlwaysPreTouch -XX:+DisableExplicitGC -XX:+UseNUMA -XX:-DontCompileHugeMethods -XX:MaxNodeLimit=240000 -XX:NodeLimitFudgeFactor=8000 -XX:+UseVectorCmov -XX:+PerfDisableSharedMem -XX:+UseFastUnorderedTimeStamps -XX:+UseCriticalJavaThreadPriority -XX:ThreadPriorityPolicy=1 -XX:AllocatePrefetchStyle=3 -XX:MaxGCPauseMillis=130 -XX:+UnlockExperimentalVMOptions -XX:+DisableExplicitGC -XX:+AlwaysPreTouch -XX:G1NewSizePercent=28 -XX:G1HeapRegionSize=16M -XX:G1ReservePercent=20 -XX:G1MixedGCCountTarget=3 -XX:InitiatingHeapOccupancyPercent=10 -XX:G1MixedGCLiveThresholdPercent=90 -XX:G1RSetUpdatingPauseTimePercent=0 -XX:SurvivorRatio=32 -XX:MaxTenuringThreshold=1 -XX:G1SATBBufferEnqueueingThresholdPercent=30 -XX:G1ConcMarkStepDurationMillis=5 -XX:G1ConcRSHotCardLimit=16 -XX:G1ConcRefinementServiceIntervalMillis=150 -XX:ConcGCThreads=5 -Xms500M -Xmx8G",
+        "Path": "C:/Games/mcservers/minfabric",
+        "Iterations": 3,
+        "Startup_Times": [
+            36.74,
+            35.72,
+            35.71
+        ],
+        "Chunkgen_Times": [
+            105.92,
+            103.8,
+            99.53
+        ],
+        "Average_TPS_Values": [
+            19.82,
+            19.85,
+            19.87
+        ],
+        "GC_Stop_MS": [
+            9.83,
+            10.77,
+            10.55
+        ],
+        "GC_Stops": [
+            191,
+            177,
+            178
+        ],
+        "Oldgen_GCs": [
+            0,
+            0,
+            0
+        ],
+        "Memory_Usage": [
+            1.9,
+            1.8,
+            1.6
+        ],
+        "CPU_Usage": [
+            33.0,
+            34.0,
+            35.0
+        ],
+        "Player_Spawn_Times": [
+            3.465,
+            3.34,
+            3.627
+        ],
+        "Average_Chunkgen_Time": 103.08,
+        "Average_Startup_Time": 36.06,
+        "PVariance_Chunkgen_Time": 7.06,
+        "Pvariance_Startup_Time": 0.23,
+        "Average_TPS": 19.85,
+        "PVariance_TPS": 0.0,
+        "Average_GC_Stop_MS": 10.38,
+        "PVariance_GC_Stop_MS": 0.16,
+        "Average_GC_Stops": 182,
+        "Average_Memory_Usage_GB": 1.77,
+        "Average_CPU_Usage": 34.0,
+        "Average_Oldgen_GCs": 0,
+        "Average_Spawn_Time": 3.48,
+        "Player_Spawn_Variance": 0.01
+    }
+]
