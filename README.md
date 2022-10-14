@@ -10,7 +10,7 @@ Benchmarks
 All flags are tested with Benchmark.py script. See the work-in-progress [Benchmarks.md](https://github.com/brucethemoose/Minecraft-Performance-Flags-Benchmarks/blob/main/Benchmarks.md).
 
 
-Picking a Java Runtume
+Picking a Java Runtime
 ======
 
 For Minecraft 1.16.5 and up, use Java 17. Some launchers like PolyMC or Curseforge ask you to use Java 8 on 1.16.X specifically, but Minecraft, all 1.18+ mods, and *most* 1.16.5 mods are compatible with Java 17.
