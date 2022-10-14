@@ -1,6 +1,6 @@
-This is a written guide to optimize Java for Minecraft. Every flag and tweak is individually benchmarked to test for regressions, and checked against Java defaults to avoid redundancy.
+This is a guide to tune Java for Minecraft. Every flag and tweak is individually benchmarked to test for regressions, and checked against Java defaults to avoid redundancy.
 
-While these tweaks notably reduce server and client stutters, expect only modest TPS gains + minimal FPS gains at best, and somewhat increased RAM usage.
+While these tweaks notably reduce server and client stutters, expect only modest TPS gains + minimal FPS gains at best, and somewhat increased RAM + CPU usage. 
 
 Discord for questions and such: https://discord.gg/zeFSR9PnUw 
 
@@ -13,7 +13,7 @@ All flags are tested with Benchmark.py script. See the work-in-progress [Benchma
 Picking a Java Runtime
 ======
 
-For Minecraft 1.16.5 and up, use Java 17. Some launchers like PolyMC or Curseforge ask you to use Java 8 on 1.16.X specifically, but Minecraft, all 1.18+ mods, and *most* 1.16.5 mods are compatible with Java 17.
+For Minecraft 1.16.5 and up, use Java 17. Some launchers like PolyMC or Curseforge ask you to use Java 8 on 1.16.X specifically, but Minecraft 1.16.5+, all 1.18+ mods, and *most* 1.16.5 mods are compatible with Java 17.
 
 Sometimes Java 11 will work where Java 17 doesn't.
 
@@ -23,7 +23,7 @@ Java runtimes from Azul, Microsoft, Adoptium, Amazon and so on are basically ide
 
 - **Oracle GraalVM Enterprise Edition** features a more aggressive Java compiler. This is what I personally run Minecraft with, see the GraalVM section below.
 
-- **Intel's Clear Linux OpenJDK** uses the same code as any other OpenJDK (making it highly compatible with mods), but the build process itself is optimized for newer CPUs. Grab it from Clear Linux's repos, or from here: https://hub.docker.com/r/clearlinux/openjdk
+- **Intel's Clear Linux OpenJDK** uses the same code as any other OpenJDK (making it highly compatible), but the build process itself is optimized for newer CPUs. Grab it from Clear Linux's repos via swupd, from distrobox, or from docker. Note that you must roll back to the Java 17 release.
 
 - **Azul's Prime OpenJDK** is *very* fast since it hooks into llvm, but its currently incompatible with most mods and is linux-only. Get it from here: https://docs.azul.com/prime/prime-quick-start-tar
 
