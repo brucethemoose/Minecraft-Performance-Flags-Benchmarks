@@ -13,7 +13,7 @@ All flags are tested with Benchmark.py script. See the work-in-progress [Benchma
 Picking a Java Runtime
 ======
 
-For Minecraft 1.16.5 and up, use Java 17. Some launchers like PolyMC or Curseforge ask you to use Java 8 on 1.16.X specifically, but Minecraft 1.16.5+, all 1.18+ mods, and *most* 1.16.5 mods are compatible with Java 17.
+For Minecraft 1.16.5 and up, use Java 17. Some launchers like Curseforge ask you to use Java 8 on 1.16.X specifically, but Minecraft 1.16.5+, all 1.18+ mods, and *most* 1.16.5 mods are compatible with Java 17.
 
 Sometimes Java 11 will work where Java 17 doesn't.
 
@@ -129,7 +129,6 @@ On linux, you generally want to use `-XX:+UseTransparentHugePages`. To manually 
 
 Check and see if large pages is working with the `-Xlog:gc+init` java argument. 
 
-
 GraalVM Enterprise Edition
 ======
 
@@ -143,7 +142,7 @@ Grab the newest "Oracle GraalVM Enterprise Edition Core" release available for J
 
 Again, you *must* use 22.1.0, not 22.2.0.
 
-These releases are not Java installers. You need to manually replace your launcher's version of Java, or use a Minecraft launcher that supports specifying your Java path. I recommend PolyMC, ATLauncher, or GDLauncher. When specifying a java path, navigate to the "bin" folder in the GraalVM download and use "javaw.exe" or "java.exe"
+These releases are not Java installers. You need to manually replace your launcher's version of Java, or use a Minecraft launcher that supports specifying your Java path. I recommend ATLauncher or GDLauncher. When specifying a java path, navigate to the "bin" folder in the GraalVM download and use "javaw.exe" or "java.exe"
 
 For servers, you need to replace the "java" command in your server start sh/bat file with the full path to graalvm java, in quotes.
 
