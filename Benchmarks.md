@@ -8,11 +8,12 @@ Clone or download this repo with the "download as zip" button on GitHub.
 
 Install a recent version of Python (preferably Python 3.10), and run this command in this folder: `python -m pip install -r requirements.txt`
 
-Client benchmarks require PolyMC (preferrably PolyMC Portable) and Intel Presentmon. 
-- https://github.com/GameTechDev/PresentMon/releases
-- https://github.com/PolyMC/PolyMC
+~~Client benchmarks require PolyMC (preferrably PolyMC Portable) and Intel Presentmon. ~~
+~~https://github.com/GameTechDev/PresentMon/releases~~
 
-Currently, client benchmarking only works on Windows. Server benching is tested on Windows and Linux, but it should work on other platforms like OSX. 
+~~Currently, client benchmarking only works on Windows. Server benching is tested on Windows and Linux, but it should work on other platforms like OSX.~~
+
+**Client Benchmarking currently does not work since PolyMC is unsafe to use.**
 
 # Server Benchmarking Setup
 
@@ -65,51 +66,55 @@ Currently, client benchmarking only works on Windows. Server benching is tested 
 
 - "CRASH", "STOPPED", or "TIMEOUT" will show up in your chunkgen/startup times if something went wrong with your server. If that's the case, you should make sure the server-start command in that partiular entry looks right, and try starting the server with that command manually. 
 
-# Client Benchmarking Setup
 
-Client benchmarking is tricky and finicky. You have been warned!
+<details>
+  <summary>Old client benchmarking tutorial, not working until PolyMC is replaced or stable</summary>
 
-- First, open the PolyMC options and disable it from automatically opening log windows when instances start.
 
-- Set up your PolyMC instance(s) you want to benchmark. Set the appropriate Java flags, install the mods you want, and so on. 
+    Client benchmarking is tricky and finicky. You have been warned!
 
-- Now launch that PolyMC instance, and create or load exactly one world you want to test. Delete all other worlds. 
+    - First, open the PolyMC options and disable it from automatically opening log windows when instances start.
 
-- The actual "benchmark" consists of the player character running forward in a straight line, jumping and holding the attack button down, so position your player accordingly. Place them near a populated base if one exists, and make sure they have room to run in a straight line for some time. Consider enabling creative mode so the test character can break blocks in their way more easily. Start them off looking slightly "down" so they can break blocks blocking their path, and try to align them with a cardinal direction so their movement is more deterministic. 
+    - Set up your PolyMC instance(s) you want to benchmark. Set the appropriate Java flags, install the mods you want, and so on. 
 
-- Once your instance is configured, close it. If you want to run similar instances with, say, different mods or different Java parameters, clone that instance so that all tested instances have the exact same world. 
+    - Now launch that PolyMC instance, and create or load exactly one world you want to test. Delete all other worlds. 
 
-- Look up the **folder name** of your instance in Windows explorer (not the instance name in the PolyMC UI). 
+    - The actual "benchmark" consists of the player character running forward in a straight line, jumping and holding the attack button down, so position your player accordingly. Place them near a populated base if one exists, and make sure they have room to run in a straight line for some time. Consider enabling creative mode so the test character can break blocks in their way more easily. Start them off looking slightly "down" so they can break blocks blocking their path, and try to align them with a cardinal direction so their movement is more deterministic. 
 
-- Now open Benchmark.py. Client benchmarks are also stored as a list of Python dicts, formatted like this: 
+    - Once your instance is configured, close it. If you want to run similar instances with, say, different mods or different Java parameters, clone that instance so that all tested instances have the exact same world. 
 
-```
-    {
-        "Name": "Client Benchmark Name", 
-        "PolyInstance": "Name (not full path) of your polymc instance folder",
-        "Iterations": # of iterations to run and average together
-    },
-```
-- "Name" is a descriptive nickname for the benchmark, "PolyInstance" is the PolyMC instance folder you just looked up, and "Iterations" is the number of iterations to run the bench. 
+    - Look up the **folder name** of your instance in Windows explorer (not the instance name in the PolyMC UI). 
 
-- You also need to configure the path to your PolyMC .exe file, and the path to your instances folder if your PolyMC installation isn't portable. 
+    - Now open Benchmark.py. Client benchmarks are also stored as a list of Python dicts, formatted like this: 
 
-- Now close (not minimize) *all* other active windows, except the explorer window to start the script. Open apps can interfere with the machine vision used to automate the benchmark. 
+    ```
+        {
+            "Name": "Client Benchmark Name", 
+            "PolyInstance": "Name (not full path) of your polymc instance folder",
+            "Iterations": # of iterations to run and average together
+        },
+    ```
+    - "Name" is a descriptive nickname for the benchmark, "PolyInstance" is the PolyMC instance folder you just looked up, and "Iterations" is the number of iterations to run the bench. 
 
-# Client Benchmark Progression and Results
+    - You also need to configure the path to your PolyMC .exe file, and the path to your instances folder if your PolyMC installation isn't portable. 
 
-- Like the server benchmark, your world will be backed up and restored after each iteration. 
+    - Now close (not minimize) *all* other active windows, except the explorer window to start the script. Open apps can interfere with the machine vision used to automate the benchmark. 
 
-- The script then starts your PolyMC instance, and clicks through and loads the first singleplayer world it finds. This step is *very* finicky and delicate. For instance, while it has some tolerance for modded startscreens, sometimes the script can't find the "Singleplayer" button to click. Sometimes background windows will "occlude" fullscreen Minecraft, even if they have been minimized. And sometimes the auto clicking just doesn't work for unknown reasons, but restarting your PC seems to fix it.
+    # Client Benchmark Progression and Results
 
-- After loading your world, the player character idles for some time to let Java "warm up." 
+    - Like the server benchmark, your world will be backed up and restored after each iteration. 
 
-- Then, the player will start constantly moving forward, jumping, and attacking. At this very moment, Intel Presentation Monitor starts recording frametime data. Do not move your mouse during this phase. 
+    - The script then starts your PolyMC instance, and clicks through and loads the first singleplayer world it finds. This step is *very* finicky and delicate. For instance, while it has some tolerance for modded startscreens, sometimes the script can't find the "Singleplayer" button to click. Sometimes background windows will "occlude" fullscreen Minecraft, even if they have been minimized. And sometimes the auto clicking just doesn't work for unknown reasons, but restarting your PC seems to fix it.
 
-- Spark info is collected at the end (if that mod is present), the client is killed, and the process continues for other iterations/benchmarks. 
+    - After loading your world, the player character idles for some time to let Java "warm up." 
 
-- Average FPS and the average of the top 1% and 5% slowest frames (which is arguably more important than average FPS, since this data represents stutters and laggy areas) is written to a json file. 
- 
+    - Then, the player will start constantly moving forward, jumping, and attacking. At this very moment, Intel Presentation Monitor starts recording frametime data. Do not move your mouse during this phase. 
+
+    - Spark info is collected at the end (if that mod is present), the client is killed, and the process continues for other iterations/benchmarks. 
+
+    - Average FPS and the average of the top 1% and 5% slowest frames (which is arguably more important than average FPS, since this data represents stutters and laggy areas) is written to a json file. 
+</details>
+
 
 # Benchmarking Tips.
 
