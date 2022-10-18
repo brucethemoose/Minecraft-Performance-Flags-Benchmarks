@@ -1,6 +1,6 @@
 This is a guide to tune Java for Minecraft. Every flag and tweak is individually benchmarked to test for regressions, and checked against Java defaults to avoid redundancy.
 
-While these tweaks notably reduce some server and client stutters, expect only modest TPS gains + minimal FPS gains at best, and somewhat increased RAM + CPU usage. And they are no substitute for clearing laggy things out with mods like Spark or Observable. 
+While these tweaks notably reduce some server and client stutters, expect only modest TPS gains + minimal FPS gains at best, and somewhat increased RAM + CPU usage. And they are no substitute for clearing laggy things out with mods like [Spark](https://spark.lucko.me/docs/guides/Finding-lag-spikes) or [Observable](https://github.com/tasgon/observable). 
 
 Discord for questions and such: https://discord.gg/zeFSR9PnUw 
 
@@ -57,7 +57,7 @@ Memory Allocation
 ======
 Minimum and maximum (`-xms` and `-xmx`) memory should be set to the same value, as explained here: https://dzone.com/articles/benefits-of-setting-initial-and-maximum-memory-siz
 
-One exception: if you are on a low-memory system, and Minecraft takes up almost all your RAM, set your mimumum memory below your maximum memory to conserve it when possible. 
+One exception: if you are on a low-memory system, and Minecraft takes up almost all your RAM, set your mimumum memory below your maximum memory to conserve as much as possible.
 
 Sizes are set in megabytes (`-Xms4096M`) or gigabytes (`-Xmx8G`)
 
@@ -127,7 +127,7 @@ On Windows, you **must** run java, and your launcher, as an administrator. That 
 
 On linux, you generally want to use `-XX:+UseTransparentHugePages`. To manually allocate memory instead (for a bigger performance boost), Red Hat has a good tutorial for RHEL-like linux distros, like Fedora, CentOS, or Oracle Linux: https://www.redhat.com/en/blog/optimizing-rhel-8-run-java-implementation-minecraft-server 
 
-Check and see if large pages is working with the `-Xlog:gc+init` java argument. 
+Check and see if large pages is working with the `-Xlog:gc+init` java argument in Java 17. 
 
 GraalVM Enterprise Edition
 ======
