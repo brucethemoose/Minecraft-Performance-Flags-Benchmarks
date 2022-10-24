@@ -59,11 +59,11 @@ Memory Allocation
 ======
 Minimum and maximum (`-xms` and `-xmx`) memory should be set to the same value, as explained here: https://dzone.com/articles/benefits-of-setting-initial-and-maximum-memory-siz
 
-One exception: if you are on a low-memory system, and Minecraft takes up almost all your RAM, set your mimumum memory below your maximum memory to conserve as much as possible.
+One exception: if you are on a low-memory system, and Minecraft takes up almost all your RAM, set your minimum memory below your maximum memory to conserve as much as possible.
 
 Sizes are set in megabytes (`-Xms4096M`) or gigabytes (`-Xmx8G`)
 
-Allocating too much memory can force your operating system to page, make garbage collection pauses more severe, and/or slow the game down. Allocating too little can break garbage collection and/or slow the game down. Keep a close eye on the Windows Task manager (or your DE's system monitor) as Minecraft is running, and allocate only as much as it needs (which is usually less than 8G).
+Allocating too much memory can break gc or just slow Minecraft down, even if you have plenty to spare. Allocating too little can also slow down or break the game. Keep a close eye on the Windows Task manager (or your DE's system monitor) as Minecraft is running, and allocate only as much as it needs (which is usually less than 8G). `sparkc gcmonitor` will tell you if your allocation is too high (the pauses will be too long) or too low (frequent GC with a low memory warning in the notification).
 
 Garbage Collection
 ======
@@ -80,7 +80,7 @@ ZGC is great for high memory/high core count servers. It has no server throughpu
 Unfortunately, it has a significant client FPS hit on my (8-core/16 thread) laptop. See the "ZGC" benchmark in the benchmarks folder. Its not available in Java 8, and much less performant in Java 11 than in Java 17.
 
 `-XX:+UseZGC -XX:AllocatePrefetchStyle=1 -XX:-ZProactive` enables it, but allocate more RAM and more `ConcGCThreads` than you normally would for other GC. Note that ZGC does not like AllocatePrefetchStyle=3, hence setting it to 1 overrides the previous entry.
-
+U
 
 ### Shenandoah
 
@@ -138,7 +138,7 @@ In any Java version/platform, if large pages isn't working, you will get a warni
 GraalVM Enterprise Edition
 ======
 
-GraalVM is a new high performance Java VM from Oracle that can improve the performance of (modded) Minecraft. While client FPS gains are modest, server-side workloads like chunk generation can get a 20%+ boost!
+GraalVM is a new high performance Java VM from Oracle that can improve the performance of (modded and vanilla) Minecraft. While client FPS gains are modest, server-side workloads like chunk generation can get a 20%+ boost!
 
 Only GraalVM Enterprise Edition comes with the full set of optimizations. Download it via direct links from Oracle:
 - Windows: https://oca.opensource.oracle.com/gds/GRAALVM_EE_JAVA17_22_3_0/graalvm-ee-java17-windows-amd64-22.3.0.zip
@@ -147,7 +147,7 @@ Only GraalVM Enterprise Edition comes with the full set of optimizations. Downlo
 - Mac x86: https://oca.opensource.oracle.com/gds/GRAALVM_EE_JAVA17_22_3_0/graalvm-ee-java17-darwin-amd64-22.3.0.tar.gz
 
 
-Legacy Java 8 versions of GraalVM EE, and versions for ARM Macs, require a free registration on Oracle's main download page: https://www.oracle.com/downloads/graalvm-downloads.html
+Java 8 versions of GraalVM EE, and new versions for ARM Macs, require a free registration on Oracle's main download page: https://www.oracle.com/downloads/graalvm-downloads.html
 
 These releases are not Java installers. You need to manually replace your launcher's version of Java, or use a Minecraft launcher that supports specifying your Java path. I recommend ATLauncher, PrismMC or GDLauncher. When specifying a java path, navigate to the "bin" folder in the GraalVM download and use "javaw.exe" or "java.exe". 
 
@@ -172,7 +172,7 @@ GraalVM EE Mod Compatibility
 
 If you run an older, Java 8-based version of GraalVM, there are some potential issues:
 
-- `VectorizeSIMD` turns entities invisible with shader mod like Optifine, Iris or Occulus... but only under certain conditions. This will be fixed in GraalVM EE 22.3.0. See: https://github.com/oracle/graal/issues/4849
+- `VectorizeSIMD` turns entities invisible with shader mods like Optifine, Iris or Occulus... but only under certain conditions. This will be fixed in GraalVM EE 22.3.0. See: https://github.com/oracle/graal/issues/4849
 
 - GraalVM CE and EE both break constellation rendering in 1.16.5 Astral Sorcery. This is possibly related to the shader bug. See: https://github.com/HellFirePvP/AstralSorcery/issues/1963
 
@@ -239,7 +239,7 @@ Other Performance Tips
 
 - Run your Minecraft servers on Clear Linux! It's by far the most optimized linux distribution out-of-the-box, and it has some other nice features (like a stateless config system). It also runs clients on AMD/Intel GPUs quite well: https://docs.01.org/clearlinux/latest/tutorials/multi-boot/dual-boot-win.html
 
-- Oracle Linux is also a good choice for servers, since its reasonably well optimized out-of-the-box and has Graalvm EE available via the package manager. For clients, Arch-based distros like CachyOS or EndeavorOS are excellent. 
+- Oracle Linux is also a good choice for servers, since its reasonably well optimized out-of-the-box and has Graalvm EE available via the package manager. For clients, Arch-based distros like CachyOS or EndeavorOS are excellent, as they have wide support for most hardware.
 
 - Make sure the Minecraft client is using your discrete GPU! Check the F3 tab, and force Minecraft to use it in the "**Windows Graphics Settings**", *not* the AMD/Nvidia control panel (as they don't seem to work anymore).
 
@@ -250,11 +250,11 @@ Other Performance Tips
 FAQ
 ======
 
-- Java 18/19 is has some incompatibilities. At this time, I recommend using 17. 
+- Java 18/19 has some mod incompatibilities. But they reportedly work with some modpacks, and I'm, not sure if there are any performance benefits.
 
 - Java tweaks improve server performance and client stuttering, but they don't boost average client FPS much (if at all). For that, running correct/up-to-date graphics drivers and performance mods is far more important: https://github.com/NordicGamerFE/usefulmods
 
-- This guide assumes you have a little spare RAM when running Minecraft. If your setup is RAM constrained, try removing the following arguments:  `-XX:NmethodSweepActivity=1 -XX:ReservedCodeCacheSize=400M -XX:NonNMethodCodeHeapSize=12M -XX:ProfiledCodeHeapSize=194M -XX:NonProfiledCodeHeapSize=194M`
+- This guide assumes you have a little spare RAM when running Minecraft. If your setup is RAM constrained, try removing the following arguments in particular: `-XX:NmethodSweepActivity=1 -XX:ReservedCodeCacheSize=400M -XX:NonNMethodCodeHeapSize=12M -XX:ProfiledCodeHeapSize=194M -XX:NonProfiledCodeHeapSize=194M`
 
 - IBM's OpenJ9 does indeed save RAM, as its reputation would suggest, but is over 30% slower at server chunkgen in my tests. If there are any flags that make it competitive with OpenJDK, please let me know on Discord or here: https://github.com/brucethemoose/Minecraft-Performance-Flags-Benchmarks/issues/9
 
