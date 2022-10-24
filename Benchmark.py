@@ -25,7 +25,7 @@ j9path = r"F:/JDKs/ibmopenj9/bin/java.exe"
 
 #Java Flags (for servers)
 #(Should start with a space, so they can be "added" together with the + sign)
-#Client flags must be set in PolyMC instances!
+#Client flags must be set in Prism instances!
 
 #GC
 aikar = r''' -XX:+UseG1GC -XX:+ParallelRefProcEnabled -XX:MaxGCPauseMillis=200 -XX:+UnlockExperimentalVMOptions -XX:+DisableExplicitGC -XX:+AlwaysPreTouch -XX:G1NewSizePercent=30 -XX:G1MaxNewSizePercent=40 -XX:G1HeapRegionSize=8M -XX:G1ReservePercent=20 -XX:G1HeapWastePercent=5 -XX:G1MixedGCCountTarget=4 -XX:InitiatingHeapOccupancyPercent=15 -XX:G1MixedGCLiveThresholdPercent=90 -XX:G1RSetUpdatingPauseTimePercent=5 -XX:SurvivorRatio=32 -XX:MaxTenuringThreshold=1'''
@@ -38,9 +38,11 @@ memory = r''' -Xms7G -Xmx7G'''
 
 lightmemory = r''' -Xms4G -Xmx4G'''
 
+alot = r'''	-Dgraal.EEPeelAlot=true -Dgraal.StripMineALot=true'''
+
 
 #-----------------------Benchmark Data--------------------------
-benchname = r"Testing"   #Name for the whole benchmark run
+benchname = r"Alot Flags Test"   #Name for the whole benchmark run
 
 blist = [
 #Note that Forge/Fabric server packs only need "java + arguments" for their launch command, as their jars are automatically found
@@ -48,7 +50,7 @@ blist = [
 
 #  {
 #    "Name": "Client Benchmark Name", 
-#    "PolyInstance": "Name (not full path) of your polymc instance folder",
+#    "PrismInstance": "Name (not full path) of your Prism instance folder",
 #    "Iterations": # of iterations to run and average together
 #  },
 #  {
@@ -58,9 +60,10 @@ blist = [
 #    "Iterations": # of iterations to run and average together
 #  }
 #]
+
   {
     "Name": "Test Client Benchmark", 
-    "PolyInstance": "1.18.2",
+    "PrismInstance": "1.18.2",
     "Iterations": 3
   },
   {
@@ -69,6 +72,7 @@ blist = [
     "Path": vevserver, 
     "Iterations": 5
   }
+
 
 ]
 
@@ -87,8 +91,8 @@ totaltimeout = 1200 #Number of seconds the whole server can run before timing ou
 forceload_cmd= r"forceload add -120 -120 120 120" #Command to forceload a rectangle. Can also be some other server console command. 
 
 #Client benchmarking options
-polypath = r"C:/Games/PolyMC-Windows-Portable-1.4.0/polymc.exe" #Full path to polymc executable file
-polyinstances = r"" #Full path to polymc instance folder. Normally in %appdata%/roaming/polymc on windows, but you can leave this blank if using polyMC portable. 
+prismpath = r"C:/Games/Prism-Windows-Portable-1.4.0/Prism.exe" #Full path to Prism executable file
+prisminstances = r"" #Full path to Prism instance folder. Normally in %appdata%/roaming/Prism on windows, but you can leave this blank if using Prism portable. 
 presentmonpath = r"presentmon.exe"  #full path to Intel presentmon executable file
 warmup = 90    #Seconds to wait after hitting the "singleplayer" button before starting the benchmark. Give enough time for the world to load, and java to "warm up"
 benchtime = 90 #Seconds to run the benchmark
@@ -123,8 +127,8 @@ def benchmark(i): #"i is the benchmark index"
   ngui = ""
   if nogui:
     ngui = " nogui"
-  if "PolyInstance" in blist[i] and ("Command" in blist[i] or "Path" in blist[i]):
-    raise Exception("Each benchmark instance should ether have a command and path entry, or a polymc instance entry, not both")
+  if "PrismInstance" in blist[i] and ("Command" in blist[i] or "Path" in blist[i]):
+    raise Exception("Each benchmark instance should ether have a command and path entry, or a Prism instance entry, not both")
   
   #Function to wait for a given line to appear in a log file. 
   def waitforlogline(lfile, key, ldelay = 1, ltimeout = 1800):
@@ -152,7 +156,7 @@ def benchmark(i): #"i is the benchmark index"
     else:
       return "-"
 
-  if "PolyInstance" in blist[i]:
+  if "PrismInstance" in blist[i]:
     #---Client branch---
     import pygetwindow as gw
     from guibot.guibot import GuiBot 
@@ -165,22 +169,22 @@ def benchmark(i): #"i is the benchmark index"
 
     if plat != "Windows":
       raise Exception("Benchmarking is only supported on Windows!")
-    polyfolder = os.path.normpath(os.path.join(os.path.dirname(polypath), "instances", blist[i]["PolyInstance"]))
-    if not os.path.isdir(polyfolder):
-      polyfolder = os.path.join(polyinstances, blist[i]["PolyInstance"])
-      if not os.path.isdir(polyfolder):
-        raise Exception("Either your PolyMC instance path or your selected instance is incorrect: " + polyfolder)
-    polyfolder = (glob.glob(os.path.join(polyfolder, "minecraft")) + glob.glob(os.path.join(polyfolder, ".minecraft")))[0]
-    if not os.path.isdir(polyfolder):
-      raise Exception("PolyMC instance not valid!")
-    plog = os.path.join(polyfolder, "logs", "latest.log")
+    prismfolder = os.path.normpath(os.path.join(os.path.dirname(prismpath), "instances", blist[i]["PrismInstance"]))
+    if not os.path.isdir(prismfolder):
+      prismfolder = os.path.join(prisminstances, blist[i]["PrismInstance"])
+      if not os.path.isdir(prismfolder):
+        raise Exception("Either your Prism instance path or your selected instance is incorrect: " + prismfolder)
+    prismfolder = (glob.glob(os.path.join(prismfolder, "minecraft")) + glob.glob(os.path.join(prismfolder, ".minecraft")))[0]
+    if not os.path.isdir(prismfolder):
+      raise Exception("Prism instance not valid!")
+    plog = os.path.join(prismfolder, "logs", "latest.log")
     try:
-      worldfolder = glob.glob(os.path.join(polyfolder, "saves", "*"))[0]
+      worldfolder = glob.glob(os.path.join(prismfolder, "saves", "*"))[0]
     except:
       raise Exception("Please create a world in this instance before running the benchmark!")
-    worldbackup = os.path.join(polyfolder, "world_backup")
+    worldbackup = os.path.join(prismfolder, "world_backup")
 
-    os.chdir(polyfolder)
+    os.chdir(prismfolder)
     
     #initialize lists
     blist[i]["Average_FPS"] = []
@@ -228,7 +232,7 @@ def benchmark(i): #"i is the benchmark index"
         except:
           pass
         try:  
-          clientprocess = subprocess.Popen([polypath, "--launch", blist[i]["PolyInstance"]], creationflags=subprocess.HIGH_PRIORITY_CLASS | subprocess.CREATE_NEW_CONSOLE, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, shell=True) #launch the client
+          clientprocess = subprocess.Popen([prismpath, "--launch", blist[i]["PrismInstance"]], creationflags=subprocess.HIGH_PRIORITY_CLASS | subprocess.CREATE_NEW_CONSOLE, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, shell=True) #launch the client
         except Exception as e:
           print("Error starting client:")
           raise e
@@ -478,13 +482,14 @@ def benchmark(i): #"i is the benchmark index"
     #Try to find Fabric
     d = glob.glob("*.jar")
     for f in d:
-      if "fabric-server" in os.path.basename(f):
+      if ("fabric-" in os.path.basename(f)) and "fabric-installer" not in os.path.basename(f):
         if debug: print("Found Fabric: " + f)
         chunkgen_command = fabric_chunkgen_command
         chunkgen_expect = fabric_chunkgen_expect
         command = command + " -jar " + os.path.basename(f)
         if nogui:
           command = command + ngui
+        break
     
     #Try to find Forge
     d = glob.glob(r"libraries/net/minecraftforge/forge/*/win_args.txt")
