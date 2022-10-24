@@ -1,0 +1,168 @@
+[
+    {
+        "Name": "No Alot",
+        "Command": "C:/JDKs/graalvm-ee-java17-windows-amd64-22.3.0/graalvm-ee-java17-22.3.0/bin/java.exe -XX:+UnlockExperimentalVMOptions -XX:+UnlockDiagnosticVMOptions -XX:+AlwaysActAsServerClassMachine -XX:+AlwaysPreTouch -XX:+DisableExplicitGC -XX:+UseNUMA -XX:AllocatePrefetchStyle=3 -XX:NmethodSweepActivity=1 -XX:ReservedCodeCacheSize=400M -XX:NonNMethodCodeHeapSize=12M -XX:ProfiledCodeHeapSize=194M -XX:NonProfiledCodeHeapSize=194M -XX:-DontCompileHugeMethods -XX:MaxNodeLimit=240000 -XX:NodeLimitFudgeFactor=8000 -XX:+UseVectorCmov -XX:+PerfDisableSharedMem -XX:+UseFastUnorderedTimeStamps -XX:+UseCriticalJavaThreadPriority -XX:+EagerJVMCI -Dgraal.TuneInlinerExploration=1 -Dgraal.CompilerConfiguration=enterprise -XX:+UseG1GC -XX:MaxGCPauseMillis=130 -XX:+UnlockExperimentalVMOptions -XX:+DisableExplicitGC -XX:+AlwaysPreTouch -XX:G1NewSizePercent=28 -XX:G1HeapRegionSize=16M -XX:G1ReservePercent=20 -XX:G1MixedGCCountTarget=3 -XX:InitiatingHeapOccupancyPercent=10 -XX:G1MixedGCLiveThresholdPercent=90 -XX:G1RSetUpdatingPauseTimePercent=0 -XX:SurvivorRatio=32 -XX:MaxTenuringThreshold=1 -XX:G1SATBBufferEnqueueingThresholdPercent=30 -XX:G1ConcMarkStepDurationMillis=5 -XX:G1ConcRSHotCardLimit=16 -XX:G1ConcRefinementServiceIntervalMillis=150 -XX:ConcGCThreads=6 -Xms7G -Xmx7G -XX:+UseLargePages -XX:LargePageSizeInBytes=2m",
+        "Path": "C:/Games/mcservers/vevserver",
+        "Iterations": 5,
+        "Startup_Times": [
+            99.53,
+            93.21,
+            93.67,
+            94.79,
+            94.84
+        ],
+        "Chunkgen_Times": [
+            162.87,
+            156.84,
+            165.36,
+            164.4,
+            168.17
+        ],
+        "Average_TPS_Values": [
+            19.44,
+            19.39,
+            19.32,
+            19.33,
+            19.39
+        ],
+        "GC_Stop_MS": [
+            45.13,
+            43.6,
+            44.56,
+            43.67,
+            44.11
+        ],
+        "GC_Stops": [
+            45,
+            45,
+            45,
+            46,
+            46
+        ],
+        "Oldgen_GCs": [
+            0,
+            0,
+            0,
+            0,
+            0
+        ],
+        "Memory_Usage": [
+            2.3,
+            3.1,
+            3.6,
+            5.0,
+            2.1
+        ],
+        "CPU_Usage": [
+            29.0,
+            29.0,
+            28.0,
+            29.0,
+            28.0
+        ],
+        "Player_Spawn_Times": [
+            5.509,
+            5.578,
+            5.624,
+            5.572,
+            5.799
+        ],
+        "Average_Chunkgen_Time": 163.53,
+        "Average_Startup_Time": 95.21,
+        "PVariance_Chunkgen_Time": 14.17,
+        "Pvariance_Startup_Time": 5.07,
+        "Average_TPS": 19.37,
+        "PVariance_TPS": 0.0,
+        "Average_GC_Stop_MS": 44.21,
+        "PVariance_GC_Stop_MS": 0.33,
+        "Average_GC_Stops": 45.4,
+        "Average_Memory_Usage_GB": 3.22,
+        "Average_CPU_Usage": 28.6,
+        "Average_Oldgen_GCs": 0,
+        "Average_Spawn_Time": 5.62,
+        "Player_Spawn_Variance": 0.01
+    },
+    {
+        "Name": "Alot",
+        "Command": "C:/JDKs/graalvm-ee-java17-windows-amd64-22.3.0/graalvm-ee-java17-22.3.0/bin/java.exe -XX:+UnlockExperimentalVMOptions -XX:+UnlockDiagnosticVMOptions -XX:+AlwaysActAsServerClassMachine -XX:+AlwaysPreTouch -XX:+DisableExplicitGC -XX:+UseNUMA -XX:AllocatePrefetchStyle=3 -XX:NmethodSweepActivity=1 -XX:ReservedCodeCacheSize=400M -XX:NonNMethodCodeHeapSize=12M -XX:ProfiledCodeHeapSize=194M -XX:NonProfiledCodeHeapSize=194M -XX:-DontCompileHugeMethods -XX:MaxNodeLimit=240000 -XX:NodeLimitFudgeFactor=8000 -XX:+UseVectorCmov -XX:+PerfDisableSharedMem -XX:+UseFastUnorderedTimeStamps -XX:+UseCriticalJavaThreadPriority -XX:+EagerJVMCI -Dgraal.TuneInlinerExploration=1 -Dgraal.CompilerConfiguration=enterprise -XX:+UseG1GC -XX:MaxGCPauseMillis=130 -XX:+UnlockExperimentalVMOptions -XX:+DisableExplicitGC -XX:+AlwaysPreTouch -XX:G1NewSizePercent=28 -XX:G1HeapRegionSize=16M -XX:G1ReservePercent=20 -XX:G1MixedGCCountTarget=3 -XX:InitiatingHeapOccupancyPercent=10 -XX:G1MixedGCLiveThresholdPercent=90 -XX:G1RSetUpdatingPauseTimePercent=0 -XX:SurvivorRatio=32 -XX:MaxTenuringThreshold=1 -XX:G1SATBBufferEnqueueingThresholdPercent=30 -XX:G1ConcMarkStepDurationMillis=5 -XX:G1ConcRSHotCardLimit=16 -XX:G1ConcRefinementServiceIntervalMillis=150 -XX:ConcGCThreads=6 -Xms7G -Xmx7G -XX:+UseLargePages -XX:LargePageSizeInBytes=2m\t-Dgraal.EEPeelAlot=true -Dgraal.StripMineALot=true",
+        "Path": "C:/Games/mcservers/vevserver",
+        "Iterations": 5,
+        "Startup_Times": [
+            96.73,
+            96.98,
+            97.79,
+            96.37,
+            97.19
+        ],
+        "Chunkgen_Times": [
+            171.1,
+            172.68,
+            184.95,
+            168.58,
+            177.13
+        ],
+        "Average_TPS_Values": [
+            19.35,
+            19.19,
+            19.3,
+            19.42,
+            19.17
+        ],
+        "GC_Stop_MS": [
+            45.7,
+            43.11,
+            43.23,
+            43.8,
+            43.73
+        ],
+        "GC_Stops": [
+            46,
+            44,
+            48,
+            45,
+            45
+        ],
+        "Oldgen_GCs": [
+            0,
+            0,
+            0,
+            0,
+            0
+        ],
+        "Memory_Usage": [
+            3.7,
+            4.8,
+            2.5,
+            3.9,
+            3.1
+        ],
+        "CPU_Usage": [
+            29.0,
+            29.0,
+            29.0,
+            30.0,
+            29.0
+        ],
+        "Player_Spawn_Times": [
+            5.512,
+            5.8,
+            5.69,
+            5.564,
+            5.66
+        ],
+        "Average_Chunkgen_Time": 174.89,
+        "Average_Startup_Time": 97.01,
+        "PVariance_Chunkgen_Time": 33.06,
+        "Pvariance_Startup_Time": 0.23,
+        "Average_TPS": 19.29,
+        "PVariance_TPS": 0.01,
+        "Average_GC_Stop_MS": 43.91,
+        "PVariance_GC_Stop_MS": 0.87,
+        "Average_GC_Stops": 45.6,
+        "Average_Memory_Usage_GB": 3.6,
+        "Average_CPU_Usage": 29.2,
+        "Average_Oldgen_GCs": 0,
+        "Average_Spawn_Time": 5.65,
+        "Player_Spawn_Variance": 0.01
+    }
+]
