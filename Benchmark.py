@@ -478,13 +478,14 @@ def benchmark(i): #"i is the benchmark index"
     #Try to find Fabric
     d = glob.glob("*.jar")
     for f in d:
-      if "fabric-server" in os.path.basename(f):
+      if ("fabric-" in os.path.basename(f)) and "fabric-installer" not in os.path.basename(f):
         if debug: print("Found Fabric: " + f)
         chunkgen_command = fabric_chunkgen_command
         chunkgen_expect = fabric_chunkgen_expect
         command = command + " -jar " + os.path.basename(f)
         if nogui:
           command = command + ngui
+        break
     
     #Try to find Forge
     d = glob.glob(r"libraries/net/minecraftforge/forge/*/win_args.txt")
