@@ -13,7 +13,7 @@ All flags are tested with Benchmark.py script. See the work-in-progress [Benchma
 Picking a Java Runtime
 ======
 
-For Minecraft 1.16.5 and up, use Java 17. Some launchers like Curseforge and PrismMC ask you to use Java 8 on 1.16.X specifically, but Minecraft 1.16.5+, all 1.18+ mods, and *most* 1.16.5 mods are compatible with Java 17.
+For Minecraft 1.16.5 and up, use Java 17. Some launchers like Curseforge and PrismMC ask you to use Java 8 on 1.16.X, but Minecraft 1.16.5+, all 1.18+ mods, and *most* 1.16.5 mods are compatible with Java 17.
 
 Sometimes Java 11 will work where Java 17 doesn't.
 
@@ -130,6 +130,10 @@ On Windows, you **must** run java, and your launcher, as an administrator. That 
 On linux, you generally want to use `-XX:+UseTransparentHugePages`. To manually allocate memory instead (for a bigger performance boost), Red Hat has a good tutorial for RHEL-like linux distros, like Fedora, CentOS, or Oracle Linux: https://www.redhat.com/en/blog/optimizing-rhel-8-run-java-implementation-minecraft-server 
 
 Check and see if large pages is working with the `-Xlog:gc+init` java argument in Java 17. 
+
+In any Java version/platform, if large pages isn't working, you will get a warning in the log similar to this: 
+
+> Java HotSpot(TM) 64-Bit Server VM warning: JVM cannot use large page memory because it does not have enough privilege to lock pages in memory.
 
 GraalVM Enterprise Edition
 ======
