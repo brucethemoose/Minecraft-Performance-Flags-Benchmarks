@@ -13,7 +13,7 @@ All flags are tested with Benchmark.py script. See the work-in-progress [Benchma
 Picking a Java Runtime
 ======
 
-For Minecraft 1.16.5 and up, use Java 17. Some launchers like Curseforge ask you to use Java 8 on 1.16.X specifically, but Minecraft 1.16.5+, all 1.18+ mods, and *most* 1.16.5 mods are compatible with Java 17.
+For Minecraft 1.16.5 and up, use Java 17. Some launchers like Curseforge and PrismMC ask you to use Java 8 on 1.16.X specifically, but Minecraft 1.16.5+, all 1.18+ mods, and *most* 1.16.5 mods are compatible with Java 17.
 
 Sometimes Java 11 will work where Java 17 doesn't.
 
@@ -33,9 +33,11 @@ Java runtimes from Azul, Microsoft, Adoptium, Amazon and so on are basically ide
 
 If you dont know what to pick, I recommend GraalVM EE (see below) or the latest Adoptium Java 17 JRE: https://adoptium.net/
 
+Couleur maintains a good running list of JREs here: https://rentry.co/JREs
+
 Base Java Flags
 ======
-These optimized flags will work with any Java 11+ build. They work on both servers and clients:
+These optimized flags run with any Java 11+ build. They work on both servers and clients:
 
 
 ```-XX:+UnlockExperimentalVMOptions -XX:+UnlockDiagnosticVMOptions -XX:+AlwaysActAsServerClassMachine -XX:+AlwaysPreTouch -XX:+DisableExplicitGC -XX:+UseNUMA -XX:NmethodSweepActivity=1 -XX:ReservedCodeCacheSize=400M -XX:NonNMethodCodeHeapSize=12M -XX:ProfiledCodeHeapSize=194M -XX:NonProfiledCodeHeapSize=194M -XX:-DontCompileHugeMethods -XX:MaxNodeLimit=240000 -XX:NodeLimitFudgeFactor=8000 -XX:+UseVectorCmov -XX:+PerfDisableSharedMem -XX:+UseFastUnorderedTimeStamps -XX:+UseCriticalJavaThreadPriority -XX:ThreadPriorityPolicy=1 -XX:AllocatePrefetchStyle=3```
@@ -134,45 +136,45 @@ GraalVM Enterprise Edition
 
 GraalVM is a new high performance Java VM from Oracle that can improve the performance of (modded) Minecraft. While client FPS gains are modest, server-side workloads like chunk generation can get a 20%+ boost!
 
-Unfortunately, only GraalVM Enterprise Edition comes with the full set of optimizations, and downloading it requires making a free Oracle account.
+Only GraalVM Enterprise Edition comes with the full set of optimizations. Download it via direct links from Oracle:
+- Windows: https://oca.opensource.oracle.com/gds/GRAALVM_EE_JAVA17_22_3_0/graalvm-ee-java17-windows-amd64-22.3.0.zip
+- Linux x86: https://oca.opensource.oracle.com/gds/GRAALVM_EE_JAVA17_22_3_0/graalvm-ee-java17-linux-amd64-22.3.0.tar.gz (GraalVM EE is also available on the AUR and on Oracle Linux's repos)
+- Linux ARM: https://oca.opensource.oracle.com/gds/GRAALVM_EE_JAVA17_22_3_0/graalvm-ee-java17-darwin-aarch64-22.3.0.tar.gz
+- Mac x86: https://oca.opensource.oracle.com/gds/GRAALVM_EE_JAVA17_22_3_0/graalvm-ee-java17-darwin-amd64-22.3.0.tar.gz
 
-Register and download it here: https://www.oracle.com/downloads/graalvm-downloads.html
 
-Grab the newest "Oracle GraalVM Enterprise Edition Core" release available for Java 17+ (or Java 11 if you need it) from the "Archives" section. Unzip it, and put the unzipped folder somewhere safe.
+Legacy Java 8 versions of GraalVM EE, and versions for ARM Macs, require a free registration on Oracle's main download page: https://www.oracle.com/downloads/graalvm-downloads.html
 
-Again, you *must* use 22.1.0, not 22.2.0.
-
-These releases are not Java installers. You need to manually replace your launcher's version of Java, or use a Minecraft launcher that supports specifying your Java path. I recommend ATLauncher or GDLauncher. When specifying a java path, navigate to the "bin" folder in the GraalVM download and use "javaw.exe" or "java.exe"
+These releases are not Java installers. You need to manually replace your launcher's version of Java, or use a Minecraft launcher that supports specifying your Java path. I recommend ATLauncher, PrismMC or GDLauncher. When specifying a java path, navigate to the "bin" folder in the GraalVM download and use "javaw.exe" or "java.exe". 
 
 For servers, you need to replace the "java" command in your server start sh/bat file with the full path to graalvm java, in quotes.
 
-If you don't feel comfortable making an Oracle account, grab the latest [GraalVM CE release](https://github.com/graalvm/graalvm-ce-builds/releases) and use the flags from above ^. But Oracle does not check the information you put into the registration page, and GraalVM CE lacks most of the EE optimizations.
-
-Apple Silicon Mac Users: For now, you must use GraalVM 22.2.0 and add the following argument: `-Dgraal.PartialEscapeAnalysis=false`
+Alternatively, you can install it system-wide by following Oracle's guide: https://www.graalvm.org/22.2/docs/getting-started/#install-graalvm
 
 GraalVM EE Java Arguments
 ======
 
 Arguments for GraalVM EE 22+ Java 17 (or Java 11):
 
-```-XX:+UnlockExperimentalVMOptions -XX:+UnlockDiagnosticVMOptions -XX:+AlwaysActAsServerClassMachine -XX:+AlwaysPreTouch -XX:+DisableExplicitGC -XX:+UseNUMA -XX:AllocatePrefetchStyle=3 -XX:NmethodSweepActivity=1 -XX:ReservedCodeCacheSize=400M -XX:NonNMethodCodeHeapSize=12M -XX:ProfiledCodeHeapSize=194M -XX:NonProfiledCodeHeapSize=194M -XX:-DontCompileHugeMethods -XX:MaxNodeLimit=240000 -XX:NodeLimitFudgeFactor=8000 -XX:+UseVectorCmov -XX:+PerfDisableSharedMem -XX:+UseFastUnorderedTimeStamps -XX:+UseCriticalJavaThreadPriority -XX:+EnableJVMCIProduct -XX:+UseJVMCICompiler -XX:+EagerJVMCI -Dgraal.TuneInlinerExploration=1 -Dgraal.CompilerConfiguration=enterprise -Dgraal.UsePriorityInlining=true -Dgraal.Vectorization=true -Dgraal.OptDuplication=true -Dgraal.DetectInvertedLoopsAsCounted=true -Dgraal.LoopInversion=true -Dgraal.VectorizeHashes=true -Dgraal.EnterprisePartialUnroll=true -Dgraal.VectorizeSIMD=true -Dgraal.StripMineNonCountedLoops=true -Dgraal.SpeculativeGuardMovement=true -Dgraal.InfeasiblePathCorrelation=true -Dgraal.LoopRotation=true```
+```-XX:+UnlockExperimentalVMOptions -XX:+UnlockDiagnosticVMOptions -XX:+AlwaysActAsServerClassMachine -XX:+AlwaysPreTouch -XX:+DisableExplicitGC -XX:+UseNUMA -XX:AllocatePrefetchStyle=3 -XX:NmethodSweepActivity=1 -XX:ReservedCodeCacheSize=400M -XX:NonNMethodCodeHeapSize=12M -XX:ProfiledCodeHeapSize=194M -XX:NonProfiledCodeHeapSize=194M -XX:-DontCompileHugeMethods -XX:MaxNodeLimit=240000 -XX:NodeLimitFudgeFactor=8000 -XX:+UseVectorCmov -XX:+PerfDisableSharedMem -XX:+UseFastUnorderedTimeStamps -XX:+UseCriticalJavaThreadPriority -XX:+EagerJVMCI -Dgraal.TuneInlinerExploration=1 -Dgraal.CompilerConfiguration=enterprise```
 
-**You must add G1GC arguments to these arguments.** GraalVM currently doesn't work with ZGC or Shenandoah.  
+**You must use G1GC with these arguments.** GraalVM currently doesn't work with ZGC or Shenandoah.  
 
 
 GraalVM EE Mod Compatibility
 ======
-There are a few client-side rendering bugs specific to GraalVM:
 
-- GraalVM EE 22.2.0 has issues with Minecraft, particularly with the `UsePriorityInlining` flag enabled. Please use 22.1.0 until 22.3.0 is out. See: https://github.com/oracle/graal/issues/4776
+**GraalVM EE 22.3.0 fixes all known Minecraft bugs**
 
-- `VectorizeSIMD` turns entities invisible with Iris or Occulus... but only under certain conditions. This will be fixed in GraalVM EE 22.3.0. See: https://github.com/oracle/graal/issues/4849
+If you run an older, Java 8-based version of GraalVM, there are some potential issues:
 
-- GraalVM CE and EE both break constellation rendering in 1.16.5 Astral Sorcery. See: https://github.com/HellFirePvP/AstralSorcery/issues/1963
+- `VectorizeSIMD` turns entities invisible with shader mod like Optifine, Iris or Occulus... but only under certain conditions. This will be fixed in GraalVM EE 22.3.0. See: https://github.com/oracle/graal/issues/4849
+
+- GraalVM CE and EE both break constellation rendering in 1.16.5 Astral Sorcery. This is possibly related to the shader bug. See: https://github.com/HellFirePvP/AstralSorcery/issues/1963
 
 I have not observed any server-side bugs yet. 
 
-If you run into any other mod issues you can trace back to GraalVM, please create a Github issue or post in the Discord! Generally, you can work around them by disabling the `dgraal` flags one at a time, or by finding the right function with `Dgraal.PrintCompilation=true`, and working around it with `-Dgraal.GraalCompileOnly=~...` once you find the miscompiled function.
+If you run into any other mod issues you can trace back to GraalVM, please create a Github issue or post in the Discord! Generally, you can work around them by disabling major `dgraal` optimization flags, or by finding the right function with `Dgraal.PrintCompilation=true`, and working around it with `-Dgraal.GraalCompileOnly=~...` once you find the miscompiled function.
 
 SpecialK
 ======
@@ -226,7 +228,7 @@ You can also get Java 8 versions of GraalVM EE from the [21.X section on the Ora
 
 ```-XX:+UnlockExperimentalVMOptions -XX:+UnlockDiagnosticVMOptions -XX:+AlwaysActAsServerClassMachine -XX:+ParallelRefProcEnabled -XX:+DisableExplicitGC -XX:+AlwaysPreTouch -XX:+AggressiveOpts -XX:+UseFastAccessorMethods -XX:AllocatePrefetchStyle=1 -XX:ThreadPriorityPolicy=1 -XX:+UseNUMA -XX:+UseDynamicNumberOfGCThreads -XX:NmethodSweepActivity=1 -XX:ReservedCodeCacheSize=350M -XX:-DontCompileHugeMethods -XX:MaxNodeLimit=240000 -XX:NodeLimitFudgeFactor=8000 -XX:+UseFPUForSpilling -XX:+EnableJVMCI -XX:+UseJVMCICompiler -XX:+EagerJVMCI -Dgraal.TuneInlinerExploration=1 -Dgraal.CompilerConfiguration=enterprise -Dgraal.UsePriorityInlining=true -Dgraal.Vectorization=true -Dgraal.OptDuplication=true -Dgraal.DetectInvertedLoopsAsCounted=true -Dgraal.LoopInversion=true -Dgraal.VectorizeHashes=true -Dgraal.EnterprisePartialUnroll=true -Dgraal.VectorizeSIMD=true -Dgraal.StripMineNonCountedLoops=true -Dgraal.SpeculativeGuardMovement=true -Dgraal.InfeasiblePathCorrelation=true```
 
-
+Be sure to set `-Dgraal.VectorizeSIMD` to `false` if you run shaders.
 
 Other Performance Tips
 ======
