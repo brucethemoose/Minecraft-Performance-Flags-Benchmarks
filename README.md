@@ -182,7 +182,7 @@ Only GraalVM Enterprise Edition comes with the full set of optimizations. Downlo
 
 (Select GraalVM EE versions are also available on the AUR and on Oracle Linux's repos)
 
-New versions for ARM Macs, require a free registration on Oracle's main download page: https://www.oracle.com/downloads/graalvm-downloads.html
+New versions for ARM Macs require a free registration on Oracle's main download page: https://www.oracle.com/downloads/graalvm-downloads.html
 
 These releases are not Java installers. You need to manually replace your launcher's version of Java, or use a Minecraft launcher that supports specifying your Java path. I recommend ATLauncher, Prism Launcher or GDLauncher. When specifying a java path, navigate to the "bin" folder in the GraalVM download and use "javaw.exe" or "java.exe". 
 
