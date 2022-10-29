@@ -143,13 +143,46 @@ GraalVM Enterprise Edition
 GraalVM is a new Java VM from Oracle that can improve the performance of (modded and vanilla) Minecraft. While client FPS gains are modest, server-side workloads like chunk generation can get a 20%+ boost!
 
 Only GraalVM Enterprise Edition comes with the full set of optimizations. Download it via direct links from Oracle:
+<details>
+  <summary>Java 17</summary>
+
 - Windows: https://oca.opensource.oracle.com/gds/GRAALVM_EE_JAVA17_22_3_0/graalvm-ee-java17-windows-amd64-22.3.0.zip
-- Linux x86: https://oca.opensource.oracle.com/gds/GRAALVM_EE_JAVA17_22_3_0/graalvm-ee-java17-linux-amd64-22.3.0.tar.gz (GraalVM EE is also available on the AUR and on Oracle Linux's repos)
+    
+- Linux x86: https://oca.opensource.oracle.com/gds/GRAALVM_EE_JAVA17_22_3_0/graalvm-ee-java17-linux-amd64-22.3.0.tar.gz
+    
 - Linux ARM: https://oca.opensource.oracle.com/gds/GRAALVM_EE_JAVA17_22_3_0/graalvm-ee-java17-darwin-aarch64-22.3.0.tar.gz
+
 - Mac x86: https://oca.opensource.oracle.com/gds/GRAALVM_EE_JAVA17_22_3_0/graalvm-ee-java17-darwin-amd64-22.3.0.tar.gz
+    
+</details>
 
+<details>
+  <summary>Java 11</summary>
 
-Java 8 versions of GraalVM EE, and new versions for ARM Macs, require a free registration on Oracle's main download page: https://www.oracle.com/downloads/graalvm-downloads.html
+- Windows: https://oca.opensource.oracle.com/gds/GRAALVM_EE_JAVA11_22_3_0/graalvm-ee-java11-windows-amd64-22.3.0.zip
+    
+- Linux x86: https://oca.opensource.oracle.com/gds/GRAALVM_EE_JAVA11_22_3_0/graalvm-ee-java11-linux-amd64-22.3.0.tar.gz
+    
+- Linux ARM: https://oca.opensource.oracle.com/gds/GRAALVM_EE_JAVA11_22_3_0/graalvm-ee-java11-darwin-aarch64-22.3.0.tar.gz
+
+- Mac x86: https://oca.opensource.oracle.com/gds/GRAALVM_EE_JAVA11_22_3_0/graalvm-ee-java11-darwin-amd64-22.3.0.tar.gz
+    
+</details>
+
+<details>
+  <summary>Java 8</summary>
+
+- Windows: https://oca.opensource.oracle.com/gds/GRAALVM_EE_JAVA8_21_3_4/graalvm-ee-java8-windows-amd64-21.3.4.zip
+    
+- Linux x86: https://oca.opensource.oracle.com/gds/GRAALVM_EE_JAVA8_21_3_4/graalvm-ee-java8-linux-amd64-21.3.4.tar.gz
+
+- Mac x86: https://oca.opensource.oracle.com/gds/GRAALVM_EE_JAVA8_21_3_4/graalvm-ee-java8-darwin-amd64-21.3.4.tar.gz
+    
+</details>
+
+(Select GraalVM EE versions are also available on the AUR and on Oracle Linux's repos)
+
+New versions for ARM Macs, require a free registration on Oracle's main download page: https://www.oracle.com/downloads/graalvm-downloads.html
 
 These releases are not Java installers. You need to manually replace your launcher's version of Java, or use a Minecraft launcher that supports specifying your Java path. I recommend ATLauncher, Prism Launcher or GDLauncher. When specifying a java path, navigate to the "bin" folder in the GraalVM download and use "javaw.exe" or "java.exe". 
 
