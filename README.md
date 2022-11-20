@@ -237,11 +237,11 @@ One user has reported reduced FPS when running SpecialK. If this happens to you,
 
 Process Priority
 ======
-After launching Minecraft, set Java to run at a high process priority in Windows with the Task Manager:
+After launching Minecraft, set Java to run at an "Above Normal" process priority in Windows with the Task Manager:
 
 ![taskmanager](Tutorial_Images/taskmon.PNG)
 
-Linux users can add  `sudo nice -n -15` to the beginning of the launch command, but note that nice levels below 0 (with the "max" being -20) require running as `sudo`. You can also use `renice` after launching Minecraft. 
+Linux users can add  `sudo nice -n -10` to the beginning of the launch command, but note that nice levels below 0 (with the "max" being -20) require running Minecraft as `sudo`. Alternatively, use the `renice` command after launching Minecraft to avoid this security risk.
 
 
 Performance Mods
