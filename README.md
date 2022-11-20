@@ -13,7 +13,7 @@ All flags are tested with Benchmark.py script. See the work-in-progress [Benchma
 Picking a Java Runtime
 ======
 
-For Minecraft 1.16.5 and up, use Java 17. Some launchers like Curseforge and PrismMC ask you to use Java 8 on 1.16.X, but Minecraft 1.16.5+, all 1.18+ mods, and *most* 1.16.5 mods are compatible with Java 17.
+For Minecraft 1.16.5 and up, use Java 17. Some launchers like Curseforge and Prism Launcher ask you to use Java 8 on 1.16.X, but Minecraft 1.16.5+, all 1.18+ mods, and *most* 1.16.5 mods are compatible with Java 17.
 
 Sometimes Java 11 will work where Java 17 doesn't.
 
