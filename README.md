@@ -272,7 +272,7 @@ Be sure to set `-Dgraal.VectorizeSIMD` to `false` if you run shaders.
 Other Performance Tips
 ======
 
-- Run your Minecraft servers on Clear Linux! It's by far the most optimized linux distribution out-of-the-box, and it has some other nice features (like a stateless config system). It also runs clients on AMD/Intel GPUs quite well: https://docs.01.org/clearlinux/latest/tutorials/multi-boot/dual-boot-win.html
+- Run your Minecraft servers on Clear Linux! It's by far the most optimized linux distribution out-of-the-box, and it has some other nice features (like a stateless config system). It also runs clients on AMD/Intel GPUs quite well: https://web.archive.org/web/20220916090057/https://docs.01.org/clearlinux/latest/tutorials/multi-boot/dual-boot-win.html
 
 - Oracle Linux is also a good choice for servers, since its reasonably well optimized out-of-the-box and has Graalvm EE available via the package manager. For clients, Arch-based distros like CachyOS or EndeavorOS are excellent, as they have wide support for most hardware.
 
