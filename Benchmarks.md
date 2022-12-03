@@ -11,9 +11,9 @@ Install a recent version of Python (preferably Python 3.10), and run this comman
 Client benchmarks require Prism Launcher (preferrably the portable release) and Intel Presentmon. 
 https://github.com/GameTechDev/PresentMon/releases
 
-Currently, client benchmarking only works on Windows. Server benching is tested on Windows and Linux, but it should work on other platforms like OSX.
+**NOTE: My own benchmarking is on pause, and this script/guide may need more updating for the switch from PolyMC to Prism Launcher**
 
-**Client Benchmarking currently does not work since Prism is unsafe to use.**
+Currently, client benchmarking only works on Windows. Server benching is tested on Windows and Linux, but it should work on other platforms like OSX.
 
 # Server Benchmarking Setup
 
