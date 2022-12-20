@@ -143,40 +143,41 @@ GraalVM Enterprise Edition
 GraalVM is a new Java VM from Oracle that can improve the performance of (modded and vanilla) Minecraft. While client FPS gains are modest, server-side workloads like chunk generation can get a 20%+ boost!
 
 Only GraalVM Enterprise Edition comes with the full set of optimizations. Download it via direct links from Oracle:
+
 <details>
   <summary>Java 17</summary>
 
-- Windows: https://oca.opensource.oracle.com/gds/GRAALVM_EE_JAVA17_22_3_0/graalvm-ee-java17-windows-amd64-22.3.0.zip
+- Windows AMD64 (64-bit): https://oca.opensource.oracle.com/gds/GRAALVM_EE_JAVA17_22_3_0/graalvm-ee-java17-windows-amd64-22.3.0.zip
     
-- Linux x86: https://oca.opensource.oracle.com/gds/GRAALVM_EE_JAVA17_22_3_0/graalvm-ee-java17-linux-amd64-22.3.0.tar.gz
+- Linux AMD64 (64-bit): https://oca.opensource.oracle.com/gds/GRAALVM_EE_JAVA17_22_3_0/graalvm-ee-java17-linux-amd64-22.3.0.tar.gz
     
-- Linux ARM: https://oca.opensource.oracle.com/gds/GRAALVM_EE_JAVA17_22_3_0/graalvm-ee-java17-darwin-aarch64-22.3.0.tar.gz
+- Linux AARCH64 (ARM 64-bit): https://oca.opensource.oracle.com/gds/GRAALVM_EE_JAVA17_22_3_0/graalvm-ee-java17-linux-aarch64-22.3.0.tar.gz
 
-- Mac x86: https://oca.opensource.oracle.com/gds/GRAALVM_EE_JAVA17_22_3_0/graalvm-ee-java17-darwin-amd64-22.3.0.tar.gz
+- Mac AMD64 (64-bit): https://oca.opensource.oracle.com/gds/GRAALVM_EE_JAVA17_22_3_0/graalvm-ee-java17-darwin-amd64-22.3.0.tar.gz
     
 </details>
 
 <details>
   <summary>Java 11</summary>
 
-- Windows: https://oca.opensource.oracle.com/gds/GRAALVM_EE_JAVA11_22_3_0/graalvm-ee-java11-windows-amd64-22.3.0.zip
+- Windows AMD64 (64-bit): https://oca.opensource.oracle.com/gds/GRAALVM_EE_JAVA11_22_3_0/graalvm-ee-java11-windows-amd64-22.3.0.zip
     
-- Linux x86: https://oca.opensource.oracle.com/gds/GRAALVM_EE_JAVA11_22_3_0/graalvm-ee-java11-linux-amd64-22.3.0.tar.gz
+- Linux AMD64 (64-bit): https://oca.opensource.oracle.com/gds/GRAALVM_EE_JAVA11_22_3_0/graalvm-ee-java11-linux-amd64-22.3.0.tar.gz
     
-- Linux ARM: https://oca.opensource.oracle.com/gds/GRAALVM_EE_JAVA11_22_3_0/graalvm-ee-java11-darwin-aarch64-22.3.0.tar.gz
+- Linux AARCH64 (ARM 64-bit): https://oca.opensource.oracle.com/gds/GRAALVM_EE_JAVA11_22_3_0/graalvm-ee-java11-linux-aarch64-22.3.0.tar.gz
 
-- Mac x86: https://oca.opensource.oracle.com/gds/GRAALVM_EE_JAVA11_22_3_0/graalvm-ee-java11-darwin-amd64-22.3.0.tar.gz
+- Mac AMD64 (64-bit): https://oca.opensource.oracle.com/gds/GRAALVM_EE_JAVA11_22_3_0/graalvm-ee-java11-darwin-amd64-22.3.0.tar.gz
     
 </details>
 
 <details>
   <summary>Java 8</summary>
 
-- Windows: https://oca.opensource.oracle.com/gds/GRAALVM_EE_JAVA8_21_3_4/graalvm-ee-java8-windows-amd64-21.3.4.zip
+- Windows AMD64 (64-bit): https://oca.opensource.oracle.com/gds/GRAALVM_EE_JAVA8_21_3_4/graalvm-ee-java8-windows-amd64-21.3.4.zip
     
-- Linux x86: https://oca.opensource.oracle.com/gds/GRAALVM_EE_JAVA8_21_3_4/graalvm-ee-java8-linux-amd64-21.3.4.tar.gz
+- Linux AMD64 (64-bit): https://oca.opensource.oracle.com/gds/GRAALVM_EE_JAVA8_21_3_4/graalvm-ee-java8-linux-amd64-21.3.4.tar.gz
 
-- Mac x86: https://oca.opensource.oracle.com/gds/GRAALVM_EE_JAVA8_21_3_4/graalvm-ee-java8-darwin-amd64-21.3.4.tar.gz
+- Mac AMD64 (64-bit): https://oca.opensource.oracle.com/gds/GRAALVM_EE_JAVA8_21_3_4/graalvm-ee-java8-darwin-amd64-21.3.4.tar.gz
     
 </details>
 
