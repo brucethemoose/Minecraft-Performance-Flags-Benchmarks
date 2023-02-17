@@ -191,8 +191,7 @@ For servers, you need to replace the "java" command in your server start sh/bat 
 
 Alternatively, you can install it system-wide by following Oracle's guide: https://www.graalvm.org/22.2/docs/getting-started/#install-graalvm
 
-GraalVM EE Java Arguments
-======
+### GraalVM EE Java Arguments
 
 Arguments for GraalVM EE 22+ Java 17 (or Java 11):
 
@@ -201,8 +200,7 @@ Arguments for GraalVM EE 22+ Java 17 (or Java 11):
 **You must use G1GC with these arguments.** GraalVM currently doesn't work with ZGC or Shenandoah.  
 
 
-GraalVM EE Mod Compatibility
-======
+### GraalVM EE Mod Compatibility
 
 **GraalVM EE 22.3.0 fixes all known Minecraft bugs**
 
