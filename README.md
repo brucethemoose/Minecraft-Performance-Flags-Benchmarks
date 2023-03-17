@@ -11,6 +11,19 @@ All flags are tested with Benchmark.py script. See the work-in-progress [Benchma
 
 <br/>
 
+Launchers
+======
+It is important to note that the launcher you use may influence the behavior of how you input your java arguments/flags. 
+
+<br/>
+
+### Linux
+When using Linux with Flathub's Prism Launcher your default permissions may prevent the launcher from accessing your entire custom Java directory which may cause the Java executable to fail to launch.
+
+In order to fix this, you must use Flatseal, or you can manually change the permissions, so that Prism launcher can access the entire directory of where you put Java.
+
+<br/>
+
 Picking a Java Runtime
 ======
 
@@ -289,6 +302,15 @@ Performance Mods
 This is a **fantastic** repo for finding performance mods: https://github.com/NordicGamerFE/usefulmods
 
 Instead of Optifine, I would recommend more compatible alternatives like Sodium + Iris or Rubidium + Oculus.
+
+<br/>
+
+Linux
+======
+### Kernel
+When using Linux, other kernels may outperform the original/base kernels. 
+
+An example of this is using the [linux-tkg](https://github.com/Frogging-Family/linux-tkg) build system which allows you to select certain optimization patches. However, it should be noted, the actual performance gain is not tested and in reality may not show any real gains.
 
 <br/>
 
