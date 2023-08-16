@@ -90,6 +90,7 @@ Garbage Collection
 
 Pick one set of flags. I recommend **Shenandoah on clients**, **ZGC on powerful Java 17 servers**, and **G1GC on Graal** or on servers/clients with less RAM and fewer cores:
 
+<br/>
 
 ### ZGC 
 
@@ -100,6 +101,8 @@ Unfortunately, it has a significant client FPS hit on my (8-core/16 thread) lapt
 `-XX:+UseZGC -XX:AllocatePrefetchStyle=1 -XX:-ZProactive` enables it, but allocate more RAM and more `ConcGCThreads` than you normally would for other GC. Note that ZGC does not like AllocatePrefetchStyle=3, hence setting it to 1 overrides the previous entry.
 U
 
+<br/>
+
 ### Shenandoah
 
 Shenandoah performs well on clients, but kills server throughput in my tests. Enable it with `-XX:+UseShenandoahGC -XX:ShenandoahGCMode=iu -XX:ShenandoahGuaranteedGCInterval=1000000 -XX:AllocatePrefetchStyle=1` 
@@ -108,6 +111,7 @@ See more tuning options [here](https://wiki.openjdk.org/display/shenandoah/Main)
 
 Note that Shenandoah is not in Java 8. Its also not in any Oracle Java builds! If you are a Java 8 user, you must use Red Hat OpenJDK to use Shenandoah: https://developers.redhat.com/products/openjdk/download
 
+<br/>
 
 ### Client G1GC
 
@@ -119,6 +123,7 @@ These are similar to the aikar flags, but with shorter, more frequent pauses, le
 
 `G1NewSizePercent` and `MaxGCPauseMillis` can be used to tune the frequency/dureation of your young generation collections. `G1HeapWastePercent=18` should be removed if you are getting any old generation pauses on your setup. Alternatively, you can raise it and set `G1MixedGCCountTarget` to 2 or 1 to make mixed garbage collection even lazier (at the cost of higher memory usage). 
 
+<br/>
 
 ### Server G1GC
 
@@ -127,6 +132,8 @@ Longer pauses are more acceptable on servers. These flags are very close to the 
 `-XX:+UseG1GC -XX:MaxGCPauseMillis=130 -XX:+UnlockExperimentalVMOptions -XX:+DisableExplicitGC -XX:+AlwaysPreTouch -XX:G1NewSizePercent=28 -XX:G1HeapRegionSize=16M -XX:G1ReservePercent=20 -XX:G1MixedGCCountTarget=3 -XX:InitiatingHeapOccupancyPercent=10 -XX:G1MixedGCLiveThresholdPercent=90 -XX:G1RSetUpdatingPauseTimePercent=0 -XX:SurvivorRatio=32 -XX:MaxTenuringThreshold=1 -XX:G1SATBBufferEnqueueingThresholdPercent=30 -XX:G1ConcMarkStepDurationMillis=5 -XX:G1ConcRSHotCardLimit=16 -XX:G1ConcRefinementServiceIntervalMillis=150`
 
 **NOTE: Java 20 doesn't need the `-XX:G1ConcRefinementServiceIntervalMillis=150` flag and will only print a warning with the flag**
+
+<br/>
 
 ### Garbage Collection Threading
 
@@ -311,7 +318,7 @@ Other Performance Tips
 FAQ
 ======
 
-- Java 18/19 have some mod incompatibilities. They reportedly work with some modpacks, but I'm not sure if there are any performance benefits.
+- Java versions above 17 have some mod incompatibilities. They reportedly work with most modpacks, but I'm not sure if there are any performance benefits outside of incubator flags (`--add-modules=jdk.incubator.vector`) which are only supported on Minecraft Servers with explicit work like [Pufferfish](https://docs.pufferfish.host/optimization/how-to-apply-aikars-flags).).
 
 - Java tweaks improve server performance and client stuttering, but they don't boost average client FPS much (if at all). For that, running correct/up-to-date graphics drivers and performance mods is far more important: https://github.com/NordicGamerFE/usefulmods
 
