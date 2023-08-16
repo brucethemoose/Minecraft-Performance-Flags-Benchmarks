@@ -45,9 +45,9 @@ Java runtimes from Azul, Microsoft, Adoptium, Amazon and so on are basically ide
 
 - **IBM's OpenJ9** is... *much* slower in Minecraft, and uses totally different flags than any other Java build, but it does consume less memory than OpenJDK-based runtimes. See [FAQ](#FAQ), the [Benchmarks folder](Benchmarks), and [this Gist for low memory consumption flags](https://gist.github.com/FluffyFoxUwU/69f8f156feefae3d826ad0d15c694002).
 
-If you dont know what to pick, I recommend GraalVM EE (see below) or the latest Adoptium Java 17 JRE: https://adoptium.net/
+If you dont know what to pick, I recommend GraalVM (see below) or the latest Adoptium Java 17 JRE: https://adoptium.net/
 
-Couleur maintains a good running list of JREs here: https://rentry.co/JREs
+Couleur also maintains a good (but outdated) running list of JREs here: https://rentry.co/JREs
 
 <br/>
 
