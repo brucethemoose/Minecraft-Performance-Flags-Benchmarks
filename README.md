@@ -172,16 +172,7 @@ These releases are not Java installers. You need to manually replace your launch
 
 For servers, you need to replace the "java" command in your server start sh/bat file with the full path to graalvm java, in quotes.
 
-<details>
-  <summary>Alternatively, you can install it system-wide by following Oracle's guides for your specific os:</summary>
-
-- Windows: https://docs.oracle.com/en/graalvm/jdk/20/docs/getting-started/installation-windows
-    
-- Linux: https://docs.oracle.com/en/graalvm/jdk/20/docs/getting-started/installation-linux
-
-- Mac: https://docs.oracle.com/en/graalvm/jdk/20/docs/getting-started/installation-macos
-    
-</details>
+Alternatively, you can install it system-wide by following Oracle's guide: https://www.graalvm.org/latest/docs/getting-started/
 
 GraalVM EE Java Arguments
 ======
