@@ -4,11 +4,25 @@ While these tweaks notably reduce some server and client stutters, expect only m
 
 Discord for questions and such: https://discord.gg/zeFSR9PnUw 
 
+<br/>
+
 Benchmarks
 ======
 
 All flags are tested with Benchmark.py script. See the work-in-progress [Benchmarks.md](https://github.com/brucethemoose/Minecraft-Performance-Flags-Benchmarks/blob/main/Benchmarks.md).
 
+<br/>
+
+Launchers
+======
+It is important to note that the launcher you use may influence the behavior of how you input your java arguments/flags. 
+
+### Linux
+When using Linux with Flathub's Prism Launcher your default permissions may prevent the launcher from accessing your entire custom Java directory which may cause the Java executable to fail to launch.
+
+In order to fix this, you must use Flatseal, or you can manually change the permissions, so that Prism launcher can access the entire directory of where you put Java.
+
+<br/>
 
 Picking a Java Runtime
 ======
@@ -35,6 +49,8 @@ If you dont know what to pick, I recommend GraalVM EE (see below) or the latest 
 
 Couleur maintains a good running list of JREs here: https://rentry.co/JREs
 
+<br/>
+
 Base Java Flags
 ======
 These optimized flags run with any Java 11+ build. They work on both servers and clients:
@@ -45,6 +61,16 @@ These optimized flags run with any Java 11+ build. They work on both servers and
 
 **You *must* add garbage collection flags to these java arguments.**  
 
+<details>
+    <summary>For example, if we were to use Java 17 with GraalVM's Java Arguments, it would look like this:</summary>
+
+```-Xms8G -Xmx8G -XX:+UnlockExperimentalVMOptions -XX:+UnlockDiagnosticVMOptions -XX:+AlwaysActAsServerClassMachine -XX:+AlwaysPreTouch -XX:+DisableExplicitGC -XX:+UseNUMA -XX:AllocatePrefetchStyle=3 -XX:NmethodSweepActivity=1 -XX:ReservedCodeCacheSize=400M -XX:NonNMethodCodeHeapSize=12M -XX:ProfiledCodeHeapSize=194M -XX:NonProfiledCodeHeapSize=194M -XX:-DontCompileHugeMethods -XX:+PerfDisableSharedMem -XX:+UseFastUnorderedTimeStamps -XX:+UseCriticalJavaThreadPriority -XX:+EagerJVMCI -Dgraal.TuneInlinerExploration=1 -Dgraal.CompilerConfiguration=enterprise -XX:+UseG1GC -XX:MaxGCPauseMillis=37 -XX:+PerfDisableSharedMem -XX:G1HeapRegionSize=16M -XX:G1NewSizePercent=23 -XX:G1ReservePercent=20 -XX:SurvivorRatio=32 -XX:G1MixedGCCountTarget=3 -XX:G1HeapWastePercent=20 -XX:InitiatingHeapOccupancyPercent=10 -XX:G1RSetUpdatingPauseTimePercent=0 -XX:MaxTenuringThreshold=1 -XX:G1SATBBufferEnqueueingThresholdPercent=30 -XX:G1ConcMarkStepDurationMillis=5.0 -XX:G1ConcRSHotCardLimit=16 -XX:GCTimeRatio=99```
+
+
+</details>
+
+<br/>
+
 Memory Allocation
 ======
 Minimum and maximum (`-xms` and `-xmx`) memory should be set to the same value, as explained here: https://dzone.com/articles/benefits-of-setting-initial-and-maximum-memory-siz
@@ -54,6 +80,8 @@ One exception: if you are on a low-memory system, and Minecraft takes up almost 
 Sizes are set in megabytes (`-Xms4096M`) or gigabytes (`-Xmx8G`)
 
 Allocating too much memory can break gc or just slow Minecraft down, even if you have plenty to spare. Allocating too little can also slow down or break the game. Keep a close eye on the Windows Task manager (or your DE's system monitor) as Minecraft is running, and allocate only as much as it needs (which is usually less than 8G). `sparkc gcmonitor` will tell you if your allocation is too high (the pauses will be too long) or too low (frequent GC with a low memory warning in the notification).
+
+<br/>
 
 Garbage Collection
 ======
@@ -108,6 +136,8 @@ In some cases (especially with ZGC or Shenandoh) you want to increase this threa
 
 No other "threading" flags like `ParallelGCThreads` or `JVMCIThreads` are necessary, as they are enabled by default with good automatic settings in Java 8+.
 
+<br/>
+
 Large Pages
 ======
 **NOTE: Large Pages requires admin privledges on Windows. This is a security risk, and you should skip this section if you aren't comfortable with that.**
@@ -130,6 +160,8 @@ Check and see if large pages is working with the `-Xlog:gc+init` java argument i
 In any Java version/platform, if large pages isn't working, you will get a warning in the log similar to this: 
 
 > Java HotSpot(TM) 64-Bit Server VM warning: JVM cannot use large page memory because it does not have enough privilege to lock pages in memory.
+
+<br/>
 
 GraalVM Enterprise Edition
 ======
@@ -183,6 +215,7 @@ Arguments for GraalVM Java 17 & 20
 
 **You must use G1GC or ZGC with these arguments.** GraalVM currently doesn't work with Shenandoah.  
 
+<br/>
 
 GraalVM EE Mod Compatibility
 ======
@@ -198,6 +231,8 @@ If you run an older, Java 8-based version of GraalVM EE, there are some potentia
 I have not observed any server-side bugs yet. 
 
 If you run into any other mod issues you can trace back to GraalVM, please create a Github issue or post in the Discord! Generally, you can work around them by disabling major `dgraal` optimization flags, or by finding the right function with `Dgraal.PrintCompilation=true`, and working around it with `-Dgraal.GraalCompileOnly=~...` once you find the miscompiled function.
+
+<br/>
 
 SpecialK
 ======
@@ -218,6 +253,7 @@ Be sure to turn off VSync and the in-game Minecraft frame limiter.
 
 One user has reported reduced FPS when running SpecialK. If this happens to you, please let me know through Discord or Github!
 
+<br/>
 
 Process Priority
 ======
@@ -227,6 +263,7 @@ After launching Minecraft, set Java to run at an "Above Normal" process priority
 
 Linux users can add  `sudo nice -n -10` to the beginning of the launch command, but note that nice levels below 0 (with the "max" being -20) require running Minecraft as `sudo`. Alternatively, use the `renice` command after launching Minecraft to avoid this security risk.
 
+<br/>
 
 Performance Mods
 ======
@@ -235,6 +272,7 @@ This is a **fantastic** repo for finding performance mods: https://github.com/No
 
 Instead of Optifine, I would recommend more compatible alternatives like Sodium + Iris or Rubidium + Oculus.
 
+<br/>
 
 Java 8
 ======
@@ -253,6 +291,8 @@ You can also get Java 8 versions of GraalVM EE from the [21.X section on the Ora
 
 Be sure to set `-Dgraal.VectorizeSIMD` to `false` if you run shaders.
 
+<br/>
+
 Other Performance Tips
 ======
 
@@ -266,6 +306,8 @@ Other Performance Tips
 
 - Close everything in the background, including Discord, game launchers and your browser! Minecraft is resource intensive, and does not like other apps generating CPU interrupts or eating disk I/O, RAM and so on.  
 
+<br/>
+
 FAQ
 ======
 
@@ -277,6 +319,7 @@ FAQ
 
 - IBM's OpenJ9 does indeed save RAM, as its reputation would suggest, but is over 30% slower at server chunkgen in my tests. If there are any flags that make it competitive with OpenJDK, please let me know on Discord or here: https://github.com/brucethemoose/Minecraft-Performance-Flags-Benchmarks/issues/9
 
+<br/>
 
 Flag Explanations
 ======
@@ -302,6 +345,8 @@ Flag Explanations
 - Most other `-Dgraal` arguments are enabled by default, and are either there as a sanity check, for debugging or as a failsafe (if, for instance, someone unknowingly disables JVCMI with some other flag). 
 - Many Java 8 flags (such as `-XX:MaxInlineLevel=15 -XX:MaxVectorSize=32`) are just copied from the Java 17 defaults. Others (like `+AggressiveOpts`) are only non-default in some older Java 8 builds. 
 
+<br/>
+
 Flags Under Consideration:
 ======
 - More aggressive inlining, via `-Dgraal.BaseTargetSpending=160` (default 120) in Graal and some other flags in OpenJDK. CPUs with larger caches might benefit from this.
@@ -309,6 +354,8 @@ Flags Under Consideration:
 - ~~`-Dgraal.LSRAOptimization=true`~~ seems to hurt performance 
 - `-Dgraal.OptWriteMotion=true` and `graal.WriteableCodeCache=true`, which *do not* seem stable, but may be more stable in GraalVM 22.3.0 
 - Extreme `G1HeapWastePercent` values.
+
+<br/>
  
 Sources
 ======
