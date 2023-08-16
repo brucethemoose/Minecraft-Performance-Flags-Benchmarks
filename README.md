@@ -21,7 +21,7 @@ Sometimes Java 11 will work where Java 17 doesn't.
 
 Java runtimes from Azul, Microsoft, Adoptium, Amazon and so on are basically identical. Some notable exceptions:
 
-- **Oracle GraalVM Enterprise Edition** features a more aggressive Java compiler. This is what I personally run Minecraft with, see the GraalVM section below.
+- **Oracle GraalVM** features a more aggressive Java compiler. This is what I personally run Minecraft with, see the GraalVM section below.
 
 - **Intel's Clear Linux OpenJDK** uses the same code as any other OpenJDK (making it highly compatible), but the build process itself and the dependencies are [optimized for newer CPUs](https://www.phoronix.com/review/zen4-clear-linux/2). Grab it from Clear Linux's repos via `swupd`, from [Distrobox](https://github.com/89luca89/distrobox), or from [Docker](https://hub.docker.com/r/clearlinux/openjdk). Note that you must roll back to the Java 17 release, and that Java 18 [reverts some of the performance enhancements](https://github.com/clearlinux-pkgs/openjdk/commit/14202e83f919643031cfb7a6318b067310be90f1). 
 
@@ -44,16 +44,6 @@ These optimized flags run with any Java 11+ build. They work on both servers and
 
 
 **You *must* add garbage collection flags to these java arguments.**  
-
-<details>
-    <summary>A full set of flags looks like this:</summary>
-
-    -Xmx8G -Xms8G -XX:+UnlockExperimentalVMOptions -XX:+UnlockDiagnosticVMOptions -XX:+AlwaysPreTouch -XX:+DisableExplicitGC -XX:+UseNUMA -XX:NmethodSweepActivity=1 -XX:ReservedCodeCacheSize=400M -XX:NonNMethodCodeHeapSize=12M -XX:ProfiledCodeHeapSize=194M -XX:NonProfiledCodeHeapSize=194M -XX:-DontCompileHugeMethods -XX:MaxNodeLimit=240000 -XX:NodeLimitFudgeFactor=8000 -XX:+UseVectorCmov -XX:+PerfDisableSharedMem -XX:+UseFastUnorderedTimeStamps -XX:+UseCriticalJavaThreadPriority -XX:ThreadPriorityPolicy=1 -XX:AllocatePrefetchStyle=3  -XX:+UseG1GC -XX:MaxGCPauseMillis=37 -XX:+PerfDisableSharedMem -XX:G1HeapRegionSize=16M -XX:G1NewSizePercent=23 -XX:G1ReservePercent=20 -XX:SurvivorRatio=32 -XX:G1MixedGCCountTarget=3 -XX:G1HeapWastePercent=20 -XX:InitiatingHeapOccupancyPercent=10 -XX:G1RSetUpdatingPauseTimePercent=0 -XX:MaxTenuringThreshold=1 -XX:G1SATBBufferEnqueueingThresholdPercent=30 -XX:G1ConcMarkStepDurationMillis=5.0 -XX:G1ConcRSHotCardLimit=16 -XX:G1ConcRefinementServiceIntervalMillis=150 -XX:GCTimeRatio=99 -XX:+UseLargePages -XX:LargePageSizeInBytes=2m
-    
-    
-</details>
-
-
 
 Memory Allocation
 ======
@@ -93,9 +83,11 @@ Note that Shenandoah is not in Java 8. Its also not in any Oracle Java builds! I
 
 ### Client G1GC
 
-G1GC is the default garbage collector, and is the only available garbage collector for [GraalVM users](https://github.com/oracle/graal/issues/2149). Aikar's [famous Minecraft server G1GC arguments](https://aikar.co/2018/07/02/tuning-the-jvm-g1gc-garbage-collector-flags-for-minecraft/) run great on clients, with two caveats: they effectively [clamp](https://www.oracle.com/technical-resources/articles/java/g1gc.html) the `MaxGCPauseMillis` parameter by setting `G1NewSizePercent` so high, producing long stutters on some clients, and they collect oldgen garbage too aggressively (as the client produces *far* less than a populated server). 
+G1GC is the default garbage collector for all JREs. Aikar's [famous Minecraft server G1GC arguments](https://aikar.co/2018/07/02/tuning-the-jvm-g1gc-garbage-collector-flags-for-minecraft/) run great on clients, with two caveats: they effectively [clamp](https://www.oracle.com/technical-resources/articles/java/g1gc.html) the `MaxGCPauseMillis` parameter by setting `G1NewSizePercent` so high, producing long stutters on some clients, and they collect oldgen garbage too aggressively (as the client produces *far* less than a populated server). 
 
 These are similar to the aikar flags, but with shorter, more frequent pauses, less aggressive G1 mixed collection and more aggressive background collection: `-XX:+UseG1GC -XX:MaxGCPauseMillis=37 -XX:+PerfDisableSharedMem -XX:G1HeapRegionSize=16M -XX:G1NewSizePercent=23 -XX:G1ReservePercent=20 -XX:SurvivorRatio=32 -XX:G1MixedGCCountTarget=3 -XX:G1HeapWastePercent=20 -XX:InitiatingHeapOccupancyPercent=10 -XX:G1RSetUpdatingPauseTimePercent=0 -XX:MaxTenuringThreshold=1 -XX:G1SATBBufferEnqueueingThresholdPercent=30 -XX:G1ConcMarkStepDurationMillis=5.0 -XX:G1ConcRSHotCardLimit=16 -XX:G1ConcRefinementServiceIntervalMillis=150 -XX:GCTimeRatio=99`  
+
+**NOTE: Java 20 doesn't need the `-XX:G1ConcRefinementServiceIntervalMillis=150` flag and will only print a warning with the flag**
 
 `G1NewSizePercent` and `MaxGCPauseMillis` can be used to tune the frequency/dureation of your young generation collections. `G1HeapWastePercent=18` should be removed if you are getting any old generation pauses on your setup. Alternatively, you can raise it and set `G1MixedGCCountTarget` to 2 or 1 to make mixed garbage collection even lazier (at the cost of higher memory usage). 
 
@@ -105,6 +97,8 @@ These are similar to the aikar flags, but with shorter, more frequent pauses, le
 Longer pauses are more acceptable on servers. These flags are very close to the aikar defaults:
 
 `-XX:+UseG1GC -XX:MaxGCPauseMillis=130 -XX:+UnlockExperimentalVMOptions -XX:+DisableExplicitGC -XX:+AlwaysPreTouch -XX:G1NewSizePercent=28 -XX:G1HeapRegionSize=16M -XX:G1ReservePercent=20 -XX:G1MixedGCCountTarget=3 -XX:InitiatingHeapOccupancyPercent=10 -XX:G1MixedGCLiveThresholdPercent=90 -XX:G1RSetUpdatingPauseTimePercent=0 -XX:SurvivorRatio=32 -XX:MaxTenuringThreshold=1 -XX:G1SATBBufferEnqueueingThresholdPercent=30 -XX:G1ConcMarkStepDurationMillis=5 -XX:G1ConcRSHotCardLimit=16 -XX:G1ConcRefinementServiceIntervalMillis=150`
+
+**NOTE: Java 20 doesn't need the `-XX:G1ConcRefinementServiceIntervalMillis=150` flag and will only print a warning with the flag**
 
 ### Garbage Collection Threading
 
@@ -142,71 +136,69 @@ GraalVM Enterprise Edition
 
 GraalVM is a new Java VM from Oracle that can improve the performance of (modded and vanilla) Minecraft. While client FPS gains are modest, server-side workloads like chunk generation can get a 20%+ boost!
 
-Only GraalVM Enterprise Edition comes with the full set of optimizations. Download it via direct links from Oracle:
+Download it via direct links from Oracle:
 
 <details>
   <summary>Java 17</summary>
 
-- Windows AMD64 (64-bit): https://oca.opensource.oracle.com/gds/GRAALVM_EE_JAVA17_22_3_1/graalvm-ee-java17-windows-amd64-22.3.1.zip
+- Windows AMD64 (64-bit): https://download.oracle.com/graalvm/17/latest/graalvm-jdk-17_windows-x64_bin.zip
     
-- Linux AMD64 (64-bit): https://oca.opensource.oracle.com/gds/GRAALVM_EE_JAVA17_22_3_1/graalvm-ee-java17-linux-amd64-22.3.1.tar.gz
+- Linux AMD64 (64-bit): https://download.oracle.com/graalvm/17/latest/graalvm-jdk-17_linux-x64_bin.tar.gz
     
-- Linux AARCH64 (ARM 64-bit): https://oca.opensource.oracle.com/gds/GRAALVM_EE_JAVA17_22_3_1/graalvm-ee-java17-linux-aarch64-22.3.1.tar.gz
+- Linux AARCH64 (ARM 64-bit): https://download.oracle.com/graalvm/17/latest/graalvm-jdk-17_linux-aarch64_bin.tar.gz
 
-- Mac AMD64 (64-bit): https://oca.opensource.oracle.com/gds/GRAALVM_EE_JAVA17_22_3_1/graalvm-ee-java17-darwin-amd64-22.3.1.tar.gz
-    
-</details>
+- Mac AMD64 (64-bit): https://download.oracle.com/graalvm/17/latest/graalvm-jdk-17_macos-x64_bin.tar.gz
 
-<details>
-  <summary>Java 11</summary>
-
-- Windows AMD64 (64-bit): https://oca.opensource.oracle.com/gds/GRAALVM_EE_JAVA11_22_3_1/graalvm-ee-java11-windows-amd64-22.3.1.zip
-    
-- Linux AMD64 (64-bit): https://oca.opensource.oracle.com/gds/GRAALVM_EE_JAVA11_22_3_1/graalvm-ee-java11-linux-amd64-22.3.1.tar.gz
-    
-- Linux AARCH64 (ARM 64-bit): https://oca.opensource.oracle.com/gds/GRAALVM_EE_JAVA11_22_3_1/graalvm-ee-java11-linux-aarch64-22.3.1.tar.gz
-
-- Mac AMD64 (64-bit): https://oca.opensource.oracle.com/gds/GRAALVM_EE_JAVA11_22_3_1/graalvm-ee-java11-darwin-amd64-22.3.1.tar.gz
+- Mac AARCH64 (ARM 64-bit): https://download.oracle.com/graalvm/17/latest/graalvm-jdk-17_macos-aarch64_bin.tar.gz
     
 </details>
 
 <details>
-  <summary>Java 8</summary>
+  <summary>Java 20</summary>
 
-- Windows AMD64 (64-bit): https://oca.opensource.oracle.com/gds/GRAALVM_EE_JAVA8_21_3_5/graalvm-ee-java8-windows-amd64-21.3.5.zip
+- Windows AMD64 (64-bit): https://download.oracle.com/graalvm/20/latest/graalvm-jdk-20_windows-x64_bin.zip
     
-- Linux AMD64 (64-bit): https://oca.opensource.oracle.com/gds/GRAALVM_EE_JAVA8_21_3_5/graalvm-ee-java8-linux-amd64-21.3.5.tar.gz
+- Linux AMD64 (64-bit): https://download.oracle.com/graalvm/20/latest/graalvm-jdk-20_linux-x64_bin.tar.gz
+    
+- Linux AARCH64 (ARM 64-bit): https://download.oracle.com/graalvm/20/latest/graalvm-jdk-20_linux-aarch64_bin.tar.gz
 
-- Mac AMD64 (64-bit): https://oca.opensource.oracle.com/gds/GRAALVM_EE_JAVA8_21_3_5/graalvm-ee-java8-darwin-amd64-21.3.5.tar.gz
+- Mac AMD64 (64-bit): https://download.oracle.com/graalvm/20/latest/graalvm-jdk-20_macos-x64_bin.tar.gz
+
+- Mac AARCH64 (ARM 64-bit): https://download.oracle.com/graalvm/20/latest/graalvm-jdk-20_macos-aarch64_bin.tar.gz
     
 </details>
-
-(Select GraalVM EE versions are also available on the AUR and on Oracle Linux's repos)
-
-New versions for ARM Macs require a free registration on Oracle's main download page: https://www.oracle.com/downloads/graalvm-downloads.html
 
 These releases are not Java installers. You need to manually replace your launcher's version of Java, or use a Minecraft launcher that supports specifying your Java path. I recommend ATLauncher, Prism Launcher or GDLauncher. When specifying a java path, navigate to the "bin" folder in the GraalVM download and use "javaw.exe" or "java.exe". 
 
 For servers, you need to replace the "java" command in your server start sh/bat file with the full path to graalvm java, in quotes.
 
-Alternatively, you can install it system-wide by following Oracle's guide: https://www.graalvm.org/22.2/docs/getting-started/#install-graalvm
+<details>
+  <summary>Alternatively, you can install it system-wide by following Oracle's guides for your specific os:</summary>
+
+- Windows: https://docs.oracle.com/en/graalvm/jdk/20/docs/getting-started/installation-windows
+    
+- Linux: https://docs.oracle.com/en/graalvm/jdk/20/docs/getting-started/installation-linux
+
+- Mac: https://docs.oracle.com/en/graalvm/jdk/20/docs/getting-started/installation-macos
+    
+</details>
 
 GraalVM EE Java Arguments
 ======
 
-Arguments for GraalVM EE 22+ Java 17 (or Java 11):
+Arguments for GraalVM Java 17 & 20
 
 ```-XX:+UnlockExperimentalVMOptions -XX:+UnlockDiagnosticVMOptions -XX:+AlwaysActAsServerClassMachine -XX:+AlwaysPreTouch -XX:+DisableExplicitGC -XX:+UseNUMA -XX:AllocatePrefetchStyle=3 -XX:NmethodSweepActivity=1 -XX:ReservedCodeCacheSize=400M -XX:NonNMethodCodeHeapSize=12M -XX:ProfiledCodeHeapSize=194M -XX:NonProfiledCodeHeapSize=194M -XX:-DontCompileHugeMethods -XX:+PerfDisableSharedMem -XX:+UseFastUnorderedTimeStamps -XX:+UseCriticalJavaThreadPriority -XX:+EagerJVMCI -Dgraal.TuneInlinerExploration=1 -Dgraal.CompilerConfiguration=enterprise```
 
-**You must use G1GC with these arguments.** GraalVM currently doesn't work with ZGC or Shenandoah.  
+**You must use G1GC or ZGC with these arguments.** GraalVM currently doesn't work with Shenandoah.  
 
 
 GraalVM EE Mod Compatibility
 ======
 
-**GraalVM EE 22.3.0 fixes all known Minecraft bugs**
+**GraalVM EE 22.3.0 fixed all known Minecraft bugs**
 
-If you run an older, Java 8-based version of GraalVM, there are some potential issues:
+If you run an older, Java 8-based version of GraalVM EE, there are some potential issues:
 
 - `VectorizeSIMD` turns entities invisible with shader mods like Optifine, Iris or Occulus... but only under certain conditions. This will be fixed in GraalVM EE 22.3.0. See: https://github.com/oracle/graal/issues/4849
 
@@ -238,7 +230,7 @@ One user has reported reduced FPS when running SpecialK. If this happens to you,
 
 Process Priority
 ======
-After launching Minecraft, set Java to run at an "Above Normal" process priority in Windows with the Task Manager:
+After launching Minecraft, set Java to run at an "Above Normal" process priority in Windows with the Task Manager in the details tab:
 
 ![taskmanager](Tutorial_Images/taskmon.PNG)
 
