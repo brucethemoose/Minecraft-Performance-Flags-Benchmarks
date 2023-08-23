@@ -170,7 +170,7 @@ In any Java version/platform, if large pages isn't working, you will get a warni
 
 <br/>
 
-GraalVM Enterprise Edition
+GraalVM
 ======
 
 GraalVM is a new Java VM from Oracle that can improve the performance of (modded and vanilla) Minecraft. While client FPS gains are modest, server-side workloads like chunk generation can get a 20%+ boost!
