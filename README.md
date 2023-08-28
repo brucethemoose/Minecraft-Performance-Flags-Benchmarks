@@ -109,7 +109,10 @@ Shenandoah performs well on clients, but kills server throughput in my tests. En
 
 See more tuning options [here](https://wiki.openjdk.org/display/shenandoah/Main). The "herustic" and "mode" options don't change much for me (except for "compact," which you should not use). Like ZGC, Shenandoah does not like AllocatePrefetchStyle=3.
 
-Note that Shenandoah is not in Java 8. Its also not in any Oracle Java builds! If you are a Java 8 user, you must use Red Hat OpenJDK to use Shenandoah: https://developers.redhat.com/products/openjdk/download
+Note that Shenandoah is not in Java 8. Its also not in any Oracle Java builds! If you are a Java 8 user, you must use Red Hat OpenJDK to use Shenandoah.
+Download Links:
+ - [Red Hat Developer](https://developers.redhat.com/products/openjdk/download)
+ - [Adoptium Marketplace](https://adoptium.net/marketplace/)
 
 <br/>
 
