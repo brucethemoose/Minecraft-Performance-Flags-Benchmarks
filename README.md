@@ -41,7 +41,7 @@ Java runtimes from Azul, Microsoft, Adoptium, Amazon and so on are basically ide
 
 - **Azul's Prime OpenJDK** is *very* fast since it hooks into llvm, but its currently incompatible with most mods and is linux-only. Get it from here: https://docs.azul.com/prime/prime-quick-start-tar
 
-- **Red Hat Java 8** has the Shenandoah garbage collector. Its gated behind a free email signup: https://developers.redhat.com/products/openjdk/download
+- **Red Hat Java 8** has the Shenandoah garbage collector. You can download it by going to [Adoptium Marketplace](https://adoptium.net/marketplace/), swapping java version to "8 - LTS", and downloading the Red Hat Build.
 
 - **IBM's OpenJ9** is... *much* slower in Minecraft, and uses totally different flags than any other Java build, but it does consume less memory than OpenJDK-based runtimes. See [FAQ](#FAQ), the [Benchmarks folder](Benchmarks), and [this Gist for low memory consumption flags](https://gist.github.com/FluffyFoxUwU/69f8f156feefae3d826ad0d15c694002).
 
