@@ -278,7 +278,7 @@ Linux users can add  `sudo nice -n -10` to the beginning of the launch command, 
 Performance Mods
 ======
 
-This is a **fantastic** repo for finding performance mods: https://github.com/NordicGamerFE/usefulmods
+This is a **fantastic** repo for finding performance mods: https://github.com/TheUsefulLists/UsefulMods
 
 Instead of Optifine, I would recommend more compatible alternatives like Sodium + Iris or Rubidium + Oculus.
 
