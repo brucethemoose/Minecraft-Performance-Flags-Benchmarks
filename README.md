@@ -323,7 +323,7 @@ FAQ
 
 - Java versions above 17 have some mod incompatibilities. They reportedly work with most modpacks, but I'm not sure if there are any performance benefits outside of incubator flags (`--add-modules=jdk.incubator.vector`) which are only supported on Minecraft Servers with explicit work like [Pufferfish](https://docs.pufferfish.host/optimization/how-to-apply-aikars-flags).).
 
-- Java tweaks improve server performance and client stuttering, but they don't boost average client FPS much (if at all). For that, running correct/up-to-date graphics drivers and performance mods is far more important: https://github.com/NordicGamerFE/usefulmods
+- Java tweaks improve server performance and client stuttering, but they don't boost average client FPS much (if at all). For that, running correct/up-to-date graphics drivers and performance mods is far more important: https://github.com/TheUsefulLists/UsefulMods
 
 - This guide assumes you have a little spare RAM when running Minecraft. If your setup is RAM constrained, try removing the following arguments in particular: `-XX:NmethodSweepActivity=1 -XX:ReservedCodeCacheSize=400M -XX:NonNMethodCodeHeapSize=12M -XX:ProfiledCodeHeapSize=194M -XX:NonProfiledCodeHeapSize=194M`, and try the server G1GC arguments.
 
