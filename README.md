@@ -122,7 +122,7 @@ G1GC is the default garbage collector for all JREs. Aikar's [famous Minecraft se
 
 These are similar to the aikar flags, but with shorter, more frequent pauses, less aggressive G1 mixed collection and more aggressive background collection: `-XX:+UseG1GC -XX:MaxGCPauseMillis=37 -XX:+PerfDisableSharedMem -XX:G1HeapRegionSize=16M -XX:G1NewSizePercent=23 -XX:G1ReservePercent=20 -XX:SurvivorRatio=32 -XX:G1MixedGCCountTarget=3 -XX:G1HeapWastePercent=20 -XX:InitiatingHeapOccupancyPercent=10 -XX:G1RSetUpdatingPauseTimePercent=0 -XX:MaxTenuringThreshold=1 -XX:G1SATBBufferEnqueueingThresholdPercent=30 -XX:G1ConcMarkStepDurationMillis=5.0 -XX:G1ConcRSHotCardLimit=16 -XX:G1ConcRefinementServiceIntervalMillis=150 -XX:GCTimeRatio=99`  
 
-**NOTE: Java 20 depreciated the `-XX:G1ConcRefinementServiceIntervalMillis=150` flag, remove it when using Java 20**
+**NOTE: Java 20 depreciated the `-XX:G1ConcRefinementServiceIntervalMillis=150` flag, remove it when using Java 20+**
 
 `G1NewSizePercent` and `MaxGCPauseMillis` can be used to tune the frequency/dureation of your young generation collections. `G1HeapWastePercent=18` should be removed if you are getting any old generation pauses on your setup. Alternatively, you can raise it and set `G1MixedGCCountTarget` to 2 or 1 to make mixed garbage collection even lazier (at the cost of higher memory usage). 
 
@@ -134,7 +134,7 @@ Longer pauses are more acceptable on servers. These flags are very close to the 
 
 `-XX:+UseG1GC -XX:MaxGCPauseMillis=130 -XX:+UnlockExperimentalVMOptions -XX:+DisableExplicitGC -XX:+AlwaysPreTouch -XX:G1NewSizePercent=28 -XX:G1HeapRegionSize=16M -XX:G1ReservePercent=20 -XX:G1MixedGCCountTarget=3 -XX:InitiatingHeapOccupancyPercent=10 -XX:G1MixedGCLiveThresholdPercent=90 -XX:G1RSetUpdatingPauseTimePercent=0 -XX:SurvivorRatio=32 -XX:MaxTenuringThreshold=1 -XX:G1SATBBufferEnqueueingThresholdPercent=30 -XX:G1ConcMarkStepDurationMillis=5 -XX:G1ConcRSHotCardLimit=16 -XX:G1ConcRefinementServiceIntervalMillis=150`
 
-**NOTE: Java 20 depreciated the `-XX:G1ConcRefinementServiceIntervalMillis=150` flag, remove it when using Java 20**
+**NOTE: Java 20 depreciated the `-XX:G1ConcRefinementServiceIntervalMillis=150` flag, remove it when using Java 20+**
 
 <br/>
 
@@ -219,7 +219,7 @@ Alternatively, you can install it system-wide by following Oracle's guide: https
 GraalVM EE Java Arguments
 ======
 
-Arguments for GraalVM Java 17 & 20
+Arguments for GraalVM Java 17+
 
 ```-XX:+UnlockExperimentalVMOptions -XX:+UnlockDiagnosticVMOptions -XX:+AlwaysActAsServerClassMachine -XX:+AlwaysPreTouch -XX:+DisableExplicitGC -XX:+UseNUMA -XX:AllocatePrefetchStyle=3 -XX:NmethodSweepActivity=1 -XX:ReservedCodeCacheSize=400M -XX:NonNMethodCodeHeapSize=12M -XX:ProfiledCodeHeapSize=194M -XX:NonProfiledCodeHeapSize=194M -XX:-DontCompileHugeMethods -XX:+PerfDisableSharedMem -XX:+UseFastUnorderedTimeStamps -XX:+UseCriticalJavaThreadPriority -XX:+EagerJVMCI -Dgraal.TuneInlinerExploration=1 -Dgraal.CompilerConfiguration=enterprise```
 
