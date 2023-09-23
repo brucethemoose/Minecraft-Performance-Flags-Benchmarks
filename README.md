@@ -62,7 +62,7 @@ These optimized flags run with any Java 11+ build. They work on both servers and
 **You *must* add garbage collection flags to these java arguments.**  
 
 <details>
-    <summary>For example, if we were to use Java 20 with GraalVM's Java Arguments and G1GC, it would something look like this:</summary>
+    <summary>For example, if we were to use Java 21 with GraalVM's Java Arguments and G1GC, it would something look like this:</summary>
 
 ```-Xms8G -Xmx8G -XX:+UnlockExperimentalVMOptions -XX:+UnlockDiagnosticVMOptions -XX:+AlwaysActAsServerClassMachine -XX:+AlwaysPreTouch -XX:+DisableExplicitGC -XX:+UseNUMA -XX:AllocatePrefetchStyle=3 -XX:NmethodSweepActivity=1 -XX:ReservedCodeCacheSize=400M -XX:NonNMethodCodeHeapSize=12M -XX:ProfiledCodeHeapSize=194M -XX:NonProfiledCodeHeapSize=194M -XX:-DontCompileHugeMethods -XX:+PerfDisableSharedMem -XX:+UseFastUnorderedTimeStamps -XX:+UseCriticalJavaThreadPriority -XX:+EagerJVMCI -Dgraal.TuneInlinerExploration=1 -Dgraal.CompilerConfiguration=enterprise -XX:+UseG1GC -XX:MaxGCPauseMillis=37 -XX:+PerfDisableSharedMem -XX:G1HeapRegionSize=16M -XX:G1NewSizePercent=23 -XX:G1ReservePercent=20 -XX:SurvivorRatio=32 -XX:G1MixedGCCountTarget=3 -XX:G1HeapWastePercent=20 -XX:InitiatingHeapOccupancyPercent=10 -XX:G1RSetUpdatingPauseTimePercent=0 -XX:MaxTenuringThreshold=1 -XX:G1SATBBufferEnqueueingThresholdPercent=30 -XX:G1ConcMarkStepDurationMillis=5.0 -XX:G1ConcRSHotCardLimit=16 -XX:GCTimeRatio=99```
 
@@ -196,17 +196,17 @@ Download it via direct links from Oracle:
 </details>
 
 <details>
-  <summary>Java 20</summary>
+  <summary>Java 21</summary>
 
-- Windows AMD64 (64-bit): https://download.oracle.com/graalvm/20/latest/graalvm-jdk-20_windows-x64_bin.zip
+- Windows AMD64 (64-bit): https://download.oracle.com/graalvm/21/latest/graalvm-jdk-21_windows-x64_bin.zip
     
-- Linux AMD64 (64-bit): https://download.oracle.com/graalvm/20/latest/graalvm-jdk-20_linux-x64_bin.tar.gz
+- Linux AMD64 (64-bit): https://download.oracle.com/graalvm/21/latest/graalvm-jdk-21_linux-x64_bin.tar.gz
     
-- Linux AARCH64 (ARM 64-bit): https://download.oracle.com/graalvm/20/latest/graalvm-jdk-20_linux-aarch64_bin.tar.gz
+- Linux AARCH64 (ARM 64-bit): https://download.oracle.com/graalvm/21/latest/graalvm-jdk-21_linux-aarch64_bin.tar.gz
 
-- Mac AMD64 (64-bit): https://download.oracle.com/graalvm/20/latest/graalvm-jdk-20_macos-x64_bin.tar.gz
+- Mac AMD64 (64-bit): https://download.oracle.com/graalvm/21/latest/graalvm-jdk-21_macos-x64_bin.tar.gz
 
-- Mac AARCH64 (ARM 64-bit): https://download.oracle.com/graalvm/20/latest/graalvm-jdk-20_macos-aarch64_bin.tar.gz
+- Mac AARCH64 (ARM 64-bit): https://download.oracle.com/graalvm/21/latest/graalvm-jdk-21_macos-aarch64_bin.tar.gz
     
 </details>
 
