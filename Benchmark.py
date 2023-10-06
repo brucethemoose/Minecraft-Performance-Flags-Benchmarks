@@ -17,11 +17,11 @@ minfabric = r"C:/Games/mcservers/MinimalFabric"
 
 #Java Paths
 
-graalpath = r"C:/JDKs/graalvm-ee-java17-windows-amd64-22.3.0/graalvm-ee-java17-22.3.0/bin/java.exe"
+graalpath = r"C:/JDKs/GraalVM/graalvm-jdk-17.0.8+9.1/bin/java.exe"
 
-jdkpath = r"C:/JDKs//OpenJDK17U-jre_x64_windows_hotspot_17.0.4_8/jdk-17.0.4+8-jre/bin/java.exe"
+jdkpath = r"C:/JDKs/Adoptium/jdk-17.0.8.1+1/bin/java.exe"
 
-j9path = r"F:/JDKs/ibmopenj9/bin/java.exe"
+j9path = r"C:/JDKs/OpenJ9/jdk-17.0.8.1+1/bin/java.exe"
 
 #Java Flags (for servers)
 #(Should start with a space, so they can be "added" together with the + sign)
