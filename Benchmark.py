@@ -80,7 +80,7 @@ blist = [
 
 #Server benchmarking options
 nogui = True     #Whether to run the dedicated server GUI or not
-carpet = 2 #number of simulated players if the "Carpet" fabric mod is present
+carpet = 67 #number of simulated players if the "Carpet" fabric mod is present
 fabric_chunkgen_command = r"chunky start"                 #Chunk generation command to use in fabric packs
 fabric_chunkgen_expect =  r"[Chunky] Task finished for"   #String to look for when chunk generation is finished
 forge_chunkgen_command = r"forge generate 0 0 0 3000"     #Chunk generation command to use in forge packs
