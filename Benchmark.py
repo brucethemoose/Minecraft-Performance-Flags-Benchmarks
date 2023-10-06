@@ -11,17 +11,17 @@ from pexpect import popen_spawn
 
 #Minecraft Server Paths
 
-vevserver = r"C:/Games/mcservers/vevserver"
+vevserver = r"C:/Benchmark/Games/mcservers/vevserver"
 
-minfabric = r"C:/Games/mcservers/MinimalFabric"
+minfabric = r"C:/Benchmark/Games/mcservers/MinimalFabric"
 
 #Java Paths
 
-graalpath = r"C:/JDKs/GraalVM/graalvm-jdk-17.0.8+9.1/bin/java.exe"
+graalpath = r"C:/Benchmark/JDKs/GraalVM/graalvm-jdk-17.0.8+9.1/bin/java.exe"
 
-jdkpath = r"C:/JDKs/Adoptium/jdk-17.0.8.1+1/bin/java.exe"
+jdkpath = r"C:/Benchmark/JDKs/Adoptium/jdk-17.0.8.1+1/bin/java.exe"
 
-j9path = r"C:/JDKs/OpenJ9/jdk-17.0.8.1+1/bin/java.exe"
+j9path = r"C:/Benchmark/JDKs/OpenJ9/jdk-17.0.8.1+1/bin/java.exe"
 
 #Java Flags (for servers)
 #(Should start with a space, so they can be "added" together with the + sign)
@@ -80,7 +80,7 @@ blist = [
 
 #Server benchmarking options
 nogui = True     #Whether to run the dedicated server GUI or not
-carpet = 67 #number of simulated players if the "Carpet" fabric mod is present
+carpet = 2 #number of simulated players if the "Carpet" fabric mod is present
 fabric_chunkgen_command = r"chunky start"                 #Chunk generation command to use in fabric packs
 fabric_chunkgen_expect =  r"[Chunky] Task finished for"   #String to look for when chunk generation is finished
 forge_chunkgen_command = r"forge generate 0 0 0 3000"     #Chunk generation command to use in forge packs
@@ -91,9 +91,9 @@ totaltimeout = 1200 #Number of seconds the whole server can run before timing ou
 forceload_cmd= r"forceload add -120 -120 120 120" #Command to forceload a rectangle. Can also be some other server console command. 
 
 #Client benchmarking options
-prismpath = r"C:/Games/Prism-Windows-Portable-1.4.0/Prism.exe" #Full path to Prism executable file
+prismpath = r"C:/Benchmark/Games/PrismLauncherPortable/Prism.exe" #Full path to Prism executable file
 prisminstances = r"" #Full path to Prism instance folder. Normally in %appdata%/roaming/Prism on windows, but you can leave this blank if using Prism portable. 
-presentmonpath = r"presentmon.exe"  #full path to Intel presentmon executable file
+presentmonpath = r"C:/Benchmark/presentmon.exe"  #full path to Intel presentmon executable file
 warmup = 90    #Seconds to wait after hitting the "singleplayer" button before starting the benchmark. Give enough time for the world to load, and java to "warm up"
 benchtime = 90 #Seconds to run the benchmark
 focusclick = False #Middle click before searching for buttons, only really necessary for fullscreen Minecraft
