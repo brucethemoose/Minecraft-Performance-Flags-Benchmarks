@@ -47,6 +47,8 @@ Java runtimes from Azul, Microsoft, Adoptium, Amazon and so on are basically ide
 
 If you dont know what to pick, I recommend GraalVM 17 (see below) or the latest Adoptium Java 17 JRE: https://adoptium.net/
 
+**NOTE: While Java 21 may work, I wouldn't recommend using it as Minecraft is made for Java 17 aswell as mods.**
+
 Couleur also maintains a good (but outdated) running list of JREs here: https://rentry.co/JREs
 
 <br/>
