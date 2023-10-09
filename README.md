@@ -53,6 +53,18 @@ Couleur also maintains a good (but outdated) running list of JREs here: https://
 
 <br/>
 
+TLDR
+======
+Client: Use Adoptium 17 or GraalVM 17 with it's latest Java Arguments and Client G1GC.
+Server: User Clear Linux 17 or GraalVM 17 with it's latest Java Arguments and Server G1GC or ZGC, also run your server on linux.
+
+Then set `-Xms` and `-Xms` to how much ram you want minecraft to have, this should generally be arround 1/2 of your total system memory. 
+
+Example: `-Xms8G -Xmx8G` - Make sure to make them the same value, reason is stated below.
+
+If you are on Linux you can also use Large Pages. 
+DO NOT USE Large Pages on windows unless you understand the risks.
+
 Base Java Flags
 ======
 These optimized flags run with any Java 11+ build. They work on both servers and clients:
@@ -218,7 +230,7 @@ For servers, you need to replace the "java" command in your server start sh/bat 
 
 Alternatively, you can install it system-wide by following Oracle's guide: https://www.graalvm.org/latest/docs/getting-started/
 
-GraalVM EE Java Arguments
+GraalVM Java Arguments
 ======
 
 Arguments for GraalVM Java 17+
@@ -229,7 +241,7 @@ Arguments for GraalVM Java 17+
 
 <br/>
 
-GraalVM EE Mod Compatibility
+GraalVM Mod Compatibility
 ======
 
 **GraalVM EE 22.3.0 fixed all known Minecraft bugs**
