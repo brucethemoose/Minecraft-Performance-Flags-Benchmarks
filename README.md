@@ -56,6 +56,7 @@ Couleur also maintains a good (but outdated) running list of JREs here: https://
 TLDR
 ======
 Client: Use Adoptium 17 or GraalVM 17 with it's latest Java Arguments and Client G1GC.
+
 Server: User Clear Linux 17 or GraalVM 17 with it's latest Java Arguments and Server G1GC or ZGC, also run your server on linux.
 
 Then set `-Xms` and `-Xms` to how much ram you want minecraft to have, this should generally be arround 1/2 of your total system memory. 
