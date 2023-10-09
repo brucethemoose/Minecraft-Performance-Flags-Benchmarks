@@ -63,7 +63,7 @@ Server: User Clear Linux 17 or GraalVM 17 with it's latest Java Arguments and Se
 
 Then set `-Xms` and `-Xms` to how much memory you want minecraft to have, this should generally be arround 1/2 of your total system memory. 
 
-Example: `-Xms8G -Xmx8G` - Make sure to make them the same value, reason is stated below.
+Example: `-Xms8G -Xmx8G` - Make sure they are the same value for reasons stated below.
 
 <br />
 
