@@ -335,6 +335,8 @@ Other Performance Tips
 
 - Close everything in the background, including Discord, game launchers and your browser! Minecraft is resource intensive, and does not like other apps generating CPU interrupts or eating disk I/O, RAM and so on.  
 
+- Server Owners can check this out, [YouHaveTrouble/minecraft-optimization](https://github.com/YouHaveTrouble/minecraft-optimization).
+
 <br/>
 
 FAQ
