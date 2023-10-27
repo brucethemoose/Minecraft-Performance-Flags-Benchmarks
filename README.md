@@ -2,6 +2,15 @@ This is a guide to tune Java for Minecraft. Every flag and tweak is individually
 
 While these tweaks notably reduce some server and client stutters, expect only modest TPS gains + minimal FPS gains at best, and somewhat increased RAM + CPU usage. And they are no substitute for clearing laggy things out with mods like [Spark](https://spark.lucko.me/docs/guides/Finding-lag-spikes) or [Observable](https://github.com/tasgon/observable). 
 
+<br />
+
+### Downloads for Spark & Observable:
+#### Spark: [Spark's Website](https://spark.lucko.me/download) or [Modrinth](https://modrinth.com/mod/spark) or [CurseForge](https://www.curseforge.com/minecraft/mc-mods/spark)
+#### Observable: [Modrinth](https://modrinth.com/mod/observable) or [CurseForge](https://www.curseforge.com/minecraft/mc-mods/observable)
+
+<br />
+<br />
+
 Discord for questions and such: https://discord.gg/zeFSR9PnUw 
 
 <br/>
