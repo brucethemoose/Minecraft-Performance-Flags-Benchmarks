@@ -235,8 +235,7 @@ For servers, you need to replace the "java" command in your server start sh/bat 
 
 Alternatively, you can install it system-wide by following Oracle's guide: https://www.graalvm.org/latest/docs/getting-started/
 
-GraalVM Java Arguments
-======
+### GraalVM Java Arguments
 
 Arguments for GraalVM Java 17+
 
@@ -246,8 +245,7 @@ Arguments for GraalVM Java 17+
 
 <br/>
 
-GraalVM Mod Compatibility
-======
+### GraalVM Mod Compatibility
 
 **GraalVM EE 22.3.0 fixed all known Minecraft bugs**
 
