@@ -33,8 +33,6 @@ Java runtimes from Azul, Microsoft, Adoptium, Amazon and so on are basically ide
 
 If you dont know what to pick, I recommend GraalVM EE (see below) or the latest Adoptium Java 17 JRE: https://adoptium.net/
 
-Couleur maintains a good running list of JREs here: https://rentry.co/JREs
-
 Base Java Flags
 ======
 These optimized flags run with any Java 11+ build. They work on both servers and clients:
@@ -80,7 +78,6 @@ ZGC is great for high memory/high core count servers. It has no server throughpu
 Unfortunately, it has a significant client FPS hit on my (8-core/16 thread) laptop. See the "ZGC" benchmark in the benchmarks folder. Its not available in Java 8, and much less performant in Java 11 than in Java 17.
 
 `-XX:+UseZGC -XX:AllocatePrefetchStyle=1 -XX:-ZProactive` enables it, but allocate more RAM and more `ConcGCThreads` than you normally would for other GC. Note that ZGC does not like AllocatePrefetchStyle=3, hence setting it to 1 overrides the previous entry.
-U
 
 ### Shenandoah
 
@@ -116,7 +113,7 @@ No other "threading" flags like `ParallelGCThreads` or `JVMCIThreads` are necess
 
 Large Pages
 ======
-**NOTE: Large Pages requires admin privledges on Windows. This is a security risk, and you should skip this section if you aren't comfortable with that.**
+**NOTE: Large Pages requires admin privileges on Windows. This is a security risk, and you should skip this section if you aren't comfortable with that.**
 
 Enabling large pages improves the performance of Minecraft servers and clients. Here are some great tutorials for enabling it:
 
@@ -142,52 +139,15 @@ GraalVM Enterprise Edition
 
 GraalVM is a new Java VM from Oracle that can improve the performance of (modded and vanilla) Minecraft. While client FPS gains are modest, server-side workloads like chunk generation can get a 20%+ boost!
 
-Only GraalVM Enterprise Edition comes with the full set of optimizations. Download it via direct links from Oracle:
+Only GraalVM Enterprise Edition comes with the full set of optimizations. 
 
-<details>
-  <summary>Java 17</summary>
+Download from Oracle's website (requires free signup) https://www.oracle.com/downloads/graalvm-downloads.html
 
-- Windows AMD64 (64-bit): https://oca.opensource.oracle.com/gds/GRAALVM_EE_JAVA17_22_3_1/graalvm-ee-java17-windows-amd64-22.3.1.zip
-    
-- Linux AMD64 (64-bit): https://oca.opensource.oracle.com/gds/GRAALVM_EE_JAVA17_22_3_1/graalvm-ee-java17-linux-amd64-22.3.1.tar.gz
-    
-- Linux AARCH64 (ARM 64-bit): https://oca.opensource.oracle.com/gds/GRAALVM_EE_JAVA17_22_3_1/graalvm-ee-java17-linux-aarch64-22.3.1.tar.gz
+(Select GraalVM EE versions are also available on the [AUR](https://aur.archlinux.org/packages?K=graalvm-ee) and on Oracle Linux's repos)
 
-- Mac AMD64 (64-bit): https://oca.opensource.oracle.com/gds/GRAALVM_EE_JAVA17_22_3_1/graalvm-ee-java17-darwin-amd64-22.3.1.tar.gz
-    
-</details>
+These releases are not Java installers but portable zips. You need to manually replace your launcher's version of Java, or use a Minecraft launcher that supports specifying your Java path. I recommend ATLauncher, Prism Launcher or GDLauncher. When specifying a java path, navigate to the "bin" folder in the GraalVM download and use "javaw.exe" or "java.exe". 
 
-<details>
-  <summary>Java 11</summary>
-
-- Windows AMD64 (64-bit): https://oca.opensource.oracle.com/gds/GRAALVM_EE_JAVA11_22_3_1/graalvm-ee-java11-windows-amd64-22.3.1.zip
-    
-- Linux AMD64 (64-bit): https://oca.opensource.oracle.com/gds/GRAALVM_EE_JAVA11_22_3_1/graalvm-ee-java11-linux-amd64-22.3.1.tar.gz
-    
-- Linux AARCH64 (ARM 64-bit): https://oca.opensource.oracle.com/gds/GRAALVM_EE_JAVA11_22_3_1/graalvm-ee-java11-linux-aarch64-22.3.1.tar.gz
-
-- Mac AMD64 (64-bit): https://oca.opensource.oracle.com/gds/GRAALVM_EE_JAVA11_22_3_1/graalvm-ee-java11-darwin-amd64-22.3.1.tar.gz
-    
-</details>
-
-<details>
-  <summary>Java 8</summary>
-
-- Windows AMD64 (64-bit): https://oca.opensource.oracle.com/gds/GRAALVM_EE_JAVA8_21_3_5/graalvm-ee-java8-windows-amd64-21.3.5.zip
-    
-- Linux AMD64 (64-bit): https://oca.opensource.oracle.com/gds/GRAALVM_EE_JAVA8_21_3_5/graalvm-ee-java8-linux-amd64-21.3.5.tar.gz
-
-- Mac AMD64 (64-bit): https://oca.opensource.oracle.com/gds/GRAALVM_EE_JAVA8_21_3_5/graalvm-ee-java8-darwin-amd64-21.3.5.tar.gz
-    
-</details>
-
-(Select GraalVM EE versions are also available on the AUR and on Oracle Linux's repos)
-
-New versions for ARM Macs require a free registration on Oracle's main download page: https://www.oracle.com/downloads/graalvm-downloads.html
-
-These releases are not Java installers. You need to manually replace your launcher's version of Java, or use a Minecraft launcher that supports specifying your Java path. I recommend ATLauncher, Prism Launcher or GDLauncher. When specifying a java path, navigate to the "bin" folder in the GraalVM download and use "javaw.exe" or "java.exe". 
-
-For servers, you need to replace the "java" command in your server start sh/bat file with the full path to graalvm java, in quotes.
+For servers, you need to replace the "java" command in your server start sh/bat file with the full path/to/graalvm/bin/java, in quotes.
 
 Alternatively, you can install it system-wide by following Oracle's guide: https://www.graalvm.org/22.2/docs/getting-started/#install-graalvm
 
@@ -218,7 +178,7 @@ If you run into any other mod issues you can trace back to GraalVM, please creat
 
 SpecialK
 ======
-A "universal" Windows mod akin to ReShade, SpecialK has 2 major performance benefits:
+A "universal" Windows mod akin to [ReShade](https://reshade.me/), SpecialK has 2 major performance benefits:
 
 - A "smart" frame limiter that reduces stutter, eliminates tearing, saves power, and saves CPU TDP to boost when needed. It even works in conjuction with VRR or Nvidia Reflex. 
 
