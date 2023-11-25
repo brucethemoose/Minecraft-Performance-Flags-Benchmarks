@@ -10,33 +10,33 @@ from pexpect import popen_spawn
 #Use / or \\ instead of \ for paths
 
 #Minecraft Server Paths
+#Where do you even get these?
 
-vevserver = r"C:/Benchmark/Games/mcservers/vevserver"
-
-minfabric = r"C:/Benchmark/Games/mcservers/MinimalFabric"
+vevserver = r"C:/Benchmark/Servers/vevserver"
+minfabric = r"C:/Benchmark/Servers/MinimalFabric"
 
 #Java Paths
 
-graalpath = r"C:/Benchmark/JDKs/GraalVM/graalvm-jdk-17.0.8+9.1/bin/java.exe"
-
-jdkpath = r"C:/Benchmark/JDKs/Adoptium/jdk-17.0.8.1+1/bin/java.exe"
-
-j9path = r"C:/Benchmark/JDKs/OpenJ9/jdk-17.0.8.1+1/bin/java.exe"
+graalpath = r"C:/Benchmark/JDKs/GraalVM/bin/java.exe"
+jdkpath = r"C:/Benchmark/JDKs/Adoptium/bin/java.exe"
+j9path = r"C:/Benchmark/JDKs/OpenJ9/bin/java.exe"
 
 #Java Flags (for servers)
 #(Should start with a space, so they can be "added" together with the + sign)
 #Client flags must be set in Prism instances!
 
 #GC
+
+# Where did this come from?
 aikar = r''' -XX:+UseG1GC -XX:+ParallelRefProcEnabled -XX:MaxGCPauseMillis=200 -XX:+UnlockExperimentalVMOptions -XX:+DisableExplicitGC -XX:+AlwaysPreTouch -XX:G1NewSizePercent=30 -XX:G1MaxNewSizePercent=40 -XX:G1HeapRegionSize=8M -XX:G1ReservePercent=20 -XX:G1HeapWastePercent=5 -XX:G1MixedGCCountTarget=4 -XX:InitiatingHeapOccupancyPercent=15 -XX:G1MixedGCLiveThresholdPercent=90 -XX:G1RSetUpdatingPauseTimePercent=5 -XX:SurvivorRatio=32 -XX:MaxTenuringThreshold=1'''
 
 graalflags = r''' -XX:+UnlockExperimentalVMOptions -XX:+UnlockDiagnosticVMOptions -XX:+AlwaysActAsServerClassMachine -XX:+AlwaysPreTouch -XX:+DisableExplicitGC -XX:+UseNUMA -XX:AllocatePrefetchStyle=3 -XX:NmethodSweepActivity=1 -XX:ReservedCodeCacheSize=400M -XX:NonNMethodCodeHeapSize=12M -XX:ProfiledCodeHeapSize=194M -XX:NonProfiledCodeHeapSize=194M -XX:-DontCompileHugeMethods -XX:MaxNodeLimit=240000 -XX:NodeLimitFudgeFactor=8000 -XX:+UseVectorCmov -XX:+PerfDisableSharedMem -XX:+UseFastUnorderedTimeStamps -XX:+UseCriticalJavaThreadPriority -XX:+EagerJVMCI -Dgraal.TuneInlinerExploration=1 -Dgraal.CompilerConfiguration=enterprise -XX:+UseG1GC -XX:MaxGCPauseMillis=130 -XX:+UnlockExperimentalVMOptions -XX:+DisableExplicitGC -XX:+AlwaysPreTouch -XX:G1NewSizePercent=28 -XX:G1HeapRegionSize=16M -XX:G1ReservePercent=20 -XX:G1MixedGCCountTarget=3 -XX:InitiatingHeapOccupancyPercent=10 -XX:G1MixedGCLiveThresholdPercent=90 -XX:G1RSetUpdatingPauseTimePercent=0 -XX:SurvivorRatio=32 -XX:MaxTenuringThreshold=1 -XX:G1SATBBufferEnqueueingThresholdPercent=30 -XX:G1ConcMarkStepDurationMillis=5 -XX:G1ConcRSHotCardLimit=16 -XX:G1ConcRefinementServiceIntervalMillis=150 -XX:ConcGCThreads=6'''
 
 lpages = r''' -XX:+UseLargePages -XX:LargePageSizeInBytes=2m'''
 
-memory = r''' -Xms7G -Xmx7G'''
+memory = r''' -Xms10G -Xmx10G'''
 
-lightmemory = r''' -Xms4G -Xmx4G'''
+lightmemory = r''' -Xms6G -Xmx6G'''
 
 alot = r'''	-Dgraal.EEPeelAlot=true -Dgraal.StripMineALot=true'''
 
@@ -91,7 +91,7 @@ totaltimeout = 1200 #Number of seconds the whole server can run before timing ou
 forceload_cmd= r"forceload add -120 -120 120 120" #Command to forceload a rectangle. Can also be some other server console command. 
 
 #Client benchmarking options
-prismpath = r"C:/Benchmark/Games/PrismLauncherPortable/Prism.exe" #Full path to Prism executable file
+prismpath = r"C:/Benchmark/PrismLauncherPortable/Prism.exe" #Full path to Prism executable file
 prisminstances = r"" #Full path to Prism instance folder. Normally in %appdata%/roaming/Prism on windows, but you can leave this blank if using Prism portable. 
 presentmonpath = r"C:/Benchmark/presentmon.exe"  #full path to Intel presentmon executable file
 warmup = 90    #Seconds to wait after hitting the "singleplayer" button before starting the benchmark. Give enough time for the world to load, and java to "warm up"
