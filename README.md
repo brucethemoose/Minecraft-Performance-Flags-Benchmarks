@@ -4,9 +4,10 @@ While these tweaks notably reduce some server and client stutters, expect only m
 
 <br />
 
-### Downloads for Spark & Observable:
-#### Spark: [Spark's Website](https://spark.lucko.me/download) or [Modrinth](https://modrinth.com/mod/spark) or [CurseForge](https://www.curseforge.com/minecraft/mc-mods/spark)
-#### Observable: [Modrinth](https://modrinth.com/mod/observable) or [CurseForge](https://www.curseforge.com/minecraft/mc-mods/observable)
+## Downloads for Spark & Observable:
+Spark: [Spark's Website](https://spark.lucko.me/download) or [Modrinth](https://modrinth.com/mod/spark) or [CurseForge](https://www.curseforge.com/minecraft/mc-mods/spark)
+
+Observable: [Modrinth](https://modrinth.com/mod/observable) or [CurseForge](https://www.curseforge.com/minecraft/mc-mods/observable)
 
 <br />
 <br />
