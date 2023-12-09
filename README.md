@@ -226,39 +226,9 @@ GraalVM
 
 GraalVM is a new Java VM from Oracle that can improve the performance of (modded and vanilla) Minecraft. While client FPS gains are modest, server-side workloads like chunk generation can get a 20%+ boost!
 
-Download it via direct links from Oracle:
+Download it from [graalvm.org](https://www.graalvm.org/downloads/) or [oracle.com](https://www.oracle.com/java/technologies/downloads/)
 
-<details>
-  <summary>Java 17</summary>
-
-- Windows AMD64 (64-bit): https://download.oracle.com/graalvm/17/latest/graalvm-jdk-17_windows-x64_bin.zip
-    
-- Linux AMD64 (64-bit): https://download.oracle.com/graalvm/17/latest/graalvm-jdk-17_linux-x64_bin.tar.gz
-    
-- Linux AARCH64 (ARM 64-bit): https://download.oracle.com/graalvm/17/latest/graalvm-jdk-17_linux-aarch64_bin.tar.gz
-
-- Mac AMD64 (64-bit): https://download.oracle.com/graalvm/17/latest/graalvm-jdk-17_macos-x64_bin.tar.gz
-
-- Mac AARCH64 (ARM 64-bit): https://download.oracle.com/graalvm/17/latest/graalvm-jdk-17_macos-aarch64_bin.tar.gz
-    
-</details>
-
-<details>
-  <summary>Java 21</summary>
-
-- Windows AMD64 (64-bit): https://download.oracle.com/graalvm/21/latest/graalvm-jdk-21_windows-x64_bin.zip
-    
-- Linux AMD64 (64-bit): https://download.oracle.com/graalvm/21/latest/graalvm-jdk-21_linux-x64_bin.tar.gz
-    
-- Linux AARCH64 (ARM 64-bit): https://download.oracle.com/graalvm/21/latest/graalvm-jdk-21_linux-aarch64_bin.tar.gz
-
-- Mac AMD64 (64-bit): https://download.oracle.com/graalvm/21/latest/graalvm-jdk-21_macos-x64_bin.tar.gz
-
-- Mac AARCH64 (ARM 64-bit): https://download.oracle.com/graalvm/21/latest/graalvm-jdk-21_macos-aarch64_bin.tar.gz
-    
-</details>
-
-These releases are not Java installers. You need to manually replace your launcher's version of Java, or use a Minecraft launcher that supports specifying your Java path. I recommend ATLauncher, Prism Launcher or GDLauncher. When specifying a java path, navigate to the "bin" folder in the GraalVM download and use "javaw.exe" or "java.exe". 
+These releases are not Java installers, they are portable zips. You need to unzip and manually replace your launcher's version of Java, or use a Minecraft launcher that supports specifying your Java path. I recommend ATLauncher, Prism Launcher or GDLauncher. When specifying a java path, navigate to the "bin" folder in the GraalVM download and use "javaw.exe" or "java.exe". 
 
 For servers, you need to replace the "java" command in your server start sh/bat file with the full path to graalvm java, in quotes.
 
