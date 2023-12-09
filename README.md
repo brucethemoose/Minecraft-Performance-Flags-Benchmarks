@@ -80,7 +80,7 @@ If you dont know what to pick, I recommend GraalVM 17 (see below) or the latest 
 
 **NOTE: While Java 21 may work, I wouldn't recommend using it as Minecraft is made for Java 17 aswell as mods.**
 
-Couleur also maintains a good (but somewhat outdated) running list of JREs here: https://rentry.co/JREs
+~~Couleur also maintains a good (but somewhat outdated) running list of JREs here: https://rentry.co/JREs~~ Sadly, It got removed and Couleur had no backup [Link Here](https://github.com/brucethemoose/Minecraft-Performance-Flags-Benchmarks/pull/51)
 
 <br/>
 
