@@ -32,6 +32,8 @@ Don't forget to add memory arguments and if you are on Linux you can also use La
 
 **<ins>DO NOT USE</ins> Large Pages on windows unless you understand the risks associated.**
 
+Don't forget Performance Mods! [Performance Mods](#performance-mods)
+
 <br />
 <br />
 
@@ -324,7 +326,7 @@ Performance Mods
 
 This is a **fantastic** repo for finding performance mods: https://github.com/TheUsefulLists/UsefulMods
 
-Instead of Optifine, I would recommend more compatible alternatives like Sodium + Iris or Rubidium + Oculus.
+Instead of Optifine, I would recommend more compatible alternatives like [Sodium](https://modrinth.com/mod/sodium) + [Iris](https://modrinth.com/mod/iris) for Fabric/Quilt and [Rubidium](https://modrinth.com/mod/rubidium) (or [Embeddium](https://modrinth.com/mod/embeddium)) + [Oculus](https://modrinth.com/mod/oculus) for Forge/NeoForge.
 
 <br/>
 
