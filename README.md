@@ -80,8 +80,7 @@ If you dont know what to pick, I recommend GraalVM 17 (see below) or the latest 
 
 **NOTE: While Java 21 may work, I wouldn't recommend using it as Minecraft is made for Java 17 aswell as mods.**
 
-~~Couleur also maintains a good (but somewhat outdated) running list of JREs here: https://rentry.co/JREs~~ Sadly, It got removed and Couleur had no backup [Link Here](https://github.com/brucethemoose/Minecraft-Performance-Flags-Benchmarks/pull/51)
-
+~~Couleur also maintains a good (but somewhat outdated) running list of JREs here: https://rentry.co/JREs~~ Sadly, It got removed and Couleur had no backup
 <br/>
 
 Base Java Flags
@@ -196,7 +195,7 @@ No other "threading" flags like `ParallelGCThreads` or `JVMCIThreads` are necess
 
 Large Pages
 ======
-**NOTE: Large Pages requires admin privledges on Windows. This is a security risk, and you should skip this section if you aren't comfortable with that.**
+**NOTE: Large Pages requires admin privileges on Windows. This is a security risk, and you should skip this section if you aren't comfortable with that.**
 
 Enabling large pages improves the performance of Minecraft servers and clients by reducing the load on your system. Here are some great tutorials for enabling it:
 
@@ -292,7 +291,7 @@ If you run into any other mod issues you can trace back to GraalVM, please creat
 
 SpecialK
 ======
-A "universal" Windows mod akin to ReShade, SpecialK has 2 major performance benefits:
+A "universal" Windows mod akin to [ReShade](https://reshade.me/), SpecialK has 2 major performance benefits:
 
 - A "smart" frame limiter that reduces stutter, eliminates tearing, saves power, and saves CPU TDP to boost when needed. It even works in conjuction with VRR or Nvidia Reflex. 
 
