@@ -2,11 +2,7 @@ This is a guide to tune Java for Minecraft. Every flag and tweak is individually
 
 While these tweaks notably reduce some server and client stutters, expect only modest TPS gains + minimal FPS gains at best, and somewhat increased RAM + CPU usage. And they are no substitute for clearing laggy things out with mods like [Spark](https://spark.lucko.me/docs/guides/Finding-lag-spikes) or [Observable](https://github.com/tasgon/observable). 
 
-<br />
-
 Discord for questions and such: https://discord.gg/zeFSR9PnUw, also feel free to make an issue.
-
-<br />
 
 ## Downloads for Spark & Observable:
 Spark: [Spark's Website](https://spark.lucko.me/download) or [Modrinth](https://modrinth.com/mod/spark) or [CurseForge](https://www.curseforge.com/minecraft/mc-mods/spark)
@@ -15,6 +11,27 @@ Observable: [Modrinth](https://modrinth.com/mod/observable) or [CurseForge](http
 
 <br />
 <br />
+
+TL:DR
+======
+### Client: 
+| JREs:        | Garbage Collectors: |
+| ------------ | ------------------- | 
+| Adoptium 17  | G1GC                |
+| GraalVM 17   | Shenandoah          |
+
+### Server: 
+| JREs:          | Garbage Collectors: |
+| -------------- | ------------------- | 
+| Clear Linux 17 | G1GC                |
+| GraalVM 17     | ZGC                 |
+
+<br />
+
+Don't forget to add memory arguments and if you are on Linux you can also use Large Pages. 
+
+**<ins>DO NOT USE</ins> Large Pages on windows unless you understand the risks associated.**
+
 <br />
 <br />
 
@@ -65,23 +82,6 @@ Couleur also maintains a good (but somewhat outdated) running list of JREs here:
 
 <br/>
 
-TLDR
-======
-Client: Use Adoptium 17 or GraalVM 17 with it's latest Java Arguments and Client G1GC.
-
-Server: User Clear Linux 17 or GraalVM 17 with it's latest Java Arguments and Server G1GC or ZGC, also run your server on linux.
-
-<br />
-
-Then set `-Xms` and `-Xms` to how much memory you want minecraft to have, this should generally be arround 1/2 of your total system memory. 
-
-Example: `-Xms8G -Xmx8G` - Make sure they are the same value for reasons stated below.
-
-<br />
-
-Finally, if you are on Linux you can also use Large Pages. 
-**DO NOT USE** Large Pages on windows unless you understand the risks.
-
 Base Java Flags
 ======
 These optimized flags run with any Java 11+ build. They work on both servers and clients:
@@ -91,8 +91,8 @@ These optimized flags run with any Java 11+ build. They work on both servers and
 -XX:+UnlockExperimentalVMOptions -XX:+UnlockDiagnosticVMOptions -XX:+AlwaysActAsServerClassMachine -XX:+AlwaysPreTouch -XX:+DisableExplicitGC -XX:+UseNUMA -XX:NmethodSweepActivity=1 -XX:ReservedCodeCacheSize=400M -XX:NonNMethodCodeHeapSize=12M -XX:ProfiledCodeHeapSize=194M -XX:NonProfiledCodeHeapSize=194M -XX:-DontCompileHugeMethods -XX:MaxNodeLimit=240000 -XX:NodeLimitFudgeFactor=8000 -XX:+UseVectorCmov -XX:+PerfDisableSharedMem -XX:+UseFastUnorderedTimeStamps -XX:+UseCriticalJavaThreadPriority -XX:ThreadPriorityPolicy=1 -XX:AllocatePrefetchStyle=3
 ```
 
-
 **You *must* add garbage collection flags to these java arguments.**  
+
 
 <details>
     <summary>For example, if we were to use Java 21 with GraalVM's Java Arguments and G1GC, it would something look like this:</summary>
