@@ -57,13 +57,6 @@ In order to fix this, you must use Flatseal, or you can manually change the perm
 
 Picking a Java Runtime
 ======
-
-For Minecraft 1.16.5 and up, use Java 17. Some launchers like Curseforge and Prism Launcher ask you to use Java 8 on 1.16.X, but Minecraft 1.16.5+, all 1.18+ mods, and *most* 1.16.5 mods are compatible with Java 17.
-
-Sometimes Java 11 will work where Java 17 doesn't.
-
-1.12.2 and below generally requires Java 8. 
-
 Java runtimes from Azul, Microsoft, Adoptium, Amazon and so on are basically identical. Some notable exceptions:
 
 - **Oracle GraalVM** features a more aggressive Java compiler. This is what I personally run Minecraft with, see the GraalVM section below.
@@ -78,7 +71,10 @@ Java runtimes from Azul, Microsoft, Adoptium, Amazon and so on are basically ide
 
 If you dont know what to pick, I recommend GraalVM 17 (see below) or the latest Adoptium Java 17 JRE: https://adoptium.net/
 
-**NOTE: While Java 21 may work, I wouldn't recommend using it as Minecraft is made for Java 17 aswell as mods.**
+You can also go here for recommendations: https://whichjdk.com - Though it says to use Java 21, use the list below to ensure Minecraft runs correctly, this website is for general advice on JDKs, it is not made specifically for Minecraft
+- **Minecraft 1.17 and above require Java 17 to run correctly**
+- **Minecraft 1.16 mods may work with Java versions above 8 but the base game will run just fine**
+- **Minecraft 1.15 and below require Java 8 to run correctly**
 
 <br />
 
