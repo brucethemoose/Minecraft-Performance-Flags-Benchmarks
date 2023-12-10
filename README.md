@@ -15,16 +15,26 @@ Observable: [Modrinth](https://modrinth.com/mod/observable) or [CurseForge](http
 TL:DR
 ======
 ### Client: 
-| JREs:        | Garbage Collectors: |
-| ------------ | ------------------- | 
-| Adoptium 17  | G1GC                |
-| GraalVM 17   | Shenandoah          |
+| JREs:        | 
+| ------------ | 
+| Adoptium 17  | 
+| GraalVM 17   |
+
+| Garbage Collectors: |
+| ------------------- | 
+| G1GC                |
+| Shenandoah          |
 
 ### Server: 
-| JREs:          | Garbage Collectors: |
-| -------------- | ------------------- | 
-| Clear Linux 17 | G1GC                |
-| GraalVM 17     | ZGC                 |
+| JREs:          |
+| -------------- |
+| Clear Linux 17 |
+| GraalVM 17     |
+
+| Garbage Collectors: |
+| ------------------- | 
+| G1GC                |
+| ZGC                 |
 
 <br />
 
