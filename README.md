@@ -83,7 +83,7 @@ If you dont know what to pick, I recommend GraalVM 17 (see below) or the latest 
 <br />
 
 ~~Couleur also maintains a good (but somewhat outdated) running list of JREs here: https://rentry.co/JREs~~ 
-> Sadly, It got removed and Couleur had no backup
+> Sadly, It got removed so I made my own mirror of it: https://rentry.co/bzaqu
 <br/>
 
 Base Java Flags
