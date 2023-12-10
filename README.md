@@ -80,6 +80,7 @@ You can also go here for recommendations: https://whichjdk.com - Though it says 
 
 ~~Couleur also maintains a good (but somewhat outdated) running list of JREs here: https://rentry.co/JREs~~ 
 > ~~Sadly, It got removed so I made my own mirror of it: https://rentry.co/bzaqu~~
+
 > My mirror got removed :(
 <br/>
 
