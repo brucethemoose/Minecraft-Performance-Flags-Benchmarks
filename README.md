@@ -79,9 +79,7 @@ You can also go here for recommendations: https://whichjdk.com - Though it says 
 <br />
 
 ~~Couleur also maintains a good (but somewhat outdated) running list of JREs here: https://rentry.co/JREs~~ 
-> ~~Sadly, It got removed so I made my own mirror of it: https://rentry.co/bzaqu~~
-
-> My mirror got removed :(
+> Sadly, It got removed so Wayback Machine Time! https://web.archive.org/web/20231023145734/https://rentry.co/JREs
 <br/>
 
 Base Java Flags
