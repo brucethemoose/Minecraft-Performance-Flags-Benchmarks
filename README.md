@@ -304,7 +304,7 @@ Performance Mods
 
 This is a **fantastic** repo for finding performance mods: https://github.com/TheUsefulLists/UsefulMods
 
-Instead of Optifine, I would recommend more compatible alternatives like [Sodium](https://modrinth.com/mod/sodium) + [Iris](https://modrinth.com/mod/iris) for Fabric/Quilt and [Rubidium](https://modrinth.com/mod/rubidium) (or [Embeddium](https://modrinth.com/mod/embeddium)) + [Oculus](https://modrinth.com/mod/oculus) for Forge/NeoForge.
+Instead of Optifine, I would recommend more compatible alternatives like [Sodium](https://modrinth.com/mod/sodium) + [Iris](https://modrinth.com/mod/iris) for Fabric/Quilt and [Embeddium](https://modrinth.com/mod/embeddium) + [Oculus](https://modrinth.com/mod/oculus) for Forge/NeoForge.
 
 <br/>
 
