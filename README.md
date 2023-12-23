@@ -144,7 +144,7 @@ ZGC is great for high memory/high core count servers. It has no server throughpu
 Unfortunately, it has a significant client FPS hit on my (8-core/16 thread) laptop. See the "ZGC" benchmark in the benchmarks folder. Its not available in Java 8, and much less performant in Java 11 than in Java 17.
 
 `-XX:+UseZGC -XX:AllocatePrefetchStyle=1 -XX:-ZProactive` enables it, but allocate more RAM and more `ConcGCThreads` than you normally would for other GC. Note that ZGC does not like AllocatePrefetchStyle=3, hence setting it to 1 overrides the previous entry.
-U
+
 
 <br/>
 
@@ -154,7 +154,7 @@ Shenandoah performs well on clients, but kills server throughput in my tests. En
 ```
 -XX:+UseShenandoahGC -XX:ShenandoahGCMode=iu -XX:ShenandoahGuaranteedGCInterval=1000000 -XX:AllocatePrefetchStyle=1
 ```
-.
+
 
 See more tuning options [here](https://wiki.openjdk.org/display/shenandoah/Main). The "herustic" and "mode" options don't change much for me (except for "compact," which you should not use). Like ZGC, Shenandoah does not like AllocatePrefetchStyle=3.
 
