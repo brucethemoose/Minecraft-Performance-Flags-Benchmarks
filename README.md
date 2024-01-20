@@ -283,6 +283,8 @@ Other Performance Tips
 
 - Close everything in the background, including Discord, game launchers and your browser! Minecraft is resource intensive, and does not like other apps generating CPU interrupts or eating disk I/O, RAM and so on.  
 
+- Server Owners using the [pterodactyl panel](https://pterodactyl.io/) should check out [these docker container images](https://github.com/Software-Noob/pterodactyl-images/tree/main)! They contain a bunch of java distributions including GraalVM which work with Minecraft Servers.
+
 FAQ
 ======
 
