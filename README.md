@@ -28,6 +28,7 @@ TL:DR
 ### Server: 
 | JREs:          |
 | -------------- |
+| Adoptium |
 | Clear Linux 17 |
 | GraalVM 17     |
 
@@ -40,7 +41,7 @@ TL:DR
 
 Don't forget to add memory arguments and if you are on Linux you can also use Large Pages. 
 
-**<ins>DO NOT USE</ins> Large Pages on windows unless you understand the risks associated.**
+**<ins>DO NOT USE</ins> Large Pages on windows unless you understand the risks associated, more information in the [Large Pages](#large-pages) section**
 
 Don't forget Performance Mods! [Performance Mods](#performance-mods)
 
@@ -50,7 +51,9 @@ Don't forget Performance Mods! [Performance Mods](#performance-mods)
 Benchmarks
 ======
 
-All flags are tested with Benchmark.py script. See the work-in-progress [Benchmarks.md](https://github.com/brucethemoose/Minecraft-Performance-Flags-Benchmarks/blob/main/Benchmarks.md).
+~~All flags are tested with Benchmark.py script. See the work-in-progress [Benchmarks.md](https://github.com/brucethemoose/Minecraft-Performance-Flags-Benchmarks/blob/main/Benchmarks.md).~~
+
+Note: I do not test my flags anymore for reasons, though they still are very similar to @brucethemoose's
 
 <br/>
 
@@ -89,7 +92,7 @@ You can also go here for recommendations: https://whichjdk.com - Though it says 
 <br />
 
 ~~Couleur also maintains a good (but somewhat outdated) running list of JREs here: https://rentry.co/JREs~~ 
-> Sadly, It got removed so Wayback Machine Time! https://web.archive.org/web/20231023145734/https://rentry.co/JREs
+> Sadly, It got removed, here's a wayback machine link if you need it: https://web.archive.org/web/20231023145734/https://rentry.co/JREs
 <br/>
 
 Base Java Flags
@@ -112,7 +115,7 @@ These optimized flags run with any Java 11+ build. They work on both servers and
 ``
 
 <b>DONT COPY THESE!</b>
-<b>Please use the tldr located above</b>
+<b>Please use the [TL:DR](#tl:dr) located above</b>
 
 
 </details>
@@ -136,17 +139,18 @@ Garbage Collection
 
 **Garbage collection flags must be added to Minecraft servers and clients**, as the default "pauses" to stop and collect garbage manifest as stutters on the client and lag on servers. Use the `/sparkc gcmonitor` command in the [Spark](https://www.curseforge.com/minecraft/mc-mods/spark) mod to observe pauses in-game. *Any* old generation pauses are bad, and young generation G1GC collections should be infrequent, but short enough to be imperceptible.  
 
-Pick one set of flags. I recommend **Shenandoah on clients**, **ZGC on powerful Java 17 servers**, and **G1GC on Graal** or on servers/clients with less RAM and fewer cores:
-
 <br/>
 
 ### ZGC 
 
-ZGC is great for high memory/high core count servers. It has no server throughput hit I can measure, and absolutely does not stutter. However, it requires more RAM and more cores than other garbage collectors.
+ZGC is great for high memory/high core count servers. It has no server throughput hit I can measure, and absolutely does not stutter. However, it requires more RAM and more cores than other garbage collectors. Enable it with
+```
+`-XX:+UseZGC -XX:AllocatePrefetchStyle=1 -XX:-ZProactive
+```
 
 Unfortunately, it has a significant client FPS hit on my (8-core/16 thread) laptop. See the "ZGC" benchmark in the benchmarks folder. Its not available in Java 8, and much less performant in Java 11 than in Java 17.
 
-`-XX:+UseZGC -XX:AllocatePrefetchStyle=1 -XX:-ZProactive` enables it, but allocate more RAM and more `ConcGCThreads` than you normally would for other GC. Note that ZGC does not like AllocatePrefetchStyle=3, hence setting it to 1 overrides the previous entry.
+> Note: Allocate more RAM and more `ConcGCThreads` than you normally would for other GC, also note that ZGC does not like AllocatePrefetchStyle=3, hence setting it to 1 overrides the previous entry.
 
 
 <br/>
@@ -158,10 +162,10 @@ Shenandoah performs well on clients, but kills server throughput in my tests. En
 -XX:+UseShenandoahGC -XX:ShenandoahGCMode=iu -XX:ShenandoahGuaranteedGCInterval=1000000 -XX:AllocatePrefetchStyle=1
 ```
 
+See more tuning options [here](https://wiki.openjdk.org/display/shenandoah/Main). The "herustic" and "mode" options don't change much for me (except for "compact," which you should not use). 
 
-See more tuning options [here](https://wiki.openjdk.org/display/shenandoah/Main). The "herustic" and "mode" options don't change much for me (except for "compact," which you should not use). Like ZGC, Shenandoah does not like AllocatePrefetchStyle=3.
+> Note:  that Shenandoah is not in Java 8. Its also not in any Oracle Java builds! If you are a Java 8 user, you must use Red Hat OpenJDK to use Shenandoah. Like ZGC, Shenandoah does not like AllocatePrefetchStyle=3.
 
-Note that Shenandoah is not in Java 8. Its also not in any Oracle Java builds! If you are a Java 8 user, you must use Red Hat OpenJDK to use Shenandoah.
 Download Links:
  - [Red Hat Developer](https://developers.redhat.com/products/openjdk/download)
  - [Adoptium Marketplace](https://adoptium.net/marketplace/)
@@ -174,12 +178,12 @@ G1GC is the default garbage collector for all JREs. Aikar's [famous Minecraft se
 
 These are similar to the aikar flags, but with shorter, more frequent pauses, less aggressive G1 mixed collection and more aggressive background collection: 
 ```
--XX:+UseG1GC -XX:MaxGCPauseMillis=37 -XX:+PerfDisableSharedMem -XX:G1HeapRegionSize=16M -XX:G1NewSizePercent=23 -XX:G1ReservePercent=20 -XX:SurvivorRatio=32 -XX:G1MixedGCCountTarget=3 -XX:G1HeapWastePercent=20 -XX:InitiatingHeapOccupancyPercent=10 -XX:G1RSetUpdatingPauseTimePercent=0 -XX:MaxTenuringThreshold=1 -XX:G1SATBBufferEnqueueingThresholdPercent=30 -XX:G1ConcMarkStepDurationMillis=5.0 -XX:G1ConcRefinementServiceIntervalMillis=150 -XX:GCTimeRatio=99 -XX:G1ConcRSHotCardLimit=16
+-XX:+UseG1GC -XX:MaxGCPauseMillis=37 -XX:+PerfDisableSharedMem -XX:G1HeapRegionSize=16M -XX:G1NewSizePercent=23 -XX:G1ReservePercent=20 -XX:SurvivorRatio=32 -XX:G1MixedGCCountTarget=3 -XX:G1HeapWastePercent=20 -XX:InitiatingHeapOccupancyPercent=10 -XX:G1RSetUpdatingPauseTimePercent=0 -XX:MaxTenuringThreshold=1 -XX:G1SATBBufferEnqueueingThresholdPercent=30 -XX:G1ConcMarkStepDurationMillis=5.0 -XX:GCTimeRatio=99 -XX:G1ConcRefinementServiceIntervalMillis=150 -XX:G1ConcRSHotCardLimit=16
 ```
 
-**NOTE: Java 21 depreciated the `G1ConcRefinementServiceIntervalMillis` flag and the `-XX:G1ConcRSHotCardLimit=16` flag, remove them when using Java 21**
+> NOTE: Java 21 depreciated the `G1ConcRefinementServiceIntervalMillis` flag and the `-XX:G1ConcRSHotCardLimit=16` flag, remove them when using Java 21 as they aren't needed
 
-`G1NewSizePercent` and `MaxGCPauseMillis` can be used to tune the frequency/dureation of your young generation collections. `G1HeapWastePercent=18` should be removed if you are getting any old generation pauses on your setup. Alternatively, you can raise it and set `G1MixedGCCountTarget` to 2 or 1 to make mixed garbage collection even lazier (at the cost of higher memory usage). 
+> Note: `G1NewSizePercent` and `MaxGCPauseMillis` can be used to tune the frequency/dureation of your young generation collections. `G1HeapWastePercent=18` should be removed if you are getting any old generation pauses on your setup. Alternatively, you can raise it and set `G1MixedGCCountTarget` to 2 or 1 to make mixed garbage collection even lazier (at the cost of higher memory usage). 
 
 <br/>
 
@@ -191,7 +195,7 @@ Longer pauses are more acceptable on servers. These flags are very close to the 
 -XX:+UseG1GC -XX:MaxGCPauseMillis=130 -XX:+UnlockExperimentalVMOptions -XX:+DisableExplicitGC -XX:+AlwaysPreTouch -XX:G1NewSizePercent=28 -XX:G1HeapRegionSize=16M -XX:G1ReservePercent=20 -XX:G1MixedGCCountTarget=3 -XX:InitiatingHeapOccupancyPercent=10 -XX:G1MixedGCLiveThresholdPercent=90 -XX:G1RSetUpdatingPauseTimePercent=0 -XX:SurvivorRatio=32 -XX:MaxTenuringThreshold=1 -XX:G1SATBBufferEnqueueingThresholdPercent=30 -XX:G1ConcMarkStepDurationMillis=5 -XX:G1ConcRefinementServiceIntervalMillis=150 -XX:G1ConcRSHotCardLimit=16
 ```
 
-**NOTE: Java 21 depreciated the `G1ConcRefinementServiceIntervalMillis` flag and the `-XX:G1ConcRSHotCardLimit=16` flag, remove them when using Java 21**
+> NOTE: Java 21 depreciated the `G1ConcRefinementServiceIntervalMillis` flag and the `-XX:G1ConcRSHotCardLimit=16` flag, remove them when using Java 21 as they aren't needed
 
 <br/>
 
@@ -199,7 +203,7 @@ Longer pauses are more acceptable on servers. These flags are very close to the 
 
 `-XX:ConcGCThreads=[Some Number]` controls the [*maximum* number](https://github.com/openjdk/jdk/blob/dd34a4c28da73c798e021c7473ac57ead56c9903/src/hotspot/share/gc/z/zHeuristics.cpp#L96-L104) of background threads the garbage collector is allowed to use, and defaults to `logical (hyperthreaded) cores / 4`. Recent versions of Java will [reduce the number of gc threads, if needed](https://wiki.openjdk.org/display/zgc/Main#Main-SettingConcurrentGCThreads).
 
-In some cases (especially with ZGC or Shenandoh) you want to increase this thread cap past the default. I recommend "2" on CPUs with 4 threads, and `[number of real cores - 2]` on most other CPUs, but you may need to play with this parameter. If its too low, garbage collection can't keep up with Minecraft, and the game will stutter and/or start eating gobs of RAM and crash. If its too high, it might slow the game down, especially if you are running Java 8. 
+In some cases (especially with ZGC or Shenandoh) you want to increase this thread cap past the default. I recommend `[number of real cores - 2]` on most CPUs, but you may need to play with this parameter. If its too low, garbage collection can't keep up with Minecraft, and the game will stutter and/or start eating gobs of RAM and crash. If its too high, it might slow the game down, especially if you are running Java 8. 
 
 No other "threading" flags like `ParallelGCThreads` or `JVMCIThreads` are necessary, as they are enabled by default with good automatic settings in Java 8+.
 
@@ -226,7 +230,7 @@ Check and see if large pages is working with the `-Xlog:gc+init` java argument i
 
 In any Java version/platform, if large pages isn't working, you will get a warning in the log similar to this: 
 
-> Java HotSpot(TM) 64-Bit Server VM warning: JVM cannot use large page memory because it does not have enough privilege to lock pages in memory.
+`Java HotSpot(TM) 64-Bit Server VM warning: JVM cannot use large page memory because it does not have enough privilege to lock pages in memory.`
 
 <br/>
 
@@ -259,15 +263,18 @@ Arguments for GraalVM Java 17+
 
 **GraalVM EE 22.3.0 fixed all known Minecraft bugs**
 
-If you run an older, Java 8-based version of GraalVM EE, there are some potential issues:
+<details>
+    <summary>If you run an older, Java 8-based version of GraalVM EE, there are some potential issues:</summary>
 
-- `VectorizeSIMD` turns entities invisible with shader mods like Optifine, Iris or Occulus... but only under certain conditions. This will be fixed in GraalVM EE 22.3.0. See: https://github.com/oracle/graal/issues/4849
+    - `VectorizeSIMD` turns entities invisible with shader mods like Optifine, Iris or Occulus... but only under certain conditions. This will be fixed in GraalVM EE 22.3.0. See: https://github.com/oracle/graal/issues/4849
+    
+    - GraalVM CE and EE both break constellation rendering in 1.16.5 Astral Sorcery. This is possibly related to the shader bug. See: https://github.com/HellFirePvP/AstralSorcery/issues/1963
+    
+    I have not observed any server-side bugs yet. 
+    
+    If you run into any other mod issues you can trace back to GraalVM, please create a Github issue or post in the Discord! Generally, you can work around them by disabling major `dgraal` optimization flags, or by finding the right function with `Dgraal.PrintCompilation=true`, and working around it with `-Dgraal.GraalCompileOnly=~...` once you find the miscompiled function.
 
-- GraalVM CE and EE both break constellation rendering in 1.16.5 Astral Sorcery. This is possibly related to the shader bug. See: https://github.com/HellFirePvP/AstralSorcery/issues/1963
-
-I have not observed any server-side bugs yet. 
-
-If you run into any other mod issues you can trace back to GraalVM, please create a Github issue or post in the Discord! Generally, you can work around them by disabling major `dgraal` optimization flags, or by finding the right function with `Dgraal.PrintCompilation=true`, and working around it with `-Dgraal.GraalCompileOnly=~...` once you find the miscompiled function.
+</details>
 
 <br/>
 
@@ -356,7 +363,7 @@ Other Performance Tips
 FAQ
 ======
 
-- Java versions above 17 have some mod incompatibilities. They reportedly work with most modpacks, but I'm not sure if there are any performance benefits outside of incubator flags (`--add-modules=jdk.incubator.vector`) which are only supported on Minecraft Servers with explicit work like [Pufferfish](https://docs.pufferfish.host/optimization/how-to-apply-aikars-flags).).
+- Java versions above 17 have some mod incompatibilities. They reportedly work with most modpacks, but I'm not sure if there are any performance benefits outside of incubator flags (`--add-modules=jdk.incubator.vector`) which (I believe) are only supported on Minecraft Servers with explicit work like [Pufferfish](https://docs.pufferfish.host/optimization/how-to-apply-aikars-flags).).
 
 - Java tweaks improve server performance and client stuttering, but they don't boost average client FPS much (if at all). For that, running correct/up-to-date graphics drivers and performance mods is far more important: https://github.com/TheUsefulLists/UsefulMods
 
@@ -375,7 +382,7 @@ Flag Explanations
 - Aikar G1GC flags are explained here: https://aikar.co/2018/07/02/tuning-the-jvm-g1gc-garbage-collector-flags-for-minecraft/
 - `-XX:+UnlockExperimentalVMOptions -XX:+UnlockDiagnosticVMOptions` simply unlock more flags to be used. These can be listed with the `-XX:+PrintFlagsFinal` and `-XX:+JVMCIPrintProperties` flags, see [Flag Dumps](Flag_Dumps)
 - `-XX:G1MixedGCCountTarget=3`: This is how many oldgen gc blocks to target in "mixed" gc. These mixed collections are much slower, and the Minecraft client doesn't generate oldgen very quickly, so we can lower this value to 3, 2, or even 1 for shorter GC pauses.
-- ~~`-XX:+UseNUMA` enables optimizations for multisocket systems, if applicable. Not sure if this applies to MCM CPUs like Ryzen or Epyc, but its auto disabled if not applicable.~~ Thanks to @draeath for explaining why we shouldn't do this "My threadripper system has multiple NUMA domains with different access costs. Your BIOS may not be exposing this."
+- ~~`-XX:+UseNUMA` enables optimizations for multisocket systems, if applicable. Not sure if this applies to MCM CPUs like Ryzen or Epyc, but its auto disabled if not applicable.~~ Thanks to @draeath for explaining why we shouldn't do this as the BIOS may not expose NUMA domains correctly
 - `-XX:-DontCompileHugeMethods` *Allows* huge methods to be compiled. Modded Minecraft has some of these, and we don't care about higher background compiler CPU usage.
 - `-XX:MaxNodeLimit=240000 -XX:NodeLimitFudgeFactor=8000` Enable optimization of larger methods. See: https://bugs.java.com/bugdatabase/view_bug.do?bug_id=8058148
 - `-XX:ReservedCodeCacheSize=400M -XX:NonNMethodCodeHeapSize=12M -XX:ProfiledCodeHeapSize=194M -XX:NonProfiledCodeHeapSize=194M` reserves more space for compiled code. All sections must "add up" to `ReservedCodeCacheSize`. I have observed modded Minecraft run into the default 250 megabyte limit with `XX:+PrintCodeCache`, but even if its not filled, the larger size makes eviction of compiled code less aggressive. 
