@@ -6,10 +6,16 @@
 
 Clone or download this repo with the "download as zip" button on GitHub. 
 
-Install a recent version of Python (preferably Python 3.10), and run this command in this folder: `python -m pip install -r requirements.txt`
+Install a recent version of Python (preferably Python 3.10+), and run this command in this folder: `python -m pip install -r requirements.txt`
 
 Client benchmarks require Prism Launcher (preferrably the portable release) and Intel Presentmon. 
-https://github.com/GameTechDev/PresentMon/releases
+ - https://github.com/GameTechDev/PresentMon/releases
+ - https://game.intel.com/story/intel-presentmon
+
+<br />
+<br />
+<br />
+<br />
 
 **NOTE: My own benchmarking is on pause, and this script/guide may need more updating for the switch from PolyMC to Prism Launcher**
 
@@ -68,8 +74,6 @@ Currently, client benchmarking only works on Windows. Server benching is tested 
 
 
 # Client Benchmarking
-
-**WIP, the client benchmark is transitioning from PolyMC to Prism Launcher!**
 
 Client benchmarking is tricky and finicky. You have been warned!
 
